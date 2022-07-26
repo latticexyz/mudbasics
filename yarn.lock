@@ -1370,15 +1370,6 @@
     "@protobuf-ts/runtime-rpc" "^2.7.0"
     observable-webworker "^4.0.1"
 
-"@latticexyz/persona-js@0.3.2":
-  version "0.3.2"
-  resolved "https://npm.pkg.github.com/download/@latticexyz/persona-js/0.3.2/c13fe4ed519097b20566426570c116c56468fe85a1dec73a883f63647bcbaedc#a402be63658cbb5682a80287d5d7d47ee7016b39"
-  integrity sha512-Eo8oWlHnu5AlFMHq01ROsczWEwpENrfXZJo+q+VdCckKNiHvz0EBNRLxpPN6dGjN7oYquOakcjbCQM6rMQShJw==
-
-"@latticexyz/persona@https://github.com/latticexyz/persona.git#a53e26a670ed6f041dc5dec365be293457a90b5d":
-  version "1.2.0"
-  resolved "https://github.com/latticexyz/persona.git#a53e26a670ed6f041dc5dec365be293457a90b5d"
-
 "@latticexyz/phaserx@^0.3.2":
   version "0.3.2"
   resolved "https://npm.pkg.github.com/download/@latticexyz/phaserx/0.3.2/dff14d5c7f9239ecfa147cdd04e96a7158e1394ccc18ecfb52999cab2e2108a9#87b1d42cbc480b2463535cd7f8670e79a03622f0"
@@ -6902,7 +6893,7 @@ ethereumjs-util@^7.1.1, ethereumjs-util@^7.1.4, ethereumjs-util@^7.1.5:
     ethereum-cryptography "^0.1.3"
     rlp "^2.2.4"
 
-ethers@^5.6.6, ethers@^5.6.7, ethers@^5.6.9:
+ethers@^5.6.6, ethers@^5.6.7:
   version "5.6.9"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.6.9.tgz#4e12f8dfcb67b88ae7a78a9519b384c23c576a4d"
   integrity sha512-lMGC2zv9HC5EC+8r429WaWu3uWJUCgUCt8xxKCFqkrFuBDZXDYIdzDUECxzjf2BMF8IVBByY1EBoGSL3RTm8RA==
@@ -11254,7 +11245,7 @@ mnemonist@^0.38.0:
   dependencies:
     obliterator "^2.0.0"
 
-mobx-react-lite@^3.3.0, mobx-react-lite@^3.4.0:
+mobx-react-lite@^3.3.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/mobx-react-lite/-/mobx-react-lite-3.4.0.tgz#d59156a96889cdadad751e5e4dab95f28926dfff"
   integrity sha512-bRuZp3C0itgLKHu/VNxi66DN/XVkQG7xtoBVWxpvC5FhAqbOCP21+nPhULjnzEqd7xBMybp6KwytdUpZKEgpIQ==
@@ -11264,7 +11255,7 @@ mobx-utils@^6.0.4:
   resolved "https://registry.yarnpkg.com/mobx-utils/-/mobx-utils-6.0.5.tgz#0cce9afb07fbba1fb559f959f8cea1f44baa7252"
   integrity sha512-QOduwicYedD4mwYZRl8+c3BalljFDcubg+PUGqBkn8tOuBoj2q7GhjXBP6JXM9J+Zh+2mePK8IoToeLfqr3Z/w==
 
-mobx@^6.4.2, mobx@^6.6.0:
+mobx@^6.4.2:
   version "6.6.1"
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-6.6.1.tgz#70ee6aa82f25aeb7e7d522bd621207434e509318"
   integrity sha512-7su3UZv5JF+ohLr2opabjbUAERfXstMY+wiBtey8yNAPoB8H187RaQXuhFjNkH8aE4iHbDWnhDFZw0+5ic4nGQ==
