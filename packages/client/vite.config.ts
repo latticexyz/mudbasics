@@ -14,4 +14,9 @@ export default defineConfig({
   resolve: {
     dedupe: ["proxy-deep"],
   },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: "es2020",
+    },
+  },
 });
