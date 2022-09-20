@@ -1,4 +1,4 @@
-import { NetworkConfig, SyncWorkerConfig } from "@latticexyz/network";
+import { SetupContractConfig } from "./setup/setupContracts";
 
 export type GameConfig = {
   worldAddress: string;
@@ -10,8 +10,6 @@ export type GameConfig = {
   devMode: boolean;
   initialBlockNumber: number;
 };
-
-export type SetupContractConfig = NetworkConfig & Omit<SyncWorkerConfig, "worldContract" | "mappings">;
 
 export const getNetworkConfig: (networkConfig: GameConfig) => SetupContractConfig = (config) => ({
   clock: {
@@ -30,4 +28,6 @@ export const getNetworkConfig: (networkConfig: GameConfig) => SetupContractConfi
   chainId: config.chainId,
   checkpointServiceUrl: config.checkpointUrl,
   initialBlockNumber: config.initialBlockNumber,
+  worldAddress: config.worldAddress,
+  devMode: config.devMode,
 });

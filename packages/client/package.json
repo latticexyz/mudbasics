@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "private": "true",
   "dependencies": {
-    "@ethersproject/providers": "^5.6.1",
+    "@ethersproject/providers": "^5.7.0",
     "@latticexyz/ecs-browser": "0.13.0",
     "@latticexyz/network": "0.13.0",
     "@latticexyz/phaserx": "0.13.0",
@@ -17,7 +17,7 @@
     "@protobuf-ts/runtime-rpc": "^2.8.1",
     "async-mutex": "^0.3.2",
     "contracts": "^0.2.0",
-    "ethers": "^5.6.6",
+    "ethers": "^5.7.1",
     "heap-js": "^2.2.0",
     "lodash": "^4.17.21",
     "mobx": "^6.4.2",
