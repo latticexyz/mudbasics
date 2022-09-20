@@ -19,4 +19,9 @@ export default defineConfig({
       target: "es2020",
     },
   },
+  server: {
+    fs: {
+      strict: false,
+    },
+  },
 });
