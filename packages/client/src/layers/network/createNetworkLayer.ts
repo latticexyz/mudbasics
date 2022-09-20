@@ -2,6 +2,7 @@ import { createWorld } from "@latticexyz/recs";
 import { setupContracts, setupDevSystems } from "./setup";
 import { createActionSystem } from "@latticexyz/std-client";
 import { GameConfig } from "./config";
+import { defineLoadingStateComponent } from "./components";
 
 /**
  * The Network layer is the lowest layer in the client architecture.
@@ -14,7 +15,9 @@ export async function createNetworkLayer(config: GameConfig) {
   const world = createWorld();
 
   // --- COMPONENTS -----------------------------------------------------------------
-  const components = {};
+  const components = {
+    LoadingState: defineLoadingStateComponent(world),
+  };
 
   // --- SETUP ----------------------------------------------------------------------
   const { txQueue, systems, txReduced$, network, startSync, encoders } = await setupContracts(
