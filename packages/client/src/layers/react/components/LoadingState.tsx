@@ -1,6 +1,6 @@
 import React from "react";
 import { BootScreen, registerUIComponent } from "../engine";
-import { concat, filter, map } from "rxjs";
+import { concat, map } from "rxjs";
 import { ComponentUpdate, EntityIndex, getComponentValue, Type } from "@latticexyz/recs";
 import { GodID, SyncState } from "@latticexyz/network";
 
