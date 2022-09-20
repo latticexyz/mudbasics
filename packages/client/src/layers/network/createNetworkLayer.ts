@@ -1,6 +1,11 @@
 import { createWorld } from "@latticexyz/recs";
 import { setupDevSystems } from "./setup";
-import { createActionSystem, setupMUDNetwork, defineCoordComponent } from "@latticexyz/std-client";
+import {
+  createActionSystem,
+  setupMUDNetwork,
+  defineCoordComponent,
+  defineStringComponent,
+} from "@latticexyz/std-client";
 import { defineLoadingStateComponent } from "./components";
 import { SystemTypes } from "contracts/types/SystemTypes";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
@@ -22,6 +27,7 @@ export async function createNetworkLayer(config: GameConfig) {
   const components = {
     LoadingState: defineLoadingStateComponent(world),
     Position: defineCoordComponent(world, { id: "Position", metadata: { contractId: "component.Position" } }),
+    CarriedBy: defineStringComponent(world, { id: "CarriedBy", metadata: { contractId: "component.CarriedBy" } }),
   };
 
   // --- SETUP ----------------------------------------------------------------------
