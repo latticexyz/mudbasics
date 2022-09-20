@@ -5,6 +5,8 @@ import { defineLoadingStateComponent } from "./components";
 import { SystemTypes } from "contracts/types/SystemTypes";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { GameConfig, getNetworkConfig } from "./config";
+import { BigNumber } from "ethers";
+import { Coord } from "@latticexyz/utils";
 
 /**
  * The Network layer is the lowest layer in the client architecture.
@@ -32,6 +34,9 @@ export async function createNetworkLayer(config: GameConfig) {
   const actions = createActionSystem(world, txReduced$);
 
   // --- API ------------------------------------------------------------------------
+  function move(entity: number, coord: Coord) {
+    systems["system.Move"].executeTyped(BigNumber.from(entity), coord);
+  }
 
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
@@ -43,7 +48,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: {},
+    api: { move },
     dev: setupDevSystems(world, encoders, systems),
   };
 
