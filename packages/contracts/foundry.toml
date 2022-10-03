@@ -1,4 +1,4 @@
-[profile.default]
+[default]
 ffi = false
 fuzz_runs = 256
 optimizer = true
