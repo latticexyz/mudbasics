@@ -140,15 +140,16 @@ async function bootGame() {
 }
 
 const mountReact: { current: (mount: boolean) => void } = { current: () => void 0 };
+const setLayers: { current: (layers: Layers) => void } = { current: () => void 0 };
 
-function bootReact(layers: Layers) {
+function bootReact() {
   const rootElement = document.getElementById("react-root");
   if (!rootElement) return console.warn("React root not found");
 
   const root = ReactDOM.createRoot(rootElement);
 
   function renderEngine() {
-    root.render(<Engine layers={layers} mountReact={mountReact} />);
+    root.render(<Engine setLayers={setLayers} mountReact={mountReact} />);
   }
 
   renderEngine();
@@ -172,6 +173,7 @@ function bootReact(layers: Layers) {
 }
 
 export async function boot() {
-  const { layers } = await bootGame();
-  bootReact(layers as Layers);
+  bootReact();
+  const game = await bootGame();
+  setLayers.current(game.layers as Layers);
 }

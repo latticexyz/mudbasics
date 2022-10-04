@@ -1,6 +1,6 @@
 import { createWorld } from "@latticexyz/recs";
 import { setupDevSystems } from "./setup";
-import { createActionSystem, setupContracts } from "@latticexyz/std-client";
+import { createActionSystem, setupMUDNetwork } from "@latticexyz/std-client";
 import { defineLoadingStateComponent } from "./components";
 import { SystemTypes } from "contracts/types/SystemTypes";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
@@ -22,7 +22,7 @@ export async function createNetworkLayer(config: GameConfig) {
   };
 
   // --- SETUP ----------------------------------------------------------------------
-  const { txQueue, systems, txReduced$, network, startSync, encoders } = await setupContracts<
+  const { txQueue, systems, txReduced$, network, startSync, encoders } = await setupMUDNetwork<
     typeof components,
     SystemTypes
   >(getNetworkConfig(config), world, components, SystemAbis);

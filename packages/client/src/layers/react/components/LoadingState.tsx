@@ -1,7 +1,7 @@
 import React from "react";
 import { BootScreen, registerUIComponent } from "../engine";
 import { concat, map } from "rxjs";
-import { ComponentUpdate, EntityIndex, getComponentValue, Type } from "@latticexyz/recs";
+import { getComponentValue } from "@latticexyz/recs";
 import { GodID, SyncState } from "@latticexyz/network";
 
 export function registerLoadingState() {
@@ -19,36 +19,18 @@ export function registerLoadingState() {
         world,
       } = layers.network;
 
-      return concat(
-        [
-          {
-            entity: 0 as EntityIndex,
-            component: LoadingState,
-            value: [{ state: -1, msg: "Initializing", percentage: 0 }, undefined],
-          } as ComponentUpdate<{
-            state: Type.Number;
-            msg: Type.String;
-            percentage: Type.Number;
-          }>,
-        ],
-        LoadingState.update$
-      ).pipe(
-        map(({ value }) =>
-          value[0] && value[0]["state"] !== SyncState.LIVE
-            ? {
-                LoadingState,
-                world,
-              }
-            : null
-        )
+      return concat([1], LoadingState.update$).pipe(
+        map(() => ({
+          LoadingState,
+          world,
+        }))
       );
     },
 
     ({ LoadingState, world }) => {
       const GodEntityIndex = world.entityToIndex.get(GodID);
 
-      const loadingState = GodEntityIndex != null ? getComponentValue(LoadingState, GodEntityIndex) : undefined;
-
+      const loadingState = GodEntityIndex == null ? null : getComponentValue(LoadingState, GodEntityIndex);
       if (loadingState == null) {
         return <BootScreen initialOpacity={1}>Connecting</BootScreen>;
       }

@@ -29,7 +29,7 @@ export function setupDevSystems(
     const data = encoders[keccak256(component.metadata.contractId)](newValue);
     const entityId = world.entities[entity];
     console.log(`Sent transaction to edit networked Component ${component.id} for Entity ${entityId}`);
-    await systems["ember.system.componentDev"].executeTyped(
+    await systems["mudwar.system.ComponentDev"].executeTyped(
       keccak256(component.metadata.contractId),
       BigNumber.from(entityId),
       data

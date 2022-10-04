@@ -1,4 +1,4 @@
-import { SetupContractConfig } from "./setup/setupContracts";
+import { SetupContractConfig } from "@latticexyz/std-client";
 
 export type GameConfig = {
   worldAddress: string;
@@ -20,6 +20,7 @@ export const getNetworkConfig: (networkConfig: GameConfig) => SetupContractConfi
   provider: {
     jsonRpcUrl: config.jsonRpc,
     wsRpcUrl: config.wsRpc,
+    chainId: config.chainId,
     options: {
       batch: false,
     },

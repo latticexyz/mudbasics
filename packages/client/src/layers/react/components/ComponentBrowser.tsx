@@ -11,16 +11,19 @@ export function registerComponentBrowser() {
       rowStart: 1,
       rowEnd: 13,
     },
-    (layers) => of(layers),
-    (layers) => {
+    (layers) => of({ layers }),
+    ({ layers }) => {
+      const {
+        network: { world, dev },
+      } = layers;
       return (
         <Browser
-          world={layers.network.world}
-          entities={layers.network.world.entities}
+          world={world}
+          entities={world.entities}
           layers={layers}
-          devHighlightComponent={layers.network.dev.DevHighlightComponent}
-          hoverHighlightComponent={layers.network.dev.HoverHighlightComponent}
-          setContractComponentValue={layers.network.dev.setContractComponentValue}
+          devHighlightComponent={dev.DevHighlightComponent}
+          hoverHighlightComponent={dev.HoverHighlightComponent}
+          setContractComponentValue={dev.setContractComponentValue}
         />
       );
     }
