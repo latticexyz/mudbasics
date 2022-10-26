@@ -14,6 +14,12 @@
       "writeAccess": [
         "PositionComponent"
       ]
+    },
+    {
+      "name": "CatchSystem",
+      "writeAccess": [
+        "PositionComponent"
+      ]
     }
   ]
 }
