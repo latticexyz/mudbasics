@@ -1,4 +1,13 @@
 {
-  "components": ["ExampleComponent"],
-  "systems": [{ "name": "ComponentDevSystem", "writeAccess": ["*"] }]
+  "components": [
+    "PositionComponent"
+  ],
+  "systems": [
+    {
+      "name": "ComponentDevSystem",
+      "writeAccess": [
+        "*"
+      ]
+    }
+  ]
 }
