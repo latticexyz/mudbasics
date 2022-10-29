@@ -2,6 +2,7 @@ import React from "react";
 import { Browser } from "@latticexyz/ecs-browser";
 import { registerUIComponent } from "../engine";
 import { of } from "rxjs";
+
 export function registerComponentBrowser() {
   registerUIComponent(
     "ComponentBrowser",
@@ -24,7 +25,7 @@ export function registerComponentBrowser() {
           devHighlightComponent={dev.DevHighlightComponent}
           hoverHighlightComponent={dev.HoverHighlightComponent}
           setContractComponentValue={dev.setContractComponentValue}
-        />
+          />
       );
     }
   );
