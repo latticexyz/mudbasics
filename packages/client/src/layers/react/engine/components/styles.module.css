@@ -1,9 +1,20 @@
+
+.wrapper  {
+  background: url(../../assets/bg.png);
+  height: 100vh;
+  width: 100vw;
+  flex: 1;
+}
+
+.desktop  {
+  background: url(../../assets/bgDesktop.png);
+}
+
 .drag {
-  position: absolute;
-  height: 80px;
-  width: 80px;
-  border-radius: 8px;
-  background-color: hotpink;
+  height: 60px;
+  width: 60px;
+  border-radius: 100px;
+  background-color: #61D3E2;
   cursor: grab;
   touch-action: none;
   -webkit-user-select: none;
@@ -13,4 +24,89 @@
 
 .drag:focus {
   border: 2px solid red;
+}
+
+.topWrapper {
+  position: relative;
+}
+
+.bottomWrapper {
+  position: relative;
+}
+
+.circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: transparent;
+}
+
+.arrowLeft {
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  transform: translate(-50%, -5%);
+}
+
+.arrowRight {
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  transform: translate(-50%, 5%);
+}
+
+.playstop {
+
+}
+
+.digitalNumbers {
+  font-family: 'Digital Numbers Regular';
+  font-size: medium;
+  color: #61D3E2;
+}
+
+.trackName {
+  /* font-family: 'Digital Numbers Regular'; */
+  font-size: medium;
+  color: white;
+  margin: 5
+}
+
+.innerTrack {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  text-align: center;
+}
+
+.TopLeft {
+  position: absolute;
+  top: 5vh;
+  left: 10vw;
+}
+.BottomLeft {
+  position: absolute;
+  bottom: 5vh;
+  left: 10vw;
+}
+.TopRight {
+  position: absolute;
+  top: 5vh;
+  right: 10vw;
+}
+.BottomRight {
+  position: absolute;
+  bottom: 5vh;
+  right: 10vw;
+}
+
+.BottomCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: transparent;
 }
