@@ -1,8 +1,9 @@
 {
-  "components": ["PositionComponent", "CarriedByComponent"],
+  "components": ["PositionComponent", "CarriedByComponent", "SoundUriComponent"],
   "systems": [
     { "name": "ComponentDevSystem", "writeAccess": ["*"] },
     { "name": "MoveSystem", "writeAccess": ["PositionComponent"] },
-    { "name": "CatchSystem", "writeAccess": ["PositionComponent", "CarriedByComponent"] }
+    { "name": "CatchSystem", "writeAccess": ["PositionComponent", "CarriedByComponent"] },
+    { "name": "UploadSoundSystem", "writeAccess": ["SoundUriComponent"] }
   ]
 }
