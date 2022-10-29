@@ -9,6 +9,9 @@ import { Layers } from "./types";
 import { Engine as EngineImport } from "./layers/react/engine/Engine";
 import { registerUIComponents as registerUIComponentsImport } from "./layers/react/components";
 import { Wallet } from "ethers";
+import * as dotenv from 'dotenv' 
+
+dotenv.config()
 
 // Assign variables that can be overridden by HMR
 let createNetworkLayer = createNetworkLayerImport;

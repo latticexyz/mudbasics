@@ -1,0 +1,28 @@
+.desktop  {
+  background: url(../../assets/bgDesktop.png);
+  text-align: center;
+  flex: 1;
+}
+
+.content  {
+  margin: 10vh;
+  text-align: center;
+  flex: 1;
+}
+
+.dropzone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  margin: 40px;
+  border-width: 2px;
+  border-radius: 2px;
+  border-color: #C527DF;
+  border-style: dashed;
+  background-color: transparent;
+  color: #C527DF;
+  outline: none;
+  transition: border .24s ease-in-out;
+}

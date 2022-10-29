@@ -34,6 +34,16 @@
   position: relative;
 }
 
+.mintBtn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: transparent;
+  height: 40px
+}
+
+/* Circle */
 .circle {
   position: absolute;
   top: 50%;
@@ -60,9 +70,10 @@
 
 }
 
+
 .digitalNumbers {
   font-family: 'Digital Numbers Regular';
-  font-size: medium;
+  font-size: large;
   color: #61D3E2;
 }
 
@@ -70,7 +81,8 @@
   /* font-family: 'Digital Numbers Regular'; */
   font-size: medium;
   color: white;
-  margin: 5
+  margin: 5;
+  text-align: center
 }
 
 .innerTrack {
@@ -109,4 +121,41 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background: transparent;
+}
+
+
+/* Pad */
+.padBg {
+  position: absolute;
+  width: 326px;
+  height: 242px;
+  box-shadow: 3px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  
+  /* Gradient1 */
+  
+  background: linear-gradient(141.25deg, #F262FF 2.56%, #566CFE 99.37%);
+  border-radius: 21px;
+}
+
+.padButton {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dragPad {
+  height: 20px;
+  width: 20px;
+  border-radius: 100px;
+  background-color: #61D3E2;
+  cursor: grab;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  font-size: 10px;
 }

@@ -67,5 +67,7 @@
     "typescript": "^4.6.2",
     "wait-on": "^6.0.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "ipfs-car": "^0.9.1"
+  }
 }
