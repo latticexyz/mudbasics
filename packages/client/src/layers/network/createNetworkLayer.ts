@@ -48,6 +48,11 @@ export async function createNetworkLayer(config: GameConfig) {
     systems["system.Catch"].executeTyped(coord);
   }
 
+  function uploadSound(soundUri: string) {
+    systems["system.UploadSound"].executeTyped(soundUri);
+  }
+
+
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
@@ -58,7 +63,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { move, pickup },
+    api: { move, pickup, uploadSound },
     dev: setupDevSystems(world, encoders, systems),
   };
 
