@@ -81,7 +81,14 @@
   /* font-family: 'Digital Numbers Regular'; */
   font-size: medium;
   color: white;
-  margin: 5;
+  margin: 15;
+  text-align: center
+}
+
+.effectName {
+  font-size: small;
+  color: white;
+  margin: 3;
   text-align: center
 }
 

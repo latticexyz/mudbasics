@@ -28,6 +28,7 @@ export async function createNetworkLayer(config: GameConfig) {
     LoadingState: defineLoadingStateComponent(world),
     Position: defineCoordComponent(world, { id: "Position", metadata: { contractId: "component.Position" } }),
     CarriedBy: defineStringComponent(world, { id: "CarriedBy", metadata: { contractId: "component.CarriedBy" } }),
+    SoundUri: defineStringComponent(world, { id: "SoundUri", metadata: { contractId: "component.SoundUri" } }),
   };
 
   // --- SETUP ----------------------------------------------------------------------

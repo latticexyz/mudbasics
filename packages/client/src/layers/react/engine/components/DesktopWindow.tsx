@@ -17,16 +17,9 @@ export const DesktopWindow: React.FC = observer(() => {
       console.log("🚀 ~ acceptedFiles", acceptedFiles)
 
       const metadata = await client.store({
-        name: 'Pinpie',
-        description: 'Pin is not delicious beef!',
-        // image: new File(
-        //   [
-        //     /* data */
-        //   ],
-        //   'pinpie.jpg',
-        //   { type: '' }
-        // ),
-
+        name: 'Beat',
+        description: 'Metadata!',
+        image: acceptedFiles[0]
       })
       console.log(metadata.url)
 
