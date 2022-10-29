@@ -1,12 +1,14 @@
 import React, {useState} from "react";
 import { observer } from "mobx-react-lite";
-import { ComponentRenderer } from "./ComponentRenderer";
 import { useDrag } from '@use-gesture/react'
 import { a, useSpring } from '@react-spring/web'
 import styles from './styles.module.css'
 import { CircularProgress, CircularProgressLabel, CloseButton } from '@chakra-ui/react'
 import { ArrowLeftIcon, ArrowRightIcon, PlusSquareIcon } from '@chakra-ui/icons'
 import { Web3Modal } from '@web3modal/react'
+import { Midi } from '@tonejs/midi'
+// import * as Tone from 'tone'
+
 
 const config = {
   projectId: "1dbb5ef68df75ff636a45402f1a56657",
@@ -18,9 +20,11 @@ const config = {
   }
 };
 
+const midi = new Midi()
+
+
 export const MainWindow: React.FC = observer(() => {
   // Hooks
-  // return <ComponentRenderer />;
   const [mainPressed, setmainPressed] = useState(false)
   const [padPressed, setpadPressed] = useState(false)
 
@@ -43,6 +47,17 @@ export const MainWindow: React.FC = observer(() => {
     
     return;
   }
+
+  // const player = new Tone.Player({
+  //   url: "https://tonejs.github.io/audio/drum-samples/loops/ominous.mp3",
+  //   autostart: true,
+  // });
+  // const filter = new Tone.Filter(400, 'lowpass').toDestination();
+  // const feedbackDelay = new Tone.FeedbackDelay(0.125, 0.5).toDestination();
+  
+  // connect the player to the feedback delay and filter in parallel
+  // player.connect(filter);
+  // player.connect(feedbackDelay);
 
 
 
@@ -70,7 +85,7 @@ export const MainWindow: React.FC = observer(() => {
     <div className={styleprop}>
       <a.div tabIndex={-1} {...bind()} className={styles.drag} style={style} />
       <div>
-        <p className={styles.trackName}>
+        <p className={styles.effectName}>
           Effect
         </p>
       </div>
@@ -115,15 +130,13 @@ export const MainWindow: React.FC = observer(() => {
   return (
     <div className={styles.wrapper}>
       <div  className="flex fullscreen" style={{flexDirection: 'column'}}>
-
-          <div className={styles.topWrapper}>    
-            <div style={{height: "40vh"}}>
+ 
+          <div style={{height: "10vh"}}>
             <Web3Modal config={config} />
-          </div>     
           </div>     
           
           <div className={styles.topWrapper}>         
-            <div style={{height: "40vh"}}>
+            <div style={{height: "35vh"}}>
               <ArrowLeftIcon color="white" className={styles.arrowLeft} />
               <div className={styles.circle}>
                 <CircularProgress value={100} size='80vw' thickness='2px' color='#C527DF' trackColor='#C527DF' />
