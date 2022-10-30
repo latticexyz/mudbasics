@@ -59,7 +59,7 @@ export async function createNetworkLayer(config: GameConfig) {
     systems["system.SetName"].executeTyped(BigNumber.from(network.connectedAddress.get()), name);
   }
 
-  function setAuthors(authors: string[]) {
+  function setAuthors(authors: string) {
     systems["system.SetAuthors"].executeTyped(BigNumber.from(network.connectedAddress.get()), authors);
   }
 

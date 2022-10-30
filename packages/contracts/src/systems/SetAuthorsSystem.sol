@@ -12,13 +12,13 @@ contract SetAuthorsSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 entity, string[] memory desiredAuthors) = abi.decode(arguments, (uint256, string[]));
+    (uint256 entity, string memory desiredAuthors) = abi.decode(arguments, (uint256, string));
 
     AuthorsComponent AuthorsComponent = AuthorsComponent(getAddressById(components, AuthorsComponentID));
     AuthorsComponent.set(entity, desiredAuthors);
   }
 
-  function executeTyped(uint256 entity, string[] memory desiredAuthors) public returns (bytes memory) {
+  function executeTyped(uint256 entity, string memory desiredAuthors) public returns (bytes memory) {
     return execute(abi.encode(entity, desiredAuthors));
   }
 }
