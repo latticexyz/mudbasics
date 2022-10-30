@@ -28,6 +28,9 @@ export async function createNetworkLayer(config: GameConfig) {
     LoadingState: defineLoadingStateComponent(world),
     Position: defineCoordComponent(world, { id: "Position", metadata: { contractId: "component.Position" } }),
     CarriedBy: defineStringComponent(world, { id: "CarriedBy", metadata: { contractId: "component.CarriedBy" } }),
+    Name: defineStringComponent(world, { id: "Name", metadata: { contractId: "component.Name" } }),
+    Authors: defineStringComponent(world, { id: "Authors", metadata: { contractId: "component.Authors" } }),
+    SoundUri: defineStringComponent(world, { id: "SoundUri", metadata: { contractId: "component.SoundUri" } }),
   };
 
   // --- SETUP ----------------------------------------------------------------------
@@ -49,9 +52,16 @@ export async function createNetworkLayer(config: GameConfig) {
   }
 
   function uploadSound(soundUri: string) {
-    systems["system.UploadSound"].executeTyped(soundUri);
+    systems["system.UploadSound"].executeTyped(BigNumber.from(network.connectedAddress.get()), soundUri);
   }
 
+  function setName(name: string) {
+    systems["system.SetName"].executeTyped(BigNumber.from(network.connectedAddress.get()), name);
+  }
+
+  function setAuthors(authors: string) {
+    systems["system.SetAuthors"].executeTyped(BigNumber.from(network.connectedAddress.get()), authors);
+  }
 
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
@@ -63,7 +73,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { move, pickup, uploadSound },
+    api: { move, pickup, uploadSound, setName, setAuthors },
     dev: setupDevSystems(world, encoders, systems),
   };
 
