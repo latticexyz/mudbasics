@@ -4,6 +4,7 @@
   import UIAvatar from "./UIAvatar.svelte";
   import UIWorldStats from "./UIWorldStats.svelte";
   import UICharacterStats from "./UICharacterStats.svelte";
+  import UIOperationsEditor from "./UIOperationsEditor.svelte";
 </script>
 
 <div class="ui-container">
@@ -27,6 +28,11 @@
     <UIComponent title="Text Log">
       <UITextLog />
     </UIComponent>
+
+        <!-- ***** TEXT LOG -->
+        <UIComponent title="Operations Editor">
+          <UIOperationsEditor />
+        </UIComponent>
   </div>
 </div>
 

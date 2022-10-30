@@ -1,9 +1,8 @@
 <script lang="ts">
-  console.log("UIAvatar");
 </script>
 
 <div class="ui-avatar">
-  <img src="/img/avatar-placeholder.jpg" />
+  <img src="/img/avatar-placeholder.jpg" alt="Avatar" />
 </div>
 
 <style>
