@@ -12,13 +12,13 @@ contract UploadSoundSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 entity, string memory targetSoundUri) = abi.decode(arguments, (uint256, string));
+    (uint256 entity, string memory desiredSoundUri) = abi.decode(arguments, (uint256, string));
 
     SoundUriComponent soundComponent = SoundUriComponent(getAddressById(components, SoundUriComponentID));
-    soundComponent.set(entity, targetSoundUri);
+    soundComponent.set(entity, desiredSoundUri);
   }
 
-  function executeTyped(uint256 entity, string memory targetSound) public returns (bytes memory) {
-    return execute(abi.encode(entity, targetSound));
+  function executeTyped(uint256 entity, string memory desiredSound) public returns (bytes memory) {
+    return execute(abi.encode(entity, desiredSound));
   }
 }

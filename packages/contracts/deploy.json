@@ -1,9 +1,17 @@
 {
-  "components": ["PositionComponent", "CarriedByComponent", "SoundUriComponent"],
+  "components": [
+    "PositionComponent",
+    "CarriedByComponent",
+    "SoundUriComponent",
+    "NameComponent",
+    "AuthorsComponent"
+  ],
   "systems": [
     { "name": "ComponentDevSystem", "writeAccess": ["*"] },
     { "name": "MoveSystem", "writeAccess": ["PositionComponent"] },
     { "name": "CatchSystem", "writeAccess": ["PositionComponent", "CarriedByComponent"] },
-    { "name": "UploadSoundSystem", "writeAccess": ["SoundUriComponent"] }
+    { "name": "UploadSoundSystem", "writeAccess": ["SoundUriComponent"] },
+    { "name": "SetAuthorsSystem", "writeAccess": ["AuthorsComponent"] },
+    { "name": "SetNameSystem", "writeAccess": ["NameComponent"] }
   ]
 }
