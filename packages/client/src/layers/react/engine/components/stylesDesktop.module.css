@@ -1,13 +1,15 @@
 .desktop  {
-  background: url(../../assets/bgDesktop.png);
   text-align: center;
-  flex: 1;
+  background: url(../../assets/desktopBg.png) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 .content  {
-  margin: 10vh;
+  padding: 10vh;
   text-align: center;
-  flex: 1;
 }
 
 .dropzone {

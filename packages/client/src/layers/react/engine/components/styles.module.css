@@ -135,7 +135,7 @@
 .padBg {
   position: absolute;
   width: 326px;
-  height: 242px;
+  height: 220px;
   box-shadow: 3px;
   top: 50%;
   left: 50%;
@@ -165,4 +165,5 @@
   -webkit-user-select: none;
   user-select: none;
   font-size: 10px;
+  align-self: center;
 }

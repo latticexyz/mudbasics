@@ -51,8 +51,8 @@ export async function createNetworkLayer(config: GameConfig) {
     systems["system.Catch"].executeTyped(coord);
   }
 
-  function uploadSound(soundUri: string) {
-    systems["system.UploadSound"].executeTyped(BigNumber.from(network.connectedAddress.get()), soundUri);
+  function uploadSound(entityId: string, soundUri: string) {
+    systems["system.UploadSound"].executeTyped(BigNumber.from(entityId), soundUri);
   }
 
   function setName(name: string) {
