@@ -1,7 +1,6 @@
 {
   "components": [
-    "PositionComponent",
-    "CarriedByComponent"
+    "PositionComponent"
   ],
   "systems": [
     {
@@ -14,13 +13,6 @@
       "name": "MoveSystem",
       "writeAccess": [
         "PositionComponent"
-      ]
-    },
-    {
-      "name": "CatchSystem",
-      "writeAccess": [
-        "PositionComponent",
-        "CarriedByComponent"
       ]
     }
   ]
