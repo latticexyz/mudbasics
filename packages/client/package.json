@@ -21,11 +21,13 @@
     "@protobuf-ts/runtime": "^2.8.1",
     "@protobuf-ts/runtime-rpc": "^2.8.1",
     "@react-spring/web": "^9.5.5",
+    "@tonejs/midi": "^2.0.28",
     "@use-gesture/react": "^10.2.20",
     "@web3modal/ethereum": "^2.0.0-beta.1",
     "@web3modal/react": "^2.0.0-beta.1",
     "async-mutex": "^0.3.2",
     "contracts": "^0.2.0",
+    "crypto": "^1.0.1",
     "dotenv": "^16.0.3",
     "ethers": "^5.7.2",
     "framer-motion": "^7.6.2",
@@ -48,8 +50,7 @@
     "rxjs": "^7.5.5",
     "styled-components": "^5.3.5",
     "threads": "^1.7.0",
-    "tone": "^14.7.77",
-    "uuid": "^8.3.2"
+    "tone": "^14.7.77"
   },
   "devDependencies": {
     "@originjs/vite-plugin-commonjs": "^1.0.3",
@@ -62,6 +63,7 @@
     "@typescript-eslint/parser": "^5.12.1",
     "assert": "^2.0.0",
     "browserify-zlib": "^0.2.0",
+    "crypto-browserify": "^3.12.0",
     "cypress": "^9.5.0",
     "cypress-wait-until": "^1.7.2",
     "dpdm": "^3.9.0",

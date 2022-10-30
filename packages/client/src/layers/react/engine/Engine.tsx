@@ -1,14 +1,24 @@
 import React from "react";
 import { LayerContext, EngineContext } from "./context";
 import { EngineStore } from "./store";
-import { BootScreen, MainWindow, DesktopWindow } from "./components";
+import { BootScreen, MainWindow, DesktopWindow, ComponentRenderer } from "./components";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Layers } from "../../../types";
 import { ChakraProvider } from '@chakra-ui/react'
 import { BrowserView, MobileView } from 'react-device-detect';
+import { Web3Modal } from '@web3modal/react'
 
+const config = {
+  projectId: "1dbb5ef68df75ff636a45402f1a56657",
+  theme: "light",   
+  accentColor: "default",
+  ethereum: {
+    appName: 'web3Modal',
+    autoConnect: true
+  }
+};
 
 export const Engine: React.FC<{
   setLayers: { current: (layers: Layers) => void };
@@ -27,18 +37,25 @@ export const Engine: React.FC<{
 
   return (
     <>
-    <BrowserView>
-      <DesktopWindow />
-    </BrowserView>
-      <MobileView>
+          <Web3Modal config={config} />
+
           <LayerContext.Provider value={layers}>
             <EngineContext.Provider value={EngineStore}>
+
+            {/* <ComponentRenderer /> */}
+
+            <BrowserView>
+              <DesktopWindow layers={layers} />
+            </BrowserView>
+            
+            <MobileView>
               <ChakraProvider>
-                <MainWindow />
+                <MainWindow layers={layers} />
               </ChakraProvider>
+            </MobileView>
+
             </EngineContext.Provider>
           </LayerContext.Provider>
-      </MobileView>
     </>
   );
 });

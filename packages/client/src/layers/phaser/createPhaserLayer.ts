@@ -2,7 +2,7 @@ import { namespaceWorld } from "@latticexyz/recs";
 import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";
-import { createPositionSystem, createInputSystem } from "./systems";
+import { createPositionSystem, createInputSystem, createUploadSoundSystem } from "./systems";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -15,21 +15,22 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const components = {};
 
   // --- PHASER ENGINE SETUP --------------------------------------------------------
-  const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
-  world.registerDisposer(disposePhaser);
+  // const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
+  // world.registerDisposer(disposePhaser);
 
   // --- LAYER CONTEXT --------------------------------------------------------------
   const context = {
     world,
     components,
     network,
-    game,
-    scenes,
+    // game,
+    // scenes,
   };
 
   // --- SYSTEMS --------------------------------------------------------------------
-  createPositionSystem(network, context);
-  createInputSystem(network, context);
+  // createPositionSystem(network, context);
+  // createInputSystem(network, context);
+  createUploadSoundSystem(network, context)
 
   return context;
 }
