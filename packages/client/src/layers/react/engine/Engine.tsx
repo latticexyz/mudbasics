@@ -1,11 +1,14 @@
 import React from "react";
 import { LayerContext, EngineContext } from "./context";
 import { EngineStore } from "./store";
-import { BootScreen, MainWindow } from "./components";
+import { BootScreen, MainWindow, DesktopWindow } from "./components";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Layers } from "../../../types";
+import { ChakraProvider } from '@chakra-ui/react'
+import { BrowserView, MobileView } from 'react-device-detect';
+
 
 export const Engine: React.FC<{
   setLayers: { current: (layers: Layers) => void };
@@ -23,10 +26,19 @@ export const Engine: React.FC<{
   if (!mounted || !layers) return customBootScreen || <BootScreen />;
 
   return (
-    <LayerContext.Provider value={layers}>
-      <EngineContext.Provider value={EngineStore}>
-        <MainWindow />
-      </EngineContext.Provider>
-    </LayerContext.Provider>
+    <>
+    <BrowserView>
+      <DesktopWindow />
+    </BrowserView>
+      <MobileView>
+          <LayerContext.Provider value={layers}>
+            <EngineContext.Provider value={EngineStore}>
+              <ChakraProvider>
+                <MainWindow />
+              </ChakraProvider>
+            </EngineContext.Provider>
+          </LayerContext.Provider>
+      </MobileView>
+    </>
   );
 });
