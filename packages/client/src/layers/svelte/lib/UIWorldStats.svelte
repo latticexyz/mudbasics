@@ -11,6 +11,7 @@
       <strong>{shortenAddress($layers.network.world.entities[id])}</strong>
       is at: x => {value.position.x}
       y => {value.position.y}
+      / energy => {value.energy}
     </div>
   {/each}
 </div>

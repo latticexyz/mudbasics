@@ -1,6 +1,7 @@
 {
   "components": [
-    "PositionComponent"
+    "PositionComponent",
+    "EnergyComponent"
   ],
   "systems": [
     {
@@ -12,7 +13,14 @@
     {
       "name": "MoveSystem",
       "writeAccess": [
-        "PositionComponent"
+        "PositionComponent",
+        "EnergyComponent"
+      ]
+    },
+    {
+      "name": "EnergySystem",
+      "writeAccess": [
+        "EnergyComponent"
       ]
     }
   ]
