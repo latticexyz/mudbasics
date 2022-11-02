@@ -1,14 +1,19 @@
 <script lang="ts">
   import { layers } from "../stores/layers";
+  import { entities } from "../stores/entities";
+  import { playerAddress } from "../stores/player";
   import { getRandomInt } from "../utils/ui";
-
-  console.log($layers);
 
   let randomMovementActive = false;
   let randomMovementInterval = {};
 
   let energyTestActive = false;
   let energyTestInterval = {};
+
+  function spawn() {
+    console.log("Spawn...");
+    $layers.network?.api.spawn();
+  }
 
   function toggleRandomMovement() {
     if (randomMovementActive) {
@@ -37,13 +42,21 @@
   }
 </script>
 
-<div class="ui-text-log">
-  <button class:running={randomMovementActive} on:click={toggleRandomMovement}>
-    {randomMovementActive ? "Stop" : "Start"} random movement
-  </button>
-  <button class:running={energyTestActive} on:click={toggleEnergyTest}>
-    {energyTestActive ? "Stop" : "Start"} energy test
-  </button>
+<div class="ui-operations-editor">
+  {#if $entities[$playerAddress]}
+    <div class="operations">
+      <button class:running={randomMovementActive} on:click={toggleRandomMovement}>
+        {randomMovementActive ? "Stop" : "Start"} random movement
+      </button>
+      <button class:running={energyTestActive} on:click={toggleEnergyTest}>
+        {energyTestActive ? "Stop" : "Start"} energy test
+      </button>
+    </div>
+  {:else}
+    <div class="spawn">
+      <button on:click={spawn}>Spawn</button>
+    </div>
+  {/if}
 </div>
 
 <style>

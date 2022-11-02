@@ -1,7 +1,9 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "plugins": [
+    "@typescript-eslint"
+  ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -13,7 +15,9 @@
       {
         "paths": [
           {
-            "importNames": ["delay"],
+            "importNames": [
+              "delay"
+            ],
             "name": "rxjs",
             "message": "Use delayTime from utils/rx instead."
           }

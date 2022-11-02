@@ -12,7 +12,7 @@
 <style>
   .ui-component {
     float: left;
-    width: 24%;
+    width: 32%;
     min-height: 200px;
     border: 1px solid #a4a4a4;
     margin: 4px;

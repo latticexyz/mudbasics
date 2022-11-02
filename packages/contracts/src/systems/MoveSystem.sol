@@ -16,12 +16,12 @@ contract MoveSystem is System {
     (uint256 entity, Coord memory targetPosition) = abi.decode(arguments, (uint256, Coord));
 
     EnergyComponent energy = EnergyComponent(getAddressById(components, EnergyComponentID));
+    PositionComponent position = PositionComponent(getAddressById(components, PositionComponentID));
 
-    if (energy.has(entity)) {
+    if (energy.has(entity) && position.has(entity)) {
       int32 currentEnergyLevel = energy.getValue(entity);
 
       if (currentEnergyLevel > 1) {
-        PositionComponent position = PositionComponent(getAddressById(components, PositionComponentID));
         position.set(entity, targetPosition);
         energy.set(entity, currentEnergyLevel - 1);
       }

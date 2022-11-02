@@ -25,14 +25,14 @@
     </UIComponent>
 
     <!-- ***** TEXT LOG -->
-    <UIComponent title="Text Log">
+    <!-- <UIComponent title="Text Log">
       <UITextLog />
-    </UIComponent>
+    </UIComponent> -->
 
-        <!-- ***** TEXT LOG -->
-        <UIComponent title="Operations Editor">
-          <UIOperationsEditor />
-        </UIComponent>
+    <!-- ***** OPERATIONS EDITOR -->
+    <UIComponent title="Operations Editor">
+      <UIOperationsEditor />
+    </UIComponent>
   </div>
 </div>
 

@@ -2,18 +2,18 @@ import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { entities, indexToID } from "../stores/entities";
 
-export function createPositionSystem(network: NetworkLayer) {
+export function createResourceSystem(network: NetworkLayer) {
   const {
     world,
-    components: { Position },
+    components: { Resource },
   } = network;
 
-  defineComponentSystem(world, Position, (update) => {
-    console.log("==> Position system: ", update);
-    const position = update.value[0];
+  defineComponentSystem(world, Resource, (update) => {
+    console.log("==> Resource system: ", update);
+    const resource = update.value[0]?.value;
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};
-      value[indexToID(update.entity)].position = position;
+      value[indexToID(update.entity)].resource = resource;
       return value;
     });
   });

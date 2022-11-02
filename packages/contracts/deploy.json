@@ -1,7 +1,8 @@
 {
   "components": [
     "PositionComponent",
-    "EnergyComponent"
+    "EnergyComponent",
+    "ResourceComponent"
   ],
   "systems": [
     {
@@ -21,6 +22,14 @@
       "name": "EnergySystem",
       "writeAccess": [
         "EnergyComponent"
+      ]
+    },
+    {
+      "name": "SpawnSystem",
+      "writeAccess": [
+        "PositionComponent",
+        "EnergyComponent",
+        "ResourceComponent"
       ]
     }
   ]

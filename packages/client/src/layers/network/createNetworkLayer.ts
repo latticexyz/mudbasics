@@ -28,6 +28,7 @@ export async function createNetworkLayer(config: GameConfig) {
     LoadingState: defineLoadingStateComponent(world),
     Position: defineCoordComponent(world, { id: "Position", metadata: { contractId: "component.Position" } }),
     Energy: defineNumberComponent(world, { id: "Energy", metadata: { contractId: "component.Energy" } }),
+    Resource: defineNumberComponent(world, { id: "Resource", metadata: { contractId: "component.Resource" } }),
   };
 
   // --- SETUP ----------------------------------------------------------------------
@@ -48,6 +49,10 @@ export async function createNetworkLayer(config: GameConfig) {
     systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()));
   }
 
+  function spawn() {
+    systems["system.Spawn"].executeTyped(BigNumber.from(network.connectedAddress.get()));
+  }
+
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
@@ -58,7 +63,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { move, incrementEnergy },
+    api: { move, incrementEnergy, spawn },
     dev: setupDevSystems(world, encoders, systems),
   };
 
