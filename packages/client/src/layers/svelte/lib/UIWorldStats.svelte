@@ -1,22 +1,7 @@
 <script lang="ts">
-  import { entities, indexToID } from "../stores/entities";
-  import { playerAddress } from "../stores/player";
-  import { shortenAddress } from "../utils/ui";
+  import { entities } from "../stores/entities";
 </script>
 
 <div class="ui-world-stats">
-  {#each Object.entries($entities) as [address, value]}
-    <div class:player={address === $playerAddress}>
-      <strong>{shortenAddress(address)}</strong>
-      is at: x => {value.position?.x}
-      y => {value.position?.y}
-      / energy => {value.energy}
-    </div>
-  {/each}
+  <div>Entities: {Object.keys($entities).length}</div>
 </div>
-
-<style>
-  .player {
-    color: blue;
-  }
-</style>

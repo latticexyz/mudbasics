@@ -14,9 +14,9 @@
       <UIAvatar />
     </UIComponent>
 
-    <!-- ***** WORLD STATS -->
-    <UIComponent title="World Stats">
-      <UIWorldStats />
+    <!-- ***** TEXT LOG -->
+    <UIComponent title="Text Log">
+      <UITextLog />
     </UIComponent>
 
     <!-- ***** CHARACTER STATS -->
@@ -24,10 +24,10 @@
       <UICharacterStats />
     </UIComponent>
 
-    <!-- ***** TEXT LOG -->
-    <!-- <UIComponent title="Text Log">
-      <UITextLog />
-    </UIComponent> -->
+    <!-- ***** WORLD STATS -->
+    <UIComponent title="World Stats">
+      <UIWorldStats />
+    </UIComponent>
 
     <!-- ***** OPERATIONS EDITOR -->
     <UIComponent title="Operations Editor">

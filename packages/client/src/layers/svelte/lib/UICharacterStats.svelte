@@ -5,7 +5,7 @@
 </script>
 
 <div class="ui-character-stats">
-  <div><strong>{$playerAddress}</strong></div>
+  <div><strong>{shortenAddress($playerAddress)}</strong></div>
   {#if $entities[$playerAddress]}
     <div>x: {$entities[$playerAddress].position.x}</div>
     <div>y: {$entities[$playerAddress].position.y}</div>
