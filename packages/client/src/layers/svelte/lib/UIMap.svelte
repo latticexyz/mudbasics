@@ -1,6 +1,8 @@
 <script lang="ts">
   import { entities } from "../stores/entities";
   import { playerAddress } from "../stores/player";
+
+  $: console.log($entities);
 </script>
 
 <div class="ui-map">
@@ -10,7 +12,7 @@
         class="agent"
         class:player={address === $playerAddress}
         class:block={!value.energy}
-        style={"left: " + value.position?.x * 2 + "px; top: " + value.position?.y * 2 + "px;"}
+        style={"left: " + (value.position?.x * 10 - 5) + "px; top: " + (value.position?.y * 10 - 5) + "px;"}
       />
     {/each}
   </div>
@@ -22,16 +24,16 @@
   }
 
   .map-container {
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
     position: relative;
     background: rgb(114, 167, 114);
   }
 
   .agent {
     position: absolute;
-    width: 2px;
-    height: 2px;
+    width: 10px;
+    height: 10px;
     background: yellow;
     z-index: 100;
   }
@@ -43,8 +45,8 @@
 
   .block {
     position: absolute;
-    width: 2px;
-    height: 2px;
+    width: 10px;
+    height: 10px;
     background: black;
     z-index: 99;
   }

@@ -24,10 +24,10 @@ contract SpawnSystem is System {
 
     if (!positionComponent.has(entity)) {
       int32 randomX = int32(
-        int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender))) % 100)
+        int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender))) % 30)
       );
       int32 randomY = int32(
-        int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender))) % 100)
+        int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender))) % 30)
       );
       Coord memory startingPosition = Coord(randomX, randomY);
       energyComponent.set(entity, 100);

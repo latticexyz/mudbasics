@@ -27,7 +27,7 @@ contract GatherSystem is System {
     int32 currentResourceBalance = resourceComponent.getValue(entity);
     Coord memory currentEntityPosition = positionComponent.getValue(entity);
 
-    if (currentEnergyLevel > 5) {
+    if (currentEnergyLevel > 2) {
       // Check if there is a terrain component in this location
       QueryFragment[] memory fragments = new QueryFragment[](2);
       fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(currentEntityPosition));
@@ -36,7 +36,7 @@ contract GatherSystem is System {
 
       if (entities.length == 0) {
         resourceComponent.set(entity, currentResourceBalance + 5);
-        energyComponent.set(entity, currentEnergyLevel - 5);
+        energyComponent.set(entity, currentEnergyLevel - 2);
 
         // Create new empty terraion component
         uint256 newTerrainEntity = world.getUniqueEntityId();

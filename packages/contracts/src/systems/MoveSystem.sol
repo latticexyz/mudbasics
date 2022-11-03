@@ -25,35 +25,84 @@ contract MoveSystem is System {
         Coord memory currentPosition = positionComponent.getValue(entity);
         Coord memory newPosition = Coord(currentPosition.x + 1, currentPosition.y + 1);
 
-        // New random X position
-        if (currentPosition.x == 0) {
-          newPosition.x = currentPosition.x + 1;
-        } else if (currentPosition.x == 100) {
-          newPosition.x = currentPosition.x - 1;
-        } else {
-          uint256 randomX = uint256(
-            keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender, currentPosition.x))
-          ) % 2;
-          if (randomX == 0) {
+        uint256 randomMovementPattern = uint256(
+          keccak256(
+            abi.encodePacked(
+              block.timestamp,
+              block.number,
+              block.difficulty,
+              msg.sender,
+              currentPosition.x,
+              currentPosition.y
+            )
+          )
+        ) % 3;
+
+        if (randomMovementPattern == 0) {
+          newPosition.y = currentPosition.y;
+          // New random X position
+          if (currentPosition.x == 1) {
+            newPosition.x = currentPosition.x + 1;
+          } else if (currentPosition.x == 30) {
             newPosition.x = currentPosition.x - 1;
           } else {
-            newPosition.x = currentPosition.x + 1;
+            uint256 randomX = uint256(
+              keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender, currentPosition.x))
+            ) % 2;
+            if (randomX == 0) {
+              newPosition.x = currentPosition.x - 1;
+            } else {
+              newPosition.x = currentPosition.x + 1;
+            }
           }
-        }
-
-        // New random Y position
-        if (currentPosition.y == 0) {
-          newPosition.y = currentPosition.y + 1;
-        } else if (currentPosition.y == 100) {
-          newPosition.y = currentPosition.y - 1;
-        } else {
-          uint256 randomY = uint256(
-            keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, currentPosition.y))
-          ) % 2;
-          if (randomY == 0) {
+        } else if (randomMovementPattern == 1) {
+          // New random Y position
+          newPosition.x = currentPosition.x;
+          if (currentPosition.y == 1) {
+            newPosition.y = currentPosition.y + 1;
+          } else if (currentPosition.y == 30) {
             newPosition.y = currentPosition.y - 1;
           } else {
+            uint256 randomY = uint256(
+              keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, currentPosition.y))
+            ) % 2;
+            if (randomY == 0) {
+              newPosition.y = currentPosition.y - 1;
+            } else {
+              newPosition.y = currentPosition.y + 1;
+            }
+          }
+        } else {
+          // New random Y position
+          if (currentPosition.y == 1) {
             newPosition.y = currentPosition.y + 1;
+          } else if (currentPosition.y == 30) {
+            newPosition.y = currentPosition.y - 1;
+          } else {
+            uint256 randomY = uint256(
+              keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, currentPosition.y))
+            ) % 2;
+            if (randomY == 0) {
+              newPosition.y = currentPosition.y - 1;
+            } else {
+              newPosition.y = currentPosition.y + 1;
+            }
+          }
+
+          // New random X position
+          if (currentPosition.x == 1) {
+            newPosition.x = currentPosition.x + 1;
+          } else if (currentPosition.x == 30) {
+            newPosition.x = currentPosition.x - 1;
+          } else {
+            uint256 randomX = uint256(
+              keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender, currentPosition.x))
+            ) % 2;
+            if (randomX == 0) {
+              newPosition.x = currentPosition.x - 1;
+            } else {
+              newPosition.x = currentPosition.x + 1;
+            }
           }
         }
 
