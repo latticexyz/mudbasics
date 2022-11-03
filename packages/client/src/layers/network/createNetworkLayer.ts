@@ -5,13 +5,13 @@ import {
   setupMUDNetwork,
   defineCoordComponent,
   defineNumberComponent,
+  defineBoolComponent,
 } from "@latticexyz/std-client";
 import { defineLoadingStateComponent } from "./components";
 import { SystemTypes } from "contracts/types/SystemTypes";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { GameConfig, getNetworkConfig } from "./config";
 import { BigNumber } from "ethers";
-import { Coord } from "@latticexyz/utils";
 
 /**
  * The Network layer is the lowest layer in the client architecture.
@@ -29,6 +29,7 @@ export async function createNetworkLayer(config: GameConfig) {
     Position: defineCoordComponent(world, { id: "Position", metadata: { contractId: "component.Position" } }),
     Energy: defineNumberComponent(world, { id: "Energy", metadata: { contractId: "component.Energy" } }),
     Resource: defineNumberComponent(world, { id: "Resource", metadata: { contractId: "component.Resource" } }),
+    Agent: defineBoolComponent(world, { id: "Agent", metadata: { contractId: "component.Agent" } }),
   };
 
   // --- SETUP ----------------------------------------------------------------------

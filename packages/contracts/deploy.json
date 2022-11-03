@@ -2,7 +2,8 @@
   "components": [
     "PositionComponent",
     "EnergyComponent",
-    "ResourceComponent"
+    "ResourceComponent",
+    "AgentComponent"
   ],
   "systems": [
     {
@@ -29,7 +30,8 @@
       "writeAccess": [
         "PositionComponent",
         "EnergyComponent",
-        "ResourceComponent"
+        "ResourceComponent",
+        "AgentComponent"
       ]
     }
   ]
