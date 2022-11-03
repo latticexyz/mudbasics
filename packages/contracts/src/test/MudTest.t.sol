@@ -34,7 +34,8 @@ contract MudTest is DSTest {
   }
 
   function setUp() public {
-    world = deploy.deploy(address(0), address(0), false);
+    deployer = utils.getNextUserAddress();
+    world = deploy.deploy(deployer, address(0), false);
     components = world.components();
     systems = world.systems();
     deployer = deploy.deployer();
