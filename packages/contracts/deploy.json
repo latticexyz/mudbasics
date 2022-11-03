@@ -3,7 +3,8 @@
     "PositionComponent",
     "EnergyComponent",
     "ResourceComponent",
-    "AgentComponent"
+    "AgentComponent",
+    "TerrainComponent"
   ],
   "systems": [
     {
@@ -32,6 +33,15 @@
         "EnergyComponent",
         "ResourceComponent",
         "AgentComponent"
+      ]
+    },
+    {
+      "name": "GatherSystem",
+      "writeAccess": [
+        "PositionComponent",
+        "ResourceComponent",
+        "EnergyComponent",
+        "TerrainComponent"
       ]
     }
   ]

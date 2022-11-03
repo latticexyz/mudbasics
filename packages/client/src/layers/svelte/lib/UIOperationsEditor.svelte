@@ -9,9 +9,21 @@
   let energyTestActive = false;
   let energyTestInterval = {};
 
+  let moveGatherActive = false;
+  let moveGatherInterval = {};
+  let turnCounter = 0;
+
   function spawn() {
     console.log("Spawn...");
     $layers.network?.api.spawn();
+  }
+
+  function singleMove() {
+    $layers.network?.api.move();
+  }
+
+  function singleGather() {
+    $layers.network?.api.gather();
   }
 
   function toggleRandomMovement() {
@@ -39,11 +51,31 @@
       energyTestActive = true;
     }
   }
+
+  function toggleMoveGather() {
+    if (moveGatherActive) {
+      clearInterval(moveGatherInterval);
+      moveGatherActive = false;
+    } else {
+      moveGatherInterval = setInterval(() => {
+        if (turnCounter % 2 == 0) {
+          console.log("move");
+          $layers.network?.api.move();
+        }
+        if (turnCounter % 2 == 1) {
+          console.log("gather");
+          $layers.network?.api.gather();
+        }
+        turnCounter++;
+      }, 1000);
+      moveGatherActive = true;
+    }
+  }
 </script>
 
 <div class="ui-operations-editor">
   {#if $entities[$playerAddress]}
-    <div class="operation-grid">
+    <!-- <div class="operation-grid">
       <select name="slot-1">
         <option value="wait">-</option>
         <option value="move">Move</option>
@@ -69,13 +101,18 @@
         <option value="gather">Gather</option>
       </select>
       <input type="submit" value="Submit" />
-    </div>
+    </div> -->
     <div class="test-operations">
+      <button on:click={singleMove}>Single move</button>
+      <button on:click={singleGather}>Single gather</button>
       <button class:running={randomMovementActive} on:click={toggleRandomMovement}>
         {randomMovementActive ? "Stop" : "Start"} random movement
       </button>
+      <button class:running={moveGatherActive} on:click={toggleMoveGather}>
+        {moveGatherActive ? "Stop" : "Start"} move + gather
+      </button>
       <button class:running={energyTestActive} on:click={toggleEnergyTest}>
-        {energyTestActive ? "Stop" : "Start"} energy test
+        {energyTestActive ? "Stop" : "Start"} energy refill
       </button>
     </div>
   {:else}
@@ -101,6 +138,7 @@
   button {
     margin-bottom: 10px;
     background: #92ff7c;
+    display: block;
   }
 
   .running {

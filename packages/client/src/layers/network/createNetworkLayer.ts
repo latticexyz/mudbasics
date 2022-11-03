@@ -54,6 +54,10 @@ export async function createNetworkLayer(config: GameConfig) {
     systems["system.Spawn"].executeTyped(BigNumber.from(network.connectedAddress.get()));
   }
 
+  function gather() {
+    systems["system.Gather"].executeTyped(BigNumber.from(network.connectedAddress.get()));
+  }
+
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
@@ -64,7 +68,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { move, incrementEnergy, spawn },
+    api: { move, incrementEnergy, spawn, gather },
     dev: setupDevSystems(world, encoders, systems),
   };
 
