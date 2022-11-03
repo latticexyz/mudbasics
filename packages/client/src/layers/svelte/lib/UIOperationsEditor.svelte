@@ -2,7 +2,6 @@
   import { layers } from "../stores/layers";
   import { entities } from "../stores/entities";
   import { playerAddress } from "../stores/player";
-  import { getRandomInt } from "../utils/ui";
 
   let randomMovementActive = false;
   let randomMovementInterval = {};
@@ -22,7 +21,7 @@
     } else {
       randomMovementInterval = setInterval(() => {
         console.log("move");
-        $layers.network?.api.move({ x: getRandomInt(0, 10), y: getRandomInt(0, 10) });
+        $layers.network?.api.move();
       }, 1000);
       randomMovementActive = true;
     }
@@ -44,7 +43,34 @@
 
 <div class="ui-operations-editor">
   {#if $entities[$playerAddress]}
-    <div class="operations">
+    <div class="operation-grid">
+      <select name="slot-1">
+        <option value="wait">-</option>
+        <option value="move">Move</option>
+        <option value="search">Search</option>
+        <option value="gather">Gather</option>
+      </select>
+      <select name="slot-2">
+        <option value="wait">-</option>
+        <option value="move">Move</option>
+        <option value="search">Search</option>
+        <option value="gather">Gather</option>
+      </select>
+      <select name="slot-3">
+        <option value="wait">-</option>
+        <option value="move">Move</option>
+        <option value="search">Search</option>
+        <option value="gather">Gather</option>
+      </select>
+      <select name="slot-4">
+        <option value="wait">-</option>
+        <option value="move">Move</option>
+        <option value="search">Search</option>
+        <option value="gather">Gather</option>
+      </select>
+      <input type="submit" value="Submit" />
+    </div>
+    <div class="test-operations">
       <button class:running={randomMovementActive} on:click={toggleRandomMovement}>
         {randomMovementActive ? "Stop" : "Start"} random movement
       </button>
@@ -60,6 +86,18 @@
 </div>
 
 <style>
+  select {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+  }
+
+  input[type="submit"] {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background: #92ff7c;
+  }
+
   button {
     margin-bottom: 10px;
     background: #92ff7c;

@@ -13,22 +13,57 @@ contract MoveSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 entity, Coord memory targetPosition) = abi.decode(arguments, (uint256, Coord));
+    uint256 entity = abi.decode(arguments, (uint256));
 
-    EnergyComponent energy = EnergyComponent(getAddressById(components, EnergyComponentID));
-    PositionComponent position = PositionComponent(getAddressById(components, PositionComponentID));
+    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
+    PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
 
-    if (energy.has(entity) && position.has(entity)) {
-      int32 currentEnergyLevel = energy.getValue(entity);
+    if (energyComponent.has(entity) && positionComponent.has(entity)) {
+      int32 currentEnergyLevel = energyComponent.getValue(entity);
 
       if (currentEnergyLevel > 1) {
-        position.set(entity, targetPosition);
-        energy.set(entity, currentEnergyLevel - 1);
+        Coord memory currentPosition = positionComponent.getValue(entity);
+        Coord memory newPosition = Coord(currentPosition.x + 1, currentPosition.y + 1);
+
+        // New random X position
+        if (currentPosition.x == 0) {
+          newPosition.x = currentPosition.x + 1;
+        } else if (currentPosition.x == 100) {
+          newPosition.x = currentPosition.x - 1;
+        } else {
+          uint256 randomX = uint256(
+            keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender, currentPosition.x))
+          ) % 2;
+          if (randomX == 0) {
+            newPosition.x = currentPosition.x - 1;
+          } else {
+            newPosition.x = currentPosition.x + 1;
+          }
+        }
+
+        // New random Y position
+        if (currentPosition.y == 0) {
+          newPosition.y = currentPosition.y + 1;
+        } else if (currentPosition.y == 100) {
+          newPosition.y = currentPosition.y - 1;
+        } else {
+          uint256 randomY = uint256(
+            keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, currentPosition.y))
+          ) % 2;
+          if (randomY == 0) {
+            newPosition.y = currentPosition.y - 1;
+          } else {
+            newPosition.y = currentPosition.y + 1;
+          }
+        }
+
+        positionComponent.set(entity, newPosition);
+        energyComponent.set(entity, currentEnergyLevel - 1);
       }
     }
   }
 
-  function executeTyped(uint256 entity, Coord memory targetPosition) public returns (bytes memory) {
-    return execute(abi.encode(entity, targetPosition));
+  function executeTyped(uint256 entity) public returns (bytes memory) {
+    return execute(abi.encode(entity));
   }
 }

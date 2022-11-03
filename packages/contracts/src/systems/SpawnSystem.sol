@@ -21,7 +21,7 @@ contract SpawnSystem is System {
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
 
     if (!positionComponent.has(entity)) {
-      Coord memory startingPosition = Coord(10, 10);
+      Coord memory startingPosition = Coord(50, 50);
       energyComponent.set(entity, 100);
       resourceComponent.set(entity, 0);
       positionComponent.set(entity, startingPosition);

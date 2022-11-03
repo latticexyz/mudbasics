@@ -11,7 +11,7 @@ contract SpawnSystemTest is MudTest {
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
     PositionComponent positionComponent = PositionComponent(component(PositionComponentID));
     Coord memory position = positionComponent.getValue(entity);
-    assertEq(position.x, 10);
-    assertEq(position.y, 10);
+    assertEq(position.x, 50);
+    assertEq(position.y, 50);
   }
 }
