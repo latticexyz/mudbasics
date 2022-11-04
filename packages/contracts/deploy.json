@@ -4,7 +4,8 @@
     "EnergyComponent",
     "ResourceComponent",
     "AgentComponent",
-    "TerrainComponent"
+    "TerrainComponent",
+    "NameComponent"
   ],
   "systems": [
     {
@@ -32,7 +33,8 @@
         "PositionComponent",
         "EnergyComponent",
         "ResourceComponent",
-        "AgentComponent"
+        "AgentComponent",
+        "NameComponent"
       ]
     },
     {

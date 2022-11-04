@@ -8,6 +8,7 @@ import { PositionComponent, ID as PositionComponentID, Coord } from "../componen
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
 import { AgentComponent, ID as AgentComponentID } from "../components/AgentComponent.sol";
+import { NameComponent, ID as NameComponentID } from "../components/NameComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Spawn"));
 
@@ -15,12 +16,14 @@ contract SpawnSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    uint256 entity = abi.decode(arguments, (uint256));
+    (uint256 entity, string memory name) = abi.decode(arguments, (uint256, string));
 
+    // Initialize components
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     AgentComponent agentComponent = AgentComponent(getAddressById(components, AgentComponentID));
+    NameComponent nameComponent = NameComponent(getAddressById(components, NameComponentID));
 
     if (!positionComponent.has(entity)) {
       int32 randomX = int32(
@@ -30,6 +33,7 @@ contract SpawnSystem is System {
         int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender))) % 30)
       );
       Coord memory startingPosition = Coord(randomX, randomY);
+      nameComponent.set(entity, name);
       energyComponent.set(entity, 100);
       resourceComponent.set(entity, 0);
       positionComponent.set(entity, startingPosition);
@@ -37,7 +41,7 @@ contract SpawnSystem is System {
     }
   }
 
-  function executeTyped(uint256 entity) public returns (bytes memory) {
-    return execute(abi.encode(entity));
+  function executeTyped(uint256 entity, string memory name) public returns (bytes memory) {
+    return execute(abi.encode(entity, name));
   }
 }

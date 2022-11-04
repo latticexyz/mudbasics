@@ -13,9 +13,11 @@
   let moveGatherInterval = {};
   let turnCounter = 0;
 
+  let userName = "";
+
   function spawn() {
-    console.log("Spawn...");
-    $layers.network?.api.spawn();
+    console.log("Spawn...", userName);
+    $layers.network?.api.spawn(userName);
   }
 
   function singleMove() {
@@ -117,6 +119,7 @@
     </div>
   {:else}
     <div class="spawn">
+      <input type="text" bind:value={userName} />
       <button on:click={spawn}>Spawn</button>
     </div>
   {/if}

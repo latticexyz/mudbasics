@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { bootGame } from "./boot";
   import UIContainer from "./lib/UIContainer.svelte";
-  import { createPositionSystem, createEnergySystem, createResourceSystem } from "./systems";
+  import { createPositionSystem, createEnergySystem, createResourceSystem, createNameSystem } from "./systems";
   import { layers as layersStore } from "./stores/layers";
 
   onMount(async () => {
@@ -16,6 +16,7 @@
     createPositionSystem(layers.network);
     createEnergySystem(layers.network);
     createResourceSystem(layers.network);
+    createNameSystem(layers.network);
 
     layersStore.set(layers);
   });

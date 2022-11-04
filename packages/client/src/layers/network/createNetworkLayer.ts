@@ -6,6 +6,7 @@ import {
   defineCoordComponent,
   defineNumberComponent,
   defineBoolComponent,
+  defineStringComponent,
 } from "@latticexyz/std-client";
 import { defineLoadingStateComponent } from "./components";
 import { SystemTypes } from "contracts/types/SystemTypes";
@@ -30,6 +31,8 @@ export async function createNetworkLayer(config: GameConfig) {
     Energy: defineNumberComponent(world, { id: "Energy", metadata: { contractId: "component.Energy" } }),
     Resource: defineNumberComponent(world, { id: "Resource", metadata: { contractId: "component.Resource" } }),
     Agent: defineBoolComponent(world, { id: "Agent", metadata: { contractId: "component.Agent" } }),
+    Terrain: defineBoolComponent(world, { id: "Terrain", metadata: { contractId: "component.Terrain" } }),
+    Name: defineStringComponent(world, { id: "Name", metadata: { contractId: "component.Name" } }),
   };
 
   // --- SETUP ----------------------------------------------------------------------
@@ -50,8 +53,9 @@ export async function createNetworkLayer(config: GameConfig) {
     systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()));
   }
 
-  function spawn() {
-    systems["system.Spawn"].executeTyped(BigNumber.from(network.connectedAddress.get()));
+  function spawn(name: string) {
+    console.log("===> name", name);
+    systems["system.Spawn"].executeTyped(BigNumber.from(network.connectedAddress.get()), name);
   }
 
   function gather() {

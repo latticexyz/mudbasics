@@ -8,10 +8,11 @@
   {#each Object.entries($entities) as [address, value]}
     {#if value.energy}
       <div class:player={address === $playerAddress}>
-        <strong>{shortenAddress(address)}</strong>
-        is at: x => {value.position?.x}
-        y => {value.position?.y}
-        / energy => {value.energy}
+        <strong>{shortenAddress(address)} ({value.name})</strong>
+        => x:{value.position?.x}
+        / y: {value.position?.y}
+        / e: {value.energy}
+        / r: {value.resource}
       </div>
     {/if}
   {/each}

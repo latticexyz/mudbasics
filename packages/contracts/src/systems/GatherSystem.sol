@@ -32,13 +32,16 @@ contract GatherSystem is System {
       QueryFragment[] memory fragments = new QueryFragment[](2);
       fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(currentEntityPosition));
       fragments[1] = QueryFragment(QueryType.Has, terrainComponent, new bytes(0));
-      uint256[] memory entities = LibQuery.query(fragments);
+      uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
 
-      if (entities.length == 0) {
+      // Check ECS blocks at coord
+      // uint256[] memory entitiesAtPosition = positionComponent.getEntitiesWithValue(currentEntityPosition);
+
+      if (entitiesAtPosition.length == 0) {
         resourceComponent.set(entity, currentResourceBalance + 5);
         energyComponent.set(entity, currentEnergyLevel - 2);
 
-        // Create new empty terraion component
+        // Create new terrain block
         uint256 newTerrainEntity = world.getUniqueEntityId();
         positionComponent.set(newTerrainEntity, currentEntityPosition);
         terrainComponent.set(newTerrainEntity);
