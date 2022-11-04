@@ -9,12 +9,15 @@ import { PositionComponent, ID as PositionComponentID, Coord } from "../../compo
 contract MoveSystemTest is MudTest {
   function testExecute() public {
     uint256 entity = 1;
-    SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
+    SpawnSystem(system(SpawnSystemID)).executeTyped(entity, "Rasmus");
     PositionComponent positionComponent = PositionComponent(component(PositionComponentID));
-    Coord memory initialPosition = positionComponent.getValue(entity);
     MoveSystem(system(MoveSystemID)).executeTyped(entity);
     Coord memory newPosition = positionComponent.getValue(entity);
-    assertEq(newPosition.x, initialPosition.x + 1);
-    assertEq(newPosition.y, initialPosition.y + 1);
+    // X between 1 and 30
+    assertGt(newPosition.x, 0);
+    assertLt(newPosition.x, 31);
+    // Y between 1 and 30
+    assertGt(newPosition.y, 0);
+    assertLt(newPosition.y, 31);
   }
 }
