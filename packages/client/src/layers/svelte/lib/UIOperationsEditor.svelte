@@ -3,118 +3,126 @@
   import { entities } from "../stores/entities";
   import { playerAddress } from "../stores/player";
 
-  let randomMovementActive = false;
-  let randomMovementInterval = {};
+  const OPERATIONS = [
+    {
+      value: "pass",
+      name: "-",
+    },
+    // {
+    //   value: "crawl",
+    //   name: "Crawl",
+    // },
+    {
+      value: "walk",
+      name: "Walk",
+    },
+    // {
+    //   value: "run",
+    //   name: "Run",
+    // },
+    // {
+    //   value: "search",
+    //   name: "Search",
+    // },
+    {
+      value: "gather",
+      name: "Gather",
+    },
+    {
+      value: "eat",
+      name: "Eat",
+    },
+    {
+      value: "wait",
+      name: "Wait",
+    },
+  ];
 
-  let energyTestActive = false;
-  let energyTestInterval = {};
+  const SLOTS = ["slot-1", "slot-2", "slot-3", "slot-4", "slot-5"];
 
-  let moveGatherActive = false;
-  let moveGatherInterval = {};
+  // let randomMovementActive = false;
+  // let randomMovementInterval = {};
+
+  // let energyTestActive = false;
+  // let energyTestInterval = {};
+
+  // let moveGatherActive = false;
+  // let moveGatherInterval = {};
+
+  let sequenceActive = false;
+  let sequenceInterval = {};
   let turnCounter = 0;
+  let activeOperationIndex = 0;
 
   let userName = "";
 
-  function spawn() {
-    console.log("Spawn...", userName);
-    $layers.network?.api.spawn(userName);
-  }
+  let sequence = [];
 
-  function singleMove() {
-    $layers.network?.api.move();
-  }
-
-  function singleGather() {
-    $layers.network?.api.gather();
-  }
-
-  function toggleRandomMovement() {
-    if (randomMovementActive) {
-      clearInterval(randomMovementInterval);
-      randomMovementActive = false;
-    } else {
-      randomMovementInterval = setInterval(() => {
-        console.log("move");
+  function executeOperation(operationName) {
+    switch (operationName) {
+      case "wait":
+        break;
+      // case "crawl":
+      //   $layers.network?.api.move();
+      //   break;
+      case "walk":
         $layers.network?.api.move();
-      }, 1000);
-      randomMovementActive = true;
+        break;
+      // case "run":
+      //   $layers.network?.api.move();
+      //   break;
+      case "gather":
+        $layers.network?.api.gather();
+        break;
+      // case "eat":
+      //   $layers.network?.api.eat();
+      //   break;
+      // case "search":
+      //   // $layers.network?.api.gather();
+      //   break;
     }
   }
 
-  function toggleEnergyTest() {
-    if (energyTestActive) {
-      clearInterval(energyTestInterval);
-      energyTestActive = false;
+  function submitSequence() {
+    if (sequenceActive) {
+      clearInterval(sequenceInterval);
+      sequenceActive = false;
     } else {
-      energyTestInterval = setInterval(() => {
-        console.log("energy test");
-        $layers.network?.api.incrementEnergy();
-      }, 1000);
-      energyTestActive = true;
-    }
-  }
+      let filteredSequence = sequence.filter((item) => item !== "pass");
+      console.log(filteredSequence);
 
-  function toggleMoveGather() {
-    if (moveGatherActive) {
-      clearInterval(moveGatherInterval);
-      moveGatherActive = false;
-    } else {
-      moveGatherInterval = setInterval(() => {
-        if (turnCounter % 2 == 0) {
-          console.log("move");
-          $layers.network?.api.move();
-        }
-        if (turnCounter % 2 == 1) {
-          console.log("gather");
-          $layers.network?.api.gather();
-        }
+      sequenceActive = true;
+      turnCounter = 0;
+
+      sequenceInterval = setInterval(() => {
+        activeOperationIndex = turnCounter % filteredSequence.length;
+        console.log("activeOperationIndex", activeOperationIndex);
+        executeOperation(filteredSequence[activeOperationIndex]);
         turnCounter++;
       }, 1000);
-      moveGatherActive = true;
     }
+  }
+
+  function spawn() {
+    $layers.network?.api.spawn(userName);
   }
 </script>
 
 <div class="ui-operations-editor">
   {#if $entities[$playerAddress]}
-    <!-- <div class="operation-grid">
-      <select name="slot-1">
-        <option value="wait">-</option>
-        <option value="move">Move</option>
-        <option value="search">Search</option>
-        <option value="gather">Gather</option>
-      </select>
-      <select name="slot-2">
-        <option value="wait">-</option>
-        <option value="move">Move</option>
-        <option value="search">Search</option>
-        <option value="gather">Gather</option>
-      </select>
-      <select name="slot-3">
-        <option value="wait">-</option>
-        <option value="move">Move</option>
-        <option value="search">Search</option>
-        <option value="gather">Gather</option>
-      </select>
-      <select name="slot-4">
-        <option value="wait">-</option>
-        <option value="move">Move</option>
-        <option value="search">Search</option>
-        <option value="gather">Gather</option>
-      </select>
-      <input type="submit" value="Submit" />
-    </div> -->
-    <div class="test-operations">
-      <button on:click={singleMove}>Single move</button>
-      <button on:click={singleGather}>Single gather</button>
-      <button class:running={randomMovementActive} on:click={toggleRandomMovement}>
-        {randomMovementActive ? "Stop" : "Start"} random movement
-      </button>
-      <button class:running={moveGatherActive} on:click={toggleMoveGather}>
-        {moveGatherActive ? "Stop" : "Start"} move + gather
-      </button>
-      <button class:running={energyTestActive} on:click={toggleEnergyTest}>
-        {energyTestActive ? "Stop" : "Start"} energy refill
+    <div class="operation-grid">
+      {#each SLOTS as slot, i}
+        <div class="slot-container">
+          <div class="indicator" class:active={sequenceActive && activeOperationIndex == i} />
+          <select disabled={sequenceActive} name={slot} bind:value={sequence[i]}>
+            {#each OPERATIONS as operation}
+              <option value={operation.value}>{operation.name}</option>
+            {/each}
+          </select>
+        </div>
+      {/each}
+      <button class:running={sequenceActive} class="submit" on:click={submitSequence}>
+        {sequenceActive ? "Stop" : "Start"}
       </button>
     </div>
   {:else}
@@ -146,5 +154,21 @@
 
   .running {
     background: #ff7e7e;
+  }
+
+  .slot-container {
+    display: flex;
+  }
+
+  .indicator {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background: grey;
+    margin-right: 10px;
+  }
+
+  .active {
+    background: #92ff7c;
   }
 </style>
