@@ -4,7 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Time } from "./utils/time";
 import { createNetworkLayer as createNetworkLayerImport } from "./layers/network";
-import { createPhaserLayer as createPhaserLayerImport } from "./layers/phaser";
+import { createReactLayer as createReactLayerImport } from "./layers/react";
 import { Layers } from "./types";
 import { Engine as EngineImport } from "./layers/react/engine/Engine";
 import { registerUIComponents as registerUIComponentsImport } from "./layers/react/components";
@@ -15,7 +15,7 @@ dotenv.config()
 
 // Assign variables that can be overridden by HMR
 let createNetworkLayer = createNetworkLayerImport;
-let createPhaserLayer = createPhaserLayerImport;
+let createReactLayer = createReactLayerImport;
 let registerUIComponents = registerUIComponentsImport;
 let Engine = EngineImport;
 
@@ -65,7 +65,8 @@ async function bootGame() {
     if (!networkLayerConfig) throw new Error("Invalid config");
 
     if (!layers.network) layers.network = await createNetworkLayer(networkLayerConfig);
-    if (!layers.phaser) layers.phaser = await createPhaserLayer(layers.network);
+    // if (!layers.phaser) layers.phaser = await createPhaserLayer(layers.network);
+    if (!layers.phaser) layers.phaser = await createReactLayer(layers.network);
 
     // Sync global time with phaser clock
     // Time.time.setPacemaker((setTimestamp) => {
@@ -112,7 +113,7 @@ async function bootGame() {
   (window as any).time = Time.time;
 
   let reloadingNetwork = false;
-  let reloadingPhaser = false;
+  let reloadingApp = false;
 
   if (import.meta.hot) {
     import.meta.hot.accept("./layers/network/index.ts", async (module) => {
@@ -120,21 +121,21 @@ async function bootGame() {
       reloadingNetwork = true;
       createNetworkLayer = module.createNetworkLayer;
       dispose("network");
-      dispose("phaser");
+      dispose("react");
       await rebootGame();
       console.log("HMR Network");
       layers.network?.startSync();
       reloadingNetwork = false;
     });
 
-    import.meta.hot.accept("./layers/phaser/index.ts", async (module) => {
-      if (reloadingPhaser) return;
-      reloadingPhaser = true;
-      createPhaserLayer = module.createPhaserLayer;
-      dispose("phaser");
+    import.meta.hot.accept("./layers/react/index.ts", async (module) => {
+      if (reloadingApp) return;
+      reloadingApp = true;
+      createReactLayer = module.createReactLayer;
+      dispose("react");
       await rebootGame();
       console.log("HMR Phaser");
-      reloadingPhaser = false;
+      reloadingApp = false;
     });
   }
   console.log("booted");

@@ -4,15 +4,12 @@ import styles from './stylesDesktop.module.css'
 import { Box, Text } from '@chakra-ui/react'
 import {useDropzone} from 'react-dropzone'
 import { NFTStorage } from 'nft.storage/dist/bundle.esm.min.js'
-import { Web3Button, useAccount } from '@web3modal/react'
 import {utils} from "ethers";
 import crypto from "crypto";
 
-const from = "0x8ba1f109551bD432803012645Ac136ddd64DBA72";
-const initCode = "0x6394198df16000526103ff60206004601c335afa6040516060f3";
-
 export const DesktopWindow: React.FC = observer(({layers}) => {
   const { account } = useAccount();
+  const disconnect = useDisconnect()
 
   const shortenAddress = (address) => {
     return `${address.slice(0, 4)}...${address.slice(
@@ -60,21 +57,7 @@ export const DesktopWindow: React.FC = observer(({layers}) => {
 }
 
 return (
-    <div className={styles.desktop}>
-        <div style={{height: "10vh"}}>
-          {account?.isConnected ? <Box
-          borderRadius='3xl'
-          p='5'
-          bg='#C527DF'
-          textAlign='center'
-          flex={1}
-          >
-          {account?.ens && (
-            <Text style={{color: 'white'}} fontSize='xs'>{account?.ens}</Text>
-            )}
-          <Text fontSize='xs' title={account.address} style={{color: 'white'}}>{shortenAddress(account.address)}</Text>
-        </Box> : <Web3Button />}
-        </div>    
+    <div className={styles.desktop}>  
         <div className={styles.content}>
         <img src="/img/eruwhite.png" />
         <h1 style={{color: 'white'}}>Upload Beats</h1>

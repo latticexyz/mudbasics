@@ -1,7 +1,7 @@
 import { boot } from "./boot";
 import { NetworkLayer } from "./layers/network";
-import { PhaserLayer } from "./layers/phaser";
+import { ReactLayer } from "./layers/react";
 
 export type EmberWindow = Awaited<ReturnType<typeof boot>>;
 
-export type Layers = { network: NetworkLayer; phaser: PhaserLayer };
+export type Layers = { network: NetworkLayer; react: ReactLayer };

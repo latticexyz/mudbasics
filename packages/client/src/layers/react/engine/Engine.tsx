@@ -8,17 +8,6 @@ import { useState } from "react";
 import { Layers } from "../../../types";
 import { ChakraProvider } from '@chakra-ui/react'
 import { BrowserView, MobileView } from 'react-device-detect';
-import { Web3Modal } from '@web3modal/react'
-
-const config = {
-  projectId: "1dbb5ef68df75ff636a45402f1a56657",
-  theme: "light",   
-  accentColor: "default",
-  ethereum: {
-    appName: 'web3Modal',
-    autoConnect: true
-  }
-};
 
 export const Engine: React.FC<{
   setLayers: { current: (layers: Layers) => void };
@@ -36,9 +25,6 @@ export const Engine: React.FC<{
   if (!mounted || !layers) return customBootScreen || <BootScreen />;
 
   return (
-    <>
-          <Web3Modal config={config} />
-
           <LayerContext.Provider value={layers}>
             <EngineContext.Provider value={EngineStore}>
 
@@ -56,6 +42,5 @@ export const Engine: React.FC<{
 
             </EngineContext.Provider>
           </LayerContext.Provider>
-    </>
   );
 });

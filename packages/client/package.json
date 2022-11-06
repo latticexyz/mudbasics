@@ -23,8 +23,6 @@
     "@react-spring/web": "^9.5.5",
     "@tonejs/midi": "^2.0.28",
     "@use-gesture/react": "^10.2.20",
-    "@web3modal/ethereum": "^2.0.0-beta.1",
-    "@web3modal/react": "^2.0.0-beta.1",
     "async-mutex": "^0.3.2",
     "contracts": "^0.2.0",
     "crypto": "^1.0.1",
