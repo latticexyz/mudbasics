@@ -5,6 +5,7 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
+import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Energy"));
 
@@ -13,17 +14,20 @@ contract EnergySystem is System {
 
   function execute(bytes memory arguments) public returns (bytes memory) {
     uint256 entity = abi.decode(arguments, (uint256));
-    int32 currentEnergyLevel;
 
-    EnergyComponent energy = EnergyComponent(getAddressById(components, EnergyComponentID));
+    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
+    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
 
-    if (energy.has(entity)) {
-      currentEnergyLevel = energy.getValue(entity);
-    } else {
-      currentEnergyLevel = 100;
+    if (energyComponent.has(entity) && resourceComponent.has(entity)) {
+      int32 currentEnergyLevel = energyComponent.getValue(entity);
+      int32 currentResourceBalance = resourceComponent.getValue(entity);
+
+      if (currentResourceBalance > 9) {
+        // Convert 10 resources to 10 energy
+        resourceComponent.set(entity, currentResourceBalance - 10);
+        energyComponent.set(entity, currentEnergyLevel + 10);
+      }
     }
-
-    energy.set(entity, currentEnergyLevel + 1);
   }
 
   function executeTyped(uint256 entity) public returns (bytes memory) {

@@ -24,7 +24,8 @@
     {
       "name": "EnergySystem",
       "writeAccess": [
-        "EnergyComponent"
+        "EnergyComponent",
+        "ResourceComponent"
       ]
     },
     {

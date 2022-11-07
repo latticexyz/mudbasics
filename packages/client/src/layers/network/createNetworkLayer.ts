@@ -49,7 +49,7 @@ export async function createNetworkLayer(config: GameConfig) {
     systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()));
   }
 
-  function incrementEnergy() {
+  function eat() {
     systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()));
   }
 
@@ -72,7 +72,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { move, incrementEnergy, spawn, gather },
+    api: { move, eat, spawn, gather },
     dev: setupDevSystems(world, encoders, systems),
   };
 

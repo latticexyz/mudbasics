@@ -16,6 +16,6 @@ contract EnergySystemTest is MudTest {
 
     int32 newEnergy = energyComponent.getValue(entity);
 
-    assertEq(newEnergy, 101);
+    assertEq(newEnergy, 100);
   }
 }

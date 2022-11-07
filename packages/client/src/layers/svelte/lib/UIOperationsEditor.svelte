@@ -40,15 +40,6 @@
 
   const SLOTS = ["slot-1", "slot-2", "slot-3", "slot-4", "slot-5"];
 
-  // let randomMovementActive = false;
-  // let randomMovementInterval = {};
-
-  // let energyTestActive = false;
-  // let energyTestInterval = {};
-
-  // let moveGatherActive = false;
-  // let moveGatherInterval = {};
-
   let sequenceActive = false;
   let sequenceInterval = {};
   let turnCounter = 0;
@@ -74,9 +65,9 @@
       case "gather":
         $layers.network?.api.gather();
         break;
-      // case "eat":
-      //   $layers.network?.api.eat();
-      //   break;
+      case "eat":
+        $layers.network?.api.eat();
+        break;
       // case "search":
       //   // $layers.network?.api.gather();
       //   break;
@@ -138,12 +129,6 @@
     display: block;
     width: 100%;
     margin-bottom: 5px;
-  }
-
-  input[type="submit"] {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    background: #92ff7c;
   }
 
   button {
