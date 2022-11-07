@@ -1,27 +1,11 @@
 import { defineConfig } from "vite";
+import { svelte } from "@sveltejs/vite-plugin-svelte";
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  root: "src",
-  build: {
-    outDir: "../dist",
-    emptyOutDir: true,
-    sourcemap: true,
-    assetsInlineLimit: 0,
-  },
-  preview: {
-    port: 3000,
-  },
-  resolve: {
-    dedupe: ["proxy-deep"],
-  },
-  optimizeDeps: {
-    esbuildOptions: {
-      target: "es2020",
-    },
-  },
+  plugins: [svelte()],
   server: {
-    fs: {
-      strict: false,
-    },
+    port: 3000,
+    host: "localhost",
   },
 });
