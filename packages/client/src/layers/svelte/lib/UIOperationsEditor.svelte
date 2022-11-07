@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { layers } from "../stores/layers";
+  import { network, blockNumber } from "../stores/network";
   import { entities } from "../stores/entities";
   import { playerAddress } from "../stores/player";
 
@@ -8,22 +8,11 @@
       value: "pass",
       name: "-",
     },
-    // {
-    //   value: "crawl",
-    //   name: "Crawl",
-    // },
+
     {
       value: "walk",
       name: "Walk",
     },
-    // {
-    //   value: "run",
-    //   name: "Run",
-    // },
-    // {
-    //   value: "search",
-    //   name: "Search",
-    // },
     {
       value: "gather",
       name: "Gather",
@@ -40,62 +29,66 @@
 
   const SLOTS = ["slot-1", "slot-2", "slot-3", "slot-4", "slot-5"];
 
+  const BLOCKTIME = 20;
+  let timeToNextBlock = 0;
+  let clockInterval = {};
+
+  function resetClock() {
+    clearInterval(clockInterval);
+    timeToNextBlock = BLOCKTIME;
+    clockInterval = setInterval(() => {
+      timeToNextBlock -= 1;
+    }, 1000);
+  }
+
   let sequenceActive = false;
-  let sequenceInterval = {};
   let turnCounter = 0;
   let activeOperationIndex = 0;
 
   let userName = "";
 
   let sequence = [];
+  let filteredSequence = [];
+
+  blockNumber.subscribe((newBlock) => {
+    if (sequenceActive) {
+      turnCounter++;
+      activeOperationIndex = turnCounter % filteredSequence.length;
+      console.log("activeOperationIndex", activeOperationIndex);
+      executeOperation(filteredSequence[activeOperationIndex]);
+    }
+    resetClock();
+  });
 
   function executeOperation(operationName) {
     switch (operationName) {
       case "wait":
         break;
-      // case "crawl":
-      //   $layers.network?.api.move();
-      //   break;
       case "walk":
-        $layers.network?.api.move();
+        $network.api?.move();
         break;
-      // case "run":
-      //   $layers.network?.api.move();
-      //   break;
       case "gather":
-        $layers.network?.api.gather();
+        $network.api?.gather();
         break;
       case "eat":
-        $layers.network?.api.eat();
+        $network.api?.eat();
         break;
-      // case "search":
-      //   // $layers.network?.api.gather();
-      //   break;
     }
   }
 
   function submitSequence() {
     if (sequenceActive) {
-      clearInterval(sequenceInterval);
       sequenceActive = false;
     } else {
-      let filteredSequence = sequence.filter((item) => item !== "pass");
+      filteredSequence = sequence.filter((item) => item !== "pass");
       console.log(filteredSequence);
-
       sequenceActive = true;
       turnCounter = 0;
-
-      sequenceInterval = setInterval(() => {
-        activeOperationIndex = turnCounter % filteredSequence.length;
-        console.log("activeOperationIndex", activeOperationIndex);
-        executeOperation(filteredSequence[activeOperationIndex]);
-        turnCounter++;
-      }, 1000);
     }
   }
 
   function spawn() {
-    $layers.network?.api.spawn(userName);
+    $network.api?.spawn(userName);
   }
 </script>
 
@@ -111,6 +104,9 @@
             {/each}
           </select>
         </div>
+        {#if sequenceActive}
+          <progress value={activeOperationIndex == i ? BLOCKTIME - timeToNextBlock : 0} max={BLOCKTIME} />
+        {/if}
       {/each}
       <button class:running={sequenceActive} class="submit" on:click={submitSequence}>
         {sequenceActive ? "Stop" : "Start"}
@@ -155,5 +151,11 @@
 
   .active {
     background: #92ff7c;
+  }
+
+  progress {
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
   }
 </style>

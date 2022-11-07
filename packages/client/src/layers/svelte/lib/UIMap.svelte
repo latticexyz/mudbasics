@@ -28,6 +28,7 @@
     height: 300px;
     position: relative;
     background: rgb(114, 167, 114);
+    transform: scale(0.5);
   }
 
   .agent {
