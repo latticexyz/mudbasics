@@ -33,6 +33,7 @@ export async function createNetworkLayer(config: GameConfig) {
     Agent: defineBoolComponent(world, { id: "Agent", metadata: { contractId: "component.Agent" } }),
     Terrain: defineBoolComponent(world, { id: "Terrain", metadata: { contractId: "component.Terrain" } }),
     Name: defineStringComponent(world, { id: "Name", metadata: { contractId: "component.Name" } }),
+    CoolDown: defineNumberComponent(world, { id: "CoolDown", metadata: { contractId: "component.CoolDown" } }),
   };
 
   // --- SETUP ----------------------------------------------------------------------
