@@ -24,10 +24,10 @@
 
 <div class="ui-world-stats">
   <div>Blocknumber: <strong>{$blockNumber}</strong></div>
-  {#if $blockNumber > 0}
+  <!-- {#if $blockNumber > 0}
     <div>Update in: <strong>{timeToNextBlock}</strong> seconds</div>
     <progress value={BLOCKTIME - timeToNextBlock} max={BLOCKTIME} />
-  {/if}
+  {/if} -->
   <!-- <div>Entities: {Object.keys($entities).length}</div> -->
 </div>
 

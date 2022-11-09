@@ -46,8 +46,8 @@ export async function createNetworkLayer(config: GameConfig) {
   const actions = createActionSystem(world, txReduced$);
 
   // --- API ------------------------------------------------------------------------
-  function move() {
-    systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()));
+  function move(energyInput: number) {
+    systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
   }
 
   function eat() {

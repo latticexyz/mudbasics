@@ -27,9 +27,9 @@
     </UIComponent>
 
     <!-- ***** VIEW -->
-    <UIComponent title="View">
+    <!-- <UIComponent title="View">
       <UIView />
-    </UIComponent>
+    </UIComponent> -->
 
     <!-- ***** WORLD STATS -->
     <UIComponent title="World Stats">

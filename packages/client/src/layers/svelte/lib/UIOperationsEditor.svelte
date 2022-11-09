@@ -2,6 +2,7 @@
   import { network, blockNumber } from "../stores/network";
   import { entities } from "../stores/entities";
   import { playerAddress } from "../stores/player";
+  import { blockNumber } from "../stores/network";
 
   const OPERATIONS = [
     {
@@ -32,6 +33,18 @@
   const BLOCKTIME = 20;
   let timeToNextBlock = 0;
   let clockInterval = {};
+
+  function walk() {
+    $network.api?.move(3);
+  }
+
+  function crawl() {
+    $network.api?.move(1);
+  }
+
+  function run() {
+    $network.api?.move(5);
+  }
 
   function resetClock() {
     clearInterval(clockInterval);
@@ -95,7 +108,14 @@
 <div class="ui-operations-editor">
   {#if $entities[$playerAddress]}
     <div class="operation-grid">
-      {#each SLOTS as slot, i}
+      <button disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={crawl}>Crawl</button>
+      <button disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={walk}>Walk</button>
+      <button disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={run}>Run</button>
+      {#if $entities[$playerAddress].coolDownBlock > $blockNumber}
+        In cooldown for <strong>{$entities[$playerAddress].coolDownBlock - $blockNumber}</strong> seconds (until block
+        <strong>{$entities[$playerAddress].coolDownBlock}</strong>)
+      {/if}
+      <!-- {#each SLOTS as slot, i}
         <div class="slot-container">
           <div class="indicator" class:active={sequenceActive && activeOperationIndex == i} />
           <select disabled={sequenceActive} name={slot} bind:value={sequence[i]}>
@@ -110,7 +130,7 @@
       {/each}
       <button class:running={sequenceActive} class="submit" on:click={submitSequence}>
         {sequenceActive ? "Stop" : "Start"}
-      </button>
+      </button> -->
     </div>
   {:else}
     <div class="spawn">

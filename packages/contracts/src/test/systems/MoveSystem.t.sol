@@ -11,7 +11,7 @@ contract MoveSystemTest is MudTest {
     uint256 entity = 1;
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity, "Rasmus");
     PositionComponent positionComponent = PositionComponent(component(PositionComponentID));
-    MoveSystem(system(MoveSystemID)).executeTyped(entity);
+    MoveSystem(system(MoveSystemID)).executeTyped(entity, 3);
     Coord memory newPosition = positionComponent.getValue(entity);
     // X between 1 and 30
     assertGt(newPosition.x, 0);
