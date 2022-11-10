@@ -34,16 +34,40 @@
   let timeToNextBlock = 0;
   let clockInterval = {};
 
-  function walk() {
-    $network.api?.move(3);
-  }
-
   function crawl() {
     $network.api?.move(1);
   }
 
+  function walk() {
+    $network.api?.move(3);
+  }
+
   function run() {
     $network.api?.move(5);
+  }
+
+  function gather() {
+    $network.api?.gather(5);
+  }
+
+  function hoard() {
+    $network.api?.gather(10);
+  }
+
+  function stockpile() {
+    $network.api?.gather(20);
+  }
+
+  function nibble() {
+    $network.api?.consume(5);
+  }
+
+  function eat() {
+    $network.api?.consume(10);
+  }
+
+  function feast() {
+    $network.api?.consume(20);
   }
 
   function resetClock() {
@@ -108,9 +132,37 @@
 <div class="ui-operations-editor">
   {#if $entities[$playerAddress]}
     <div class="operation-grid">
-      <button disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={crawl}>Crawl</button>
-      <button disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={walk}>Walk</button>
-      <button disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={run}>Run</button>
+      <!-- MOVE SYSTEM -->
+      <button class="move" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={crawl}>
+        Crawl
+      </button>
+      <button class="move" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={walk}>
+        Walk
+      </button>
+      <button class="move" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={run}>Run</button>
+      <hr />
+      <!-- GATHER SYSTEM -->
+      <button class="gather" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={gather}
+        >Gather</button
+      >
+      <button class="gather" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={hoard}
+        >Hoard</button
+      >
+      <button class="gather" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={stockpile}
+        >Stockpile</button
+      >
+      <hr />
+      <!-- GASTRIC SYSTEM -->
+      <button class="consume" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={nibble}
+        >Nibble</button
+      >
+      <button class="consume" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={eat}
+        >Eat</button
+      >
+      <button class="consume" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={feast}
+        >Feast</button
+      >
+      <!-- ... -->
       {#if $entities[$playerAddress].coolDownBlock > $blockNumber}
         In cooldown for <strong>{$entities[$playerAddress].coolDownBlock - $blockNumber}</strong> seconds (until block
         <strong>{$entities[$playerAddress].coolDownBlock}</strong>)
@@ -149,7 +201,6 @@
 
   button {
     margin-bottom: 10px;
-    background: #92ff7c;
     display: block;
   }
 
@@ -177,5 +228,21 @@
     width: 100%;
     display: block;
     margin-bottom: 10px;
+  }
+
+  input[type="text"] {
+    margin-bottom: 10px;
+  }
+
+  .move {
+    background: #92ff7c;
+  }
+
+  .gather {
+    background: #7ce5ff;
+  }
+
+  .consume {
+    background: #d37cff;
   }
 </style>

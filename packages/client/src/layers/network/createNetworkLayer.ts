@@ -46,21 +46,20 @@ export async function createNetworkLayer(config: GameConfig) {
   const actions = createActionSystem(world, txReduced$);
 
   // --- API ------------------------------------------------------------------------
+  function spawn(name: string) {
+    systems["system.Spawn"].executeTyped(BigNumber.from(network.connectedAddress.get()), name);
+  }
+
   function move(energyInput: number) {
     systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
   }
 
-  function eat() {
-    systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()));
+  function gather(energyInput: number) {
+    systems["system.Gather"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
   }
 
-  function spawn(name: string) {
-    console.log("===> name", name);
-    systems["system.Spawn"].executeTyped(BigNumber.from(network.connectedAddress.get()), name);
-  }
-
-  function gather() {
-    systems["system.Gather"].executeTyped(BigNumber.from(network.connectedAddress.get()));
+  function consume(resourceInput: number) {
+    systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
   }
 
   // --- CONTEXT --------------------------------------------------------------------
@@ -73,7 +72,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { move, eat, spawn, gather },
+    api: { spawn, move, gather, consume },
     dev: setupDevSystems(world, encoders, systems),
   };
 

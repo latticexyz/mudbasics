@@ -9,6 +9,7 @@ import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyCo
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Move"));
+int32 constant MAX_DISTANCE = 5;
 
 contract MoveSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
@@ -30,8 +31,9 @@ contract MoveSystem is System {
     int32 currentEnergyLevel = energyComponent.getValue(entity);
     require(currentEnergyLevel >= energyInput, "not enough energy");
 
+    // 1 energy => 1 step, capped at MAX_DISTANCE
     int32 steps = energyInput;
-    if (steps > 5) steps = 5;
+    if (steps > MAX_DISTANCE) steps = MAX_DISTANCE;
     coolDownComponent.set(entity, int32(int256(block.number)) + 20);
 
     energyComponent.set(entity, currentEnergyLevel - energyInput);
