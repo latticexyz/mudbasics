@@ -25,11 +25,11 @@ contract SpawnSystemTest is MudTest {
     PositionComponent positionComponent = PositionComponent(component(PositionComponentID));
     Coord memory newPosition = positionComponent.getValue(entity);
     // X between 1 and 30
-    assertGt(newPosition.x, 0);
-    assertLt(newPosition.x, 31);
+    assertGt(newPosition.x, 2500);
+    assertLt(newPosition.x, 5000);
     // Y between 1 and 30
-    assertGt(newPosition.y, 0);
-    assertLt(newPosition.y, 31);
+    assertGt(newPosition.y, 2500);
+    assertLt(newPosition.y, 5000);
     // --- Resource
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     int32 initialResourceBalance = resourceComponent.getValue(entity);

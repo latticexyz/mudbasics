@@ -5,7 +5,8 @@
     "ResourceComponent",
     "AgentComponent",
     "TerrainComponent",
-    "NameComponent"
+    "NameComponent",
+    "CoolDownComponent"
   ],
   "systems": [
     {
@@ -18,14 +19,16 @@
       "name": "MoveSystem",
       "writeAccess": [
         "PositionComponent",
-        "EnergyComponent"
+        "EnergyComponent",
+        "CoolDownComponent"
       ]
     },
     {
       "name": "EnergySystem",
       "writeAccess": [
         "EnergyComponent",
-        "ResourceComponent"
+        "ResourceComponent",
+        "CoolDownComponent"
       ]
     },
     {
@@ -44,7 +47,8 @@
         "PositionComponent",
         "ResourceComponent",
         "EnergyComponent",
-        "TerrainComponent"
+        "TerrainComponent",
+        "CoolDownComponent"
       ]
     }
   ]

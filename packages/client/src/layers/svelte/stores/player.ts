@@ -1,11 +1,5 @@
 import { derived } from "svelte/store";
-import { layers } from "./layers";
-import { entities } from "./entities";
+import { network } from "./network";
+import { entitites } from "./entities";
 
-export const playerAddress = derived(layers, ($layers) => $layers.network?.network.connectedAddress.get());
-
-// export const isSpawned = derived([entities, playerAddress], ([$entities, $playerAddress]) => {
-//     console.log('entitites', $entities);
-//     console.log('playerAddress', $playerAddress);
-//     return $entities[$playerAddress]
-// });
+export const playerAddress = derived(network, ($network) => $network.network?.connectedAddress.get());

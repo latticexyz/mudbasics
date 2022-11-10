@@ -1,29 +1,19 @@
 <script lang="ts">
-  import { layers } from "../stores/layers";
+  import { network, blockNumber } from "../stores/network";
   import { entities } from "../stores/entities";
   import { playerAddress } from "../stores/player";
+  import { blockNumber } from "../stores/network";
 
   const OPERATIONS = [
     {
       value: "pass",
       name: "-",
     },
-    // {
-    //   value: "crawl",
-    //   name: "Crawl",
-    // },
+
     {
       value: "walk",
       name: "Walk",
     },
-    // {
-    //   value: "run",
-    //   name: "Run",
-    // },
-    // {
-    //   value: "search",
-    //   name: "Search",
-    // },
     {
       value: "gather",
       name: "Gather",
@@ -40,69 +30,144 @@
 
   const SLOTS = ["slot-1", "slot-2", "slot-3", "slot-4", "slot-5"];
 
+  const BLOCKTIME = 20;
+  let timeToNextBlock = 0;
+  let clockInterval = {};
+
+  function crawl() {
+    $network.api?.move(1);
+  }
+
+  function walk() {
+    $network.api?.move(3);
+  }
+
+  function run() {
+    $network.api?.move(5);
+  }
+
+  function gather() {
+    $network.api?.gather(5);
+  }
+
+  function hoard() {
+    $network.api?.gather(10);
+  }
+
+  function stockpile() {
+    $network.api?.gather(20);
+  }
+
+  function nibble() {
+    $network.api?.consume(5);
+  }
+
+  function eat() {
+    $network.api?.consume(10);
+  }
+
+  function feast() {
+    $network.api?.consume(20);
+  }
+
+  function resetClock() {
+    clearInterval(clockInterval);
+    timeToNextBlock = BLOCKTIME;
+    clockInterval = setInterval(() => {
+      timeToNextBlock -= 1;
+    }, 1000);
+  }
+
   let sequenceActive = false;
-  let sequenceInterval = {};
   let turnCounter = 0;
   let activeOperationIndex = 0;
 
   let userName = "";
 
   let sequence = [];
+  let filteredSequence = [];
+
+  blockNumber.subscribe((newBlock) => {
+    if (sequenceActive) {
+      turnCounter++;
+      activeOperationIndex = turnCounter % filteredSequence.length;
+      console.log("activeOperationIndex", activeOperationIndex);
+      executeOperation(filteredSequence[activeOperationIndex]);
+    }
+    resetClock();
+  });
 
   function executeOperation(operationName) {
     switch (operationName) {
       case "wait":
         break;
-      // case "crawl":
-      //   $layers.network?.api.move();
-      //   break;
       case "walk":
-        $layers.network?.api.move();
+        $network.api?.move();
         break;
-      // case "run":
-      //   $layers.network?.api.move();
-      //   break;
       case "gather":
-        $layers.network?.api.gather();
+        $network.api?.gather();
         break;
       case "eat":
-        $layers.network?.api.eat();
+        $network.api?.eat();
         break;
-      // case "search":
-      //   // $layers.network?.api.gather();
-      //   break;
     }
   }
 
   function submitSequence() {
     if (sequenceActive) {
-      clearInterval(sequenceInterval);
       sequenceActive = false;
     } else {
-      let filteredSequence = sequence.filter((item) => item !== "pass");
+      filteredSequence = sequence.filter((item) => item !== "pass");
       console.log(filteredSequence);
-
       sequenceActive = true;
       turnCounter = 0;
-
-      sequenceInterval = setInterval(() => {
-        activeOperationIndex = turnCounter % filteredSequence.length;
-        console.log("activeOperationIndex", activeOperationIndex);
-        executeOperation(filteredSequence[activeOperationIndex]);
-        turnCounter++;
-      }, 1000);
     }
   }
 
   function spawn() {
-    $layers.network?.api.spawn(userName);
+    $network.api?.spawn(userName);
   }
 </script>
 
 <div class="ui-operations-editor">
   {#if $entities[$playerAddress]}
     <div class="operation-grid">
-      {#each SLOTS as slot, i}
+      <!-- MOVE SYSTEM -->
+      <button class="move" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={crawl}>
+        Crawl
+      </button>
+      <button class="move" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={walk}>
+        Walk
+      </button>
+      <button class="move" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={run}>Run</button>
+      <hr />
+      <!-- GATHER SYSTEM -->
+      <button class="gather" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={gather}
+        >Gather</button
+      >
+      <button class="gather" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={hoard}
+        >Hoard</button
+      >
+      <button class="gather" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={stockpile}
+        >Stockpile</button
+      >
+      <hr />
+      <!-- GASTRIC SYSTEM -->
+      <button class="consume" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={nibble}
+        >Nibble</button
+      >
+      <button class="consume" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={eat}
+        >Eat</button
+      >
+      <button class="consume" disabled={$entities[$playerAddress].coolDownBlock > $blockNumber} on:click={feast}
+        >Feast</button
+      >
+      <!-- ... -->
+      {#if $entities[$playerAddress].coolDownBlock > $blockNumber}
+        In cooldown for <strong>{$entities[$playerAddress].coolDownBlock - $blockNumber}</strong> seconds (until block
+        <strong>{$entities[$playerAddress].coolDownBlock}</strong>)
+      {/if}
+      <!-- {#each SLOTS as slot, i}
         <div class="slot-container">
           <div class="indicator" class:active={sequenceActive && activeOperationIndex == i} />
           <select disabled={sequenceActive} name={slot} bind:value={sequence[i]}>
@@ -111,10 +176,13 @@
             {/each}
           </select>
         </div>
+        {#if sequenceActive}
+          <progress value={activeOperationIndex == i ? BLOCKTIME - timeToNextBlock : 0} max={BLOCKTIME} />
+        {/if}
       {/each}
       <button class:running={sequenceActive} class="submit" on:click={submitSequence}>
         {sequenceActive ? "Stop" : "Start"}
-      </button>
+      </button> -->
     </div>
   {:else}
     <div class="spawn">
@@ -133,7 +201,6 @@
 
   button {
     margin-bottom: 10px;
-    background: #92ff7c;
     display: block;
   }
 
@@ -155,5 +222,27 @@
 
   .active {
     background: #92ff7c;
+  }
+
+  progress {
+    width: 100%;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  input[type="text"] {
+    margin-bottom: 10px;
+  }
+
+  .move {
+    background: #92ff7c;
+  }
+
+  .gather {
+    background: #7ce5ff;
+  }
+
+  .consume {
+    background: #d37cff;
   }
 </style>

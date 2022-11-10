@@ -6,6 +6,7 @@
   import UICharacterStats from "./UICharacterStats.svelte";
   import UIOperationsEditor from "./UIOperationsEditor.svelte";
   import UIMap from "./UIMap.svelte";
+  import UIView from "./UIView.svelte";
 </script>
 
 <div class="ui-container">
@@ -24,6 +25,11 @@
     <UIComponent title="Character Stats">
       <UICharacterStats />
     </UIComponent>
+
+    <!-- ***** VIEW -->
+    <!-- <UIComponent title="View">
+      <UIView />
+    </UIComponent> -->
 
     <!-- ***** WORLD STATS -->
     <UIComponent title="World Stats">

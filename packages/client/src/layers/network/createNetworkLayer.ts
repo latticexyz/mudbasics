@@ -33,6 +33,7 @@ export async function createNetworkLayer(config: GameConfig) {
     Agent: defineBoolComponent(world, { id: "Agent", metadata: { contractId: "component.Agent" } }),
     Terrain: defineBoolComponent(world, { id: "Terrain", metadata: { contractId: "component.Terrain" } }),
     Name: defineStringComponent(world, { id: "Name", metadata: { contractId: "component.Name" } }),
+    CoolDown: defineNumberComponent(world, { id: "CoolDown", metadata: { contractId: "component.CoolDown" } }),
   };
 
   // --- SETUP ----------------------------------------------------------------------
@@ -45,21 +46,20 @@ export async function createNetworkLayer(config: GameConfig) {
   const actions = createActionSystem(world, txReduced$);
 
   // --- API ------------------------------------------------------------------------
-  function move() {
-    systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()));
-  }
-
-  function eat() {
-    systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()));
-  }
-
   function spawn(name: string) {
-    console.log("===> name", name);
     systems["system.Spawn"].executeTyped(BigNumber.from(network.connectedAddress.get()), name);
   }
 
-  function gather() {
-    systems["system.Gather"].executeTyped(BigNumber.from(network.connectedAddress.get()));
+  function move(energyInput: number) {
+    systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
+  }
+
+  function gather(energyInput: number) {
+    systems["system.Gather"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
+  }
+
+  function consume(resourceInput: number) {
+    systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
   }
 
   // --- CONTEXT --------------------------------------------------------------------
@@ -72,7 +72,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { move, eat, spawn, gather },
+    api: { spawn, move, gather, consume },
     dev: setupDevSystems(world, encoders, systems),
   };
 

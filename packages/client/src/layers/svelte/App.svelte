@@ -3,7 +3,8 @@
   import { bootGame } from "./boot";
   import UIContainer from "./lib/UIContainer.svelte";
   import { createPositionSystem, createEnergySystem, createResourceSystem, createNameSystem } from "./systems";
-  import { layers as layersStore } from "./stores/layers";
+  import { network as networkStore, blockNumber } from "./stores/network";
+  import { createCoolDownSystem } from "./systems/createCoolDownSystem";
 
   onMount(async () => {
     console.log("Mounting app...");
@@ -17,8 +18,13 @@
     createEnergySystem(layers.network);
     createResourceSystem(layers.network);
     createNameSystem(layers.network);
+    createCoolDownSystem(layers.network);
 
-    layersStore.set(layers);
+    networkStore.set(layers.network);
+
+    layers.network.network.blockNumber$.subscribe((x) => {
+      blockNumber.set(x);
+    });
   });
 </script>
 
