@@ -19,7 +19,7 @@
     </UIComponent>
 
     <!-- ***** TEXT LOG -->
-    <UIComponent title="Text Log">
+    <UIComponent title="Text Log" large={true}>
       <UITextLog />
     </UIComponent>
 
@@ -34,9 +34,9 @@
     </UIComponent> -->
 
     <!-- ***** WORLD STATS -->
-    <UIComponent title="World Stats">
+    <!-- <UIComponent title="World Stats">
       <UIWorldStats />
-    </UIComponent>
+    </UIComponent> -->
 
     <!-- ***** VISUAL OPERATIONS EDITOR -->
     <UIComponent title="Visual Operations Editor" large={true}>

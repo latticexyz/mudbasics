@@ -9,7 +9,7 @@ export function createPositionSystem(network: NetworkLayer) {
   } = network;
 
   defineComponentSystem(world, Position, (update) => {
-    console.log("==> Position system: ", update);
+    // console.log("==> Position system: ", update);
     const position = update.value[0];
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};

@@ -9,7 +9,7 @@ export function createNameSystem(network: NetworkLayer) {
   } = network;
 
   defineComponentSystem(world, Name, (update) => {
-    console.log("==> Name system: ", update);
+    // console.log("==> Name system: ", update);
     const name = update.value[0]?.value;
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};

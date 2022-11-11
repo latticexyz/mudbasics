@@ -1,10 +1,13 @@
 <script lang="ts">
+  import { blockNumber } from "../stores/network";
   import { playerAddress } from "../stores/player";
   import { entities } from "../stores/entities";
   import { shortenAddress } from "../utils/ui";
 </script>
 
 <div class="ui-character-stats">
+  <div>Blocknumber: <strong>{$blockNumber}</strong></div>
+  <hr />
   <div><strong>{shortenAddress($playerAddress)}</strong></div>
   {#if $entities[$playerAddress]}
     <div>Cooldown block: {$entities[$playerAddress].coolDownBlock}</div>

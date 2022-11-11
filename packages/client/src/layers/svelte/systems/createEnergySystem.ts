@@ -9,7 +9,7 @@ export function createEnergySystem(network: NetworkLayer) {
   } = network;
 
   defineComponentSystem(world, Energy, (update) => {
-    console.log("==> Energy system: ", update);
+    // console.log("==> Energy system: ", update);
     const energy = update.value[0]?.value;
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};

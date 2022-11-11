@@ -9,7 +9,7 @@ export function createCoolDownSystem(network: NetworkLayer) {
   } = network;
 
   defineComponentSystem(world, CoolDown, (update) => {
-    console.log("==> CoolDown system: ", update);
+    // console.log("==> CoolDown system: ", update);
     const coolDownBlock = update.value[0]?.value;
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};
