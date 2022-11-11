@@ -9,6 +9,7 @@ import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyCo
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
 import { AgentComponent, ID as AgentComponentID } from "../components/AgentComponent.sol";
 import { NameComponent, ID as NameComponentID } from "../components/NameComponent.sol";
+import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Spawn"));
 
@@ -24,6 +25,7 @@ contract SpawnSystem is System {
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     AgentComponent agentComponent = AgentComponent(getAddressById(components, AgentComponentID));
     NameComponent nameComponent = NameComponent(getAddressById(components, NameComponentID));
+    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
 
     if (!positionComponent.has(entity)) {
       int32 randomX = int32(
@@ -38,6 +40,7 @@ contract SpawnSystem is System {
       resourceComponent.set(entity, 0);
       positionComponent.set(entity, startingPosition);
       agentComponent.set(entity);
+      coolDownComponent.set(entity, 0);
     }
   }
 

@@ -38,7 +38,8 @@
         "EnergyComponent",
         "ResourceComponent",
         "AgentComponent",
-        "NameComponent"
+        "NameComponent",
+        "CoolDownComponent"
       ]
     },
     {

@@ -1,8 +1,11 @@
 <script lang="ts">
   export let title = "";
+  export let large = false;
+  // export let width = 4;
+  // export let height = 4;
 </script>
 
-<div class="ui-component">
+<div class="ui-component" class:large>
   <div class="titlebar">{title}</div>
   <div class="ui-component-inner">
     <slot />
@@ -17,6 +20,10 @@
     border: 1px solid #a4a4a4;
     margin: 4px;
     background: #e4e4e4;
+  }
+
+  .large {
+    width: calc(48% + 8px);
   }
 
   .ui-component-inner {

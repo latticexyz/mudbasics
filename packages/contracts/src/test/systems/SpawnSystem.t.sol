@@ -8,6 +8,7 @@ import { EnergyComponent, ID as EnergyComponentID } from "../../components/Energ
 import { PositionComponent, ID as PositionComponentID, Coord } from "../../components/PositionComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../../components/ResourceComponent.sol";
 import { AgentComponent, ID as AgentComponentID } from "../../components/AgentComponent.sol";
+import { CoolDownComponent, ID as CoolDownComponentID } from "../../components/CoolDownComponent.sol";
 
 contract SpawnSystemTest is MudTest {
   function testExecute() public {
@@ -38,5 +39,9 @@ contract SpawnSystemTest is MudTest {
     AgentComponent agentComponent = AgentComponent(getAddressById(components, AgentComponentID));
     bool isAgent = agentComponent.getValue(entity);
     assertTrue(isAgent);
+    // --- Cooldown
+    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    int32 initialCoolDownBlock = coolDownComponent.getValue(entity);
+    assertEq(initialCoolDownBlock, 0);
   }
 }

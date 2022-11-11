@@ -1,12 +1,14 @@
 <script lang="ts">
   import UIComponent from "./UIComponent.svelte";
   import UITextLog from "./UITextLog.svelte";
+  import UIDebugLog from "./UIDebugLog.svelte";
   import UIAvatar from "./UIAvatar.svelte";
   import UIWorldStats from "./UIWorldStats.svelte";
   import UICharacterStats from "./UICharacterStats.svelte";
   import UIOperationsEditor from "./UIOperationsEditor.svelte";
-  import UIMap from "./UIMap.svelte";
-  import UIView from "./UIView.svelte";
+  import UIVisualOperationsEditor from "./UIVisualOperationsEditor.svelte";
+  // import UIMap from "./UIMap.svelte";
+  // import UIView from "./UIView.svelte";
 </script>
 
 <div class="ui-container">
@@ -36,15 +38,25 @@
       <UIWorldStats />
     </UIComponent>
 
+    <!-- ***** VISUAL OPERATIONS EDITOR -->
+    <UIComponent title="Visual Operations Editor" large={true}>
+      <UIVisualOperationsEditor />
+    </UIComponent>
+
     <!-- ***** OPERATIONS EDITOR -->
-    <UIComponent title="Operations Editor">
+    <!-- <UIComponent title="Operations Editor" large={true}>
       <UIOperationsEditor />
+    </UIComponent> -->
+
+    <!-- ***** TEXT LOG -->
+    <UIComponent title="Debug Log">
+      <UIDebugLog />
     </UIComponent>
 
     <!-- ***** MAP -->
-    <UIComponent title="Map">
+    <!-- <UIComponent title="Map">
       <UIMap />
-    </UIComponent>
+    </UIComponent> -->
   </div>
 </div>
 
