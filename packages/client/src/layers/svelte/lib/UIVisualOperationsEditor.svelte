@@ -1,10 +1,9 @@
 <script lang="ts">
-  import { network, blockNumber } from "../stores/network";
+  import { blockNumber } from "../stores/network";
   import { entities } from "../stores/entities";
   import { playerAddress } from "../stores/player";
   import { operations, Operation } from "../operations/";
 
-  let userName = "";
   let sequencerActive = false;
   let turnCounter = 0;
   let activeOperationIndex = 0;
@@ -23,10 +22,6 @@
   function executeOperation(operation: Operation) {
     console.log("====> executing operation:", operation.name);
     return operation.f();
-  }
-
-  function spawn() {
-    $network.api?.spawn(userName);
   }
 
   function addToSequencer(operation: Operation) {
@@ -70,57 +65,50 @@
 </script>
 
 <div class="ui-operations-editor">
-  {#if $entities[$playerAddress]}
-    <div class="operation-grid">
-      {#each sequence as operation, index}
-        <div class="slot-container" class:hidden={sequencerActive && operation.category == "empty"}>
-          <div
-            class="slot {operation.category}"
-            class:failure={!sequenceSuccess[index]}
-            class:active={sequencerActive && activeOperationIndex == index}
-          >
-            <div>
-              {operation.name}
-              {#if sequencerActive && activeOperationIndex == index}
-                <strong>
-                  {#if $entities[$playerAddress].coolDownBlock - $blockNumber >= 0}
-                    {$entities[$playerAddress].coolDownBlock - $blockNumber}
-                  {/if}
-                </strong>
-              {/if}
-            </div>
+  <div class="operation-grid">
+    {#each sequence as operation, index}
+      <div class="slot-container" class:hidden={sequencerActive && operation.category == "empty"}>
+        <div
+          class="slot {operation.category}"
+          class:failure={!sequenceSuccess[index]}
+          class:active={sequencerActive && activeOperationIndex == index}
+        >
+          <div>
+            {operation.name}
+            {#if sequencerActive && activeOperationIndex == index}
+              <strong>
+                {#if $entities[$playerAddress].coolDownBlock - $blockNumber >= 0}
+                  {$entities[$playerAddress].coolDownBlock - $blockNumber}
+                {/if}
+              </strong>
+            {/if}
           </div>
         </div>
-      {/each}
-    </div>
-    <div class="sequencer-controls">
-      {#if !sequencerActive}
-        <button on:click={clearSequencer}>Clear sequencer</button>
-      {/if}
-      {#if sequencerActive}
-        <button on:click={stopSequencer}>Stop sequencer</button>
-      {:else}
-        <button on:click={startSequencer}>Start sequencer</button>
-      {/if}
-    </div>
-    <div class="inventory" class:disabled={sequencerActive}>
-      {#each operations as operation}
-        <div
-          class="operation {operation.category}"
-          on:click={() => {
-            addToSequencer(operation);
-          }}
-        >
-          {operation.name}
-        </div>
-      {/each}
-    </div>
-  {:else}
-    <div class="spawn">
-      <input type="text" bind:value={userName} />
-      <button on:click={spawn}>Spawn</button>
-    </div>
-  {/if}
+      </div>
+    {/each}
+  </div>
+  <div class="sequencer-controls">
+    {#if !sequencerActive}
+      <button on:click={clearSequencer}>Clear sequencer</button>
+    {/if}
+    {#if sequencerActive}
+      <button on:click={stopSequencer}>Stop sequencer</button>
+    {:else}
+      <button on:click={startSequencer}>Start sequencer</button>
+    {/if}
+  </div>
+  <div class="inventory" class:disabled={sequencerActive}>
+    {#each operations as operation}
+      <div
+        class="operation {operation.category}"
+        on:click={() => {
+          addToSequencer(operation);
+        }}
+      >
+        {operation.name}
+      </div>
+    {/each}
+  </div>
 </div>
 
 <style>
@@ -148,16 +136,6 @@
 
   .active {
     background: #92ff7c;
-  }
-
-  progress {
-    width: 100%;
-    display: block;
-    margin-bottom: 10px;
-  }
-
-  input[type="text"] {
-    margin-bottom: 10px;
   }
 
   .move {

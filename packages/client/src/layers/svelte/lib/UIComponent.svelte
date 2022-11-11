@@ -1,11 +1,12 @@
 <script lang="ts">
   export let title = "";
   export let large = false;
+  export let centered = false;
   // export let width = 4;
   // export let height = 4;
 </script>
 
-<div class="ui-component" class:large>
+<div class="ui-component" class:large class:centered>
   <div class="titlebar">{title}</div>
   <div class="ui-component-inner">
     <slot />
@@ -36,5 +37,12 @@
     font-size: 12px;
     background: black;
     color: red;
+  }
+
+  .centered {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
   }
 </style>
