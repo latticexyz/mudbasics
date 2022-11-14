@@ -7,7 +7,9 @@
 </script>
 
 <div class="ui-component" class:large class:centered>
-  <div class="titlebar">{title}</div>
+  {#if title}
+    <div class="titlebar">{title}</div>
+  {/if}
   <div class="ui-component-inner">
     <slot />
   </div>

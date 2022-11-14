@@ -4,7 +4,6 @@
   import UIComponent from "./UIComponent.svelte";
   import UISpawn from "./UISpawn.svelte";
   import UITextLog from "./UITextLog.svelte";
-  import UIDebugLog from "./UIDebugLog.svelte";
   import UIAvatar from "./UIAvatar.svelte";
   import UICharacterStats from "./UICharacterStats.svelte";
   import UIVisualOperationsEditor from "./UIVisualOperationsEditor.svelte";
@@ -12,13 +11,14 @@
   // import UIView from "./UIView.svelte";
   // import UIOperationsEditor from "./UIOperationsEditor.svelte";
   // import UIWorldStats from "./UIWorldStats.svelte";
+  import UIDebugLog from "./UIDebugLog.svelte";
 </script>
 
 <div class="ui-container">
   <div class="ui-container-inner">
     {#if !$entities[$playerAddress]}
       <!-- ***** SPAWN -->
-      <UIComponent title="Spawn" centered={true}>
+      <UIComponent centered={true}>
         <UISpawn />
       </UIComponent>
     {:else}
@@ -33,8 +33,13 @@
       </UIComponent>
 
       <!-- ***** CHARACTER STATS -->
-      <UIComponent title="Character Stats">
+      <!-- <UIComponent title="Character Stats">
         <UICharacterStats />
+      </UIComponent> -->
+
+      <!-- ***** DEBUG LOG -->
+      <UIComponent title="Debug Log">
+        <UIDebugLog />
       </UIComponent>
 
       <!-- ***** VIEW -->
@@ -56,11 +61,6 @@
       <!-- <UIComponent title="Operations Editor" large={true}>
       <UIOperationsEditor />
     </UIComponent> -->
-
-      <!-- ***** TEXT LOG -->
-      <UIComponent title="Debug Log">
-        <UIDebugLog />
-      </UIComponent>
 
       <!-- ***** MAP -->
       <!-- <UIComponent title="Map">
