@@ -32,7 +32,7 @@ contract MoveSystem is System {
     require(currentEnergyLevel >= energyInput, "not enough energy");
 
     // 1 energy => 1 step, capped at MAX_DISTANCE
-    int32 steps = energyInput;
+    int32 steps = energyInput / 10;
     if (steps > MAX_DISTANCE) steps = MAX_DISTANCE;
     coolDownComponent.set(entity, int32(int256(block.number)) + 20);
 

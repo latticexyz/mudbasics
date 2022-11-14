@@ -4,8 +4,8 @@ import { entities } from "../../stores/entities";
 import { playerAddress } from "../../stores/player";
 
 export function walk() {
-  if (get(entities)[get(playerAddress)].energy >= 3) {
-    get(network).api?.move(3);
+  if (get(entities)[get(playerAddress)].energy >= 30) {
+    get(network).api?.move(30);
     return true;
   } else {
     console.log("Walk: not enough energy");

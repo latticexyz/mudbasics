@@ -4,8 +4,8 @@ import { entities } from "../../stores/entities";
 import { playerAddress } from "../../stores/player";
 
 export function stockpile() {
-  if (get(entities)[get(playerAddress)].energy >= 20) {
-    get(network).api?.gather(20);
+  if (get(entities)[get(playerAddress)].energy >= 200) {
+    get(network).api?.gather(200);
     return true;
   } else {
     console.log("Stockpile: not enough energy");

@@ -4,8 +4,8 @@ import { entities } from "../../stores/entities";
 import { playerAddress } from "../../stores/player";
 
 export function crawl() {
-  if (get(entities)[get(playerAddress)].energy >= 1) {
-    get(network).api?.move(1);
+  if (get(entities)[get(playerAddress)].energy >= 10) {
+    get(network).api?.move(10);
     return true;
   } else {
     console.log("Crawl: not enough energy");

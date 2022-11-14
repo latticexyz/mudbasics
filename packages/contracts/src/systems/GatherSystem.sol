@@ -40,8 +40,8 @@ contract GatherSystem is System {
     int32 currentResourceBalance = resourceComponent.getValue(entity);
     Coord memory currentEntityPosition = positionComponent.getValue(entity);
 
-    // 1 energy => 1 resource, capped at MAX_RESOURCE
-    int32 resourceToExtract = energyInput;
+    // 10 energy => 1 resource, capped at MAX_RESOURCE
+    int32 resourceToExtract = energyInput / 10;
     if (resourceToExtract > MAX_RESOURCE) resourceToExtract = MAX_RESOURCE;
 
     coolDownComponent.set(entity, int32(int256(block.number)) + (COOLDOWN_PER_RESOURCE * resourceToExtract));

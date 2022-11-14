@@ -36,7 +36,7 @@ contract SpawnSystem is System {
       ) + 2500;
       Coord memory startingPosition = Coord(randomX, randomY);
       nameComponent.set(entity, name);
-      energyComponent.set(entity, 100);
+      energyComponent.set(entity, 1000);
       resourceComponent.set(entity, 0);
       positionComponent.set(entity, startingPosition);
       agentComponent.set(entity);
