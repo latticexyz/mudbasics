@@ -1,16 +1,16 @@
 const firstNameList: string[] = [
   "billo",
-  "bolk",
-  "skint",
+  "bolka",
+  "skim",
   "scol",
   "pigmang",
   "surto",
   "skree",
-  "begor",
-  "xaur",
+  "scarp",
+  "xaura",
   "bitwis",
 ];
-const lastNameList: string[] = ["arbi", "cart", "whil", "bork", "scarp", "snok", "kantr", "uzko", "sverg", "sunwik"];
+const lastNameList: string[] = ["arbi", "cartor", "whilt", "bork", "begor", "snok", "kantr", "uzko", "sverg", "sunwik"];
 
 function toTitleCase(str: string) {
   return str.replace(/\w\S*/g, function (txt) {
