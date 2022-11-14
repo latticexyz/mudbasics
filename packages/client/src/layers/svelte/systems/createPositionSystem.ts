@@ -20,12 +20,14 @@ export function createPositionSystem(network: NetworkLayer) {
       return value;
     });
 
-    const logEntry = {
-      address: indexToID(update.entity),
-      message: "is moving " + getDirection(previousPosition, currentPosition),
-    };
-    narrative.update((value) => {
-      return [logEntry, ...value];
-    });
+    if (previousPosition) {
+      const logEntry = {
+        address: indexToID(update.entity),
+        message: "is moving " + getDirection(previousPosition, currentPosition),
+      };
+      narrative.update((value) => {
+        return [logEntry, ...value];
+      });
+    }
   });
 }

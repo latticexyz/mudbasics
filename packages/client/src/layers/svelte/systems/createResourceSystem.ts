@@ -11,6 +11,7 @@ export function createResourceSystem(network: NetworkLayer) {
 
   defineComponentSystem(world, Resource, (update) => {
     // console.log("==> Resource system: ", update);
+    const oldResource = update.value[1]?.value;
     const resource = update.value[0]?.value;
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};
@@ -18,12 +19,14 @@ export function createResourceSystem(network: NetworkLayer) {
       return value;
     });
 
-    const logEntry = {
-      address: indexToID(update.entity),
-      message: "is gathering.",
-    };
-    narrative.update((value) => {
-      return [logEntry, ...value];
-    });
+    if (resource > oldResource) {
+      const logEntry = {
+        address: indexToID(update.entity),
+        message: "is gathering.",
+      };
+      narrative.update((value) => {
+        return [logEntry, ...value];
+      });
+    }
   });
 }
