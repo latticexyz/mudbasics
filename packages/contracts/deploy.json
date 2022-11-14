@@ -5,7 +5,7 @@
     "ResourceComponent",
     "AgentComponent",
     "TerrainComponent",
-    "NameComponent",
+    "SeedComponent",
     "CoolDownComponent"
   ],
   "systems": [
@@ -38,7 +38,7 @@
         "EnergyComponent",
         "ResourceComponent",
         "AgentComponent",
-        "NameComponent",
+        "SeedComponent",
         "CoolDownComponent"
       ]
     },

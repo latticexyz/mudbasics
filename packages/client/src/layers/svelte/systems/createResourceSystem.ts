@@ -1,6 +1,7 @@
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { entities, indexToID } from "../stores/entities";
+import { narrative } from "../stores/narrative";
 
 export function createResourceSystem(network: NetworkLayer) {
   const {
@@ -15,6 +16,14 @@ export function createResourceSystem(network: NetworkLayer) {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};
       value[indexToID(update.entity)].resource = resource;
       return value;
+    });
+
+    const logEntry = {
+      address: indexToID(update.entity),
+      message: "is gathering.",
+    };
+    narrative.update((value) => {
+      return [logEntry, ...value];
     });
   });
 }

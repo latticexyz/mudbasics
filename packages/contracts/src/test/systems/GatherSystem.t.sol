@@ -20,22 +20,23 @@ contract GatherSystemTest is MudTest {
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
     TerrainComponent terrainComponent = TerrainComponent(getAddressById(components, TerrainComponentID));
 
-    SpawnSystem(system(SpawnSystemID)).executeTyped(entity, "tester");
+    SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
 
-    GatherSystem(system(GatherSystemID)).executeTyped(entity, 5);
-
+    // Convert 50 energy => resource
+    GatherSystem(system(GatherSystemID)).executeTyped(entity, 50);
+    // 0 + 5
     assertEq(resourceComponent.getValue(entity), 5);
-    assertEq(energyComponent.getValue(entity), 95);
-
-    Coord memory currentPosition = positionComponent.getValue(entity);
+    // 1000 - 50
+    assertEq(energyComponent.getValue(entity), 950);
 
     // Check for terrain component in current location
+    Coord memory currentPosition = positionComponent.getValue(entity);
     QueryFragment[] memory fragments = new QueryFragment[](2);
     fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(currentPosition));
     fragments[1] = QueryFragment(QueryType.Has, terrainComponent, new bytes(0));
     uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
-
     assertEq(entitiesAtPosition.length, 1);
+    // Terrain component should have 20 - 5 resources
     assertEq(resourceComponent.getValue(entitiesAtPosition[0]), 15);
   }
 }

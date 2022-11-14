@@ -2,8 +2,9 @@
 pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
+import { console } from "forge-std/console.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
-import { NameComponent, ID as NameComponentID } from "../../components/NameComponent.sol";
+import { SeedComponent, ID as SeedComponentID } from "../../components/SeedComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../../components/EnergyComponent.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../../components/PositionComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../../components/ResourceComponent.sol";
@@ -13,15 +14,16 @@ import { CoolDownComponent, ID as CoolDownComponentID } from "../../components/C
 contract SpawnSystemTest is MudTest {
   function testExecute() public {
     uint256 entity = 1;
-    SpawnSystem(system(SpawnSystemID)).executeTyped(entity, "Rasmus");
-    // --- Name
-    NameComponent nameComponent = NameComponent(component(NameComponentID));
-    string memory name = nameComponent.getValue(entity);
-    assertEq(name, "Rasmus");
+    SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
+    // --- Seed
+    SeedComponent seedComponent = SeedComponent(component(SeedComponentID));
+    int32 seed = seedComponent.getValue(entity);
+    console.logInt(seed);
+    assertEq(seed, 1747333387);
     // --- Energy
     EnergyComponent energyComponent = EnergyComponent(component(EnergyComponentID));
     int32 initialEnergy = energyComponent.getValue(entity);
-    assertEq(initialEnergy, 100);
+    assertEq(initialEnergy, 1000);
     // --- Position
     PositionComponent positionComponent = PositionComponent(component(PositionComponentID));
     Coord memory newPosition = positionComponent.getValue(entity);
