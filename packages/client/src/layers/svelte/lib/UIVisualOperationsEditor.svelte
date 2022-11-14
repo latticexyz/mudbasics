@@ -3,6 +3,9 @@
   import { entities } from "../stores/entities";
   import { playerAddress } from "../stores/player";
   import { operations, Operation } from "../operations/";
+  import { tweened } from "svelte/motion";
+
+  const progress = tweened(0);
 
   let sequencerActive = false;
   let turnCounter = 0;
@@ -14,6 +17,10 @@
     category: "empty",
     f: () => false,
   };
+
+  // $: {
+  //   console.log($blockNumber);
+  // }
 
   let sequenceSuccess = [true, true, true, true];
 

@@ -10,7 +10,7 @@ export function createEnergySystem(network: NetworkLayer) {
   } = network;
 
   defineComponentSystem(world, Energy, (update) => {
-    // console.log("==> Energy system: ", update);
+    console.log("==> Energy system: ", update);
     const oldEnergy = update.value[1]?.value;
     const energy = update.value[0]?.value;
     entities.update((value) => {

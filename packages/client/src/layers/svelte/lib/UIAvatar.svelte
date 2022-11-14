@@ -1,7 +1,31 @@
 <script lang="ts">
+  import { tweened } from "svelte/motion";
   import { playerAddress } from "../stores/player";
   import { entities } from "../stores/entities";
   import { seedToName } from "../utils/name";
+  import { blockNumber } from "../stores/network";
+
+  const energy = tweened($entities[$playerAddress].energy);
+  const resource = tweened($entities[$playerAddress].resource);
+
+  entities.subscribe((value) => {
+    let duration = ($entities[$playerAddress].coolDownBlock - $blockNumber) * 1000;
+    duration = duration > 0 ? duration : 1000;
+
+    console.log("$entities[$playerAddress].coolDownBlock", $entities[$playerAddress].coolDownBlock);
+    console.log("$blockNumber", $blockNumber);
+    console.log("duration", duration);
+
+    let newEnergy = $entities[$playerAddress].energy;
+    if (newEnergy !== $energy) {
+      energy.set(newEnergy, { duration: duration });
+    }
+
+    let newResource = $entities[$playerAddress].resource;
+    if (newResource !== $resource) {
+      resource.set(newResource, { duration: duration });
+    }
+  });
 </script>
 
 <div class="ui-avatar">
@@ -9,11 +33,11 @@
   <div><strong>{seedToName($entities[$playerAddress].seed)}</strong></div>
   <div class="large-indicator">
     <div class="label">Energy</div>
-    <div class="value">{$entities[$playerAddress].energy}</div>
+    <div class="value">{$energy.toFixed(2)}</div>
   </div>
   <div class="large-indicator">
     <div class="label">Resource</div>
-    <div class="value">{$entities[$playerAddress].resource}</div>
+    <div class="value">{$resource.toFixed(2)}</div>
   </div>
 </div>
 
@@ -46,5 +70,14 @@
   .value {
     font-size: 2em;
     width: 70%;
+    font-family: monospace;
+  }
+
+  .up {
+    background: #bfff5e;
+  }
+
+  .down {
+    background: #d1656c;
   }
 </style>
