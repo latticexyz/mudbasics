@@ -31,8 +31,8 @@ contract MoveSystem is System {
     int32 currentEnergyLevel = energyComponent.getValue(entity);
     require(currentEnergyLevel >= energyInput, "not enough energy");
 
-    // 1 energy => 1 step, capped at MAX_DISTANCE
-    int32 steps = energyInput;
+    // 10 energy => 1 step, capped at MAX_DISTANCE
+    int32 steps = energyInput / 10;
     if (steps > MAX_DISTANCE) steps = MAX_DISTANCE;
     coolDownComponent.set(entity, int32(int256(block.number)) + 20);
 
@@ -41,58 +41,34 @@ contract MoveSystem is System {
     Coord memory currentPosition = positionComponent.getValue(entity);
     Coord memory newPosition = Coord(currentPosition.x + steps, currentPosition.y + steps);
 
+    // Move either horizontally or vertically
+    uint256 randomMovementPattern = uint256(
+      keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, currentPosition.y))
+    ) % 2;
+
+    // ... either forwards or backwards
+    uint256 randomDirection = uint256(
+      keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender, currentPosition.x))
+    ) % 2;
+
+    if (randomMovementPattern == 0) {
+      newPosition.y = currentPosition.y;
+      // New random X position
+      if (randomDirection == 0) {
+        newPosition.x = currentPosition.x - steps;
+      } else {
+        newPosition.x = currentPosition.x + steps;
+      }
+    } else {
+      // New random Y position
+      if (randomDirection == 0) {
+        newPosition.y = currentPosition.y - steps;
+      } else {
+        newPosition.y = currentPosition.y + steps;
+      }
+    }
+
     positionComponent.set(entity, newPosition);
-
-    // Move either horizontally, vertically or diagonally
-    // uint256 randomMovementPattern = uint256(
-    //   keccak256(
-    //     abi.encodePacked(
-    //       block.timestamp,
-    //       block.number,
-    //       block.difficulty,
-    //       msg.sender,
-    //       currentPosition.x,
-    //       currentPosition.y
-    //     )
-    //   )
-    // ) % 3;
-
-    // uint256 randomX = uint256(
-    //   keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender, currentPosition.x))
-    // ) % 2;
-    // uint256 randomY = uint256(
-    //   keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, currentPosition.y))
-    // ) % 2;
-
-    // if (randomMovementPattern == 0) {
-    //   newPosition.y = currentPosition.y;
-    //   // New random X position
-    //   if (randomX == 0) {
-    //     newPosition.x = currentPosition.x - steps;
-    //   } else {
-    //     newPosition.x = currentPosition.x + steps;
-    //   }
-    // } else if (randomMovementPattern == 1) {
-    //   // New random Y position
-    //   newPosition.x = currentPosition.x;
-    //   if (randomY == 0) {
-    //     newPosition.y = currentPosition.y - steps;
-    //   } else {
-    //     newPosition.y = currentPosition.y + steps;
-    //   }
-    // } else {
-    //   // New random Y position
-    //   if (randomY == 0) {
-    //     newPosition.y = currentPosition.y - steps;
-    //   } else {
-    //     newPosition.y = currentPosition.y + steps;
-    //   }
-    //   if (randomX == 0) {
-    //     newPosition.x = currentPosition.x - steps;
-    //   } else {
-    //     newPosition.x = currentPosition.x + steps;
-    //   }
-    // }
   }
 
   function executeTyped(uint256 entity, int32 energyInput) public returns (bytes memory) {

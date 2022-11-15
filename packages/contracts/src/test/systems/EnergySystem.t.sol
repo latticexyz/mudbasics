@@ -18,22 +18,23 @@ contract EnergySystemTest is MudTest {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
 
-    SpawnSystem(system(SpawnSystemID)).executeTyped(entity, "tester");
+    SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
 
-    GatherSystem(system(GatherSystemID)).executeTyped(entity, 5);
-
+    // Convert 50 energy => 5 resource
+    GatherSystem(system(GatherSystemID)).executeTyped(entity, 50);
+    // 0 + 5
     assertEq(resourceComponent.getValue(entity), 5);
-    assertEq(energyComponent.getValue(entity), 95);
+    // 1000 - 50
+    assertEq(energyComponent.getValue(entity), 950);
 
-    console.log(block.number);
-
+    // Fast forward past cool down block
     vm.roll(666);
 
-    console.log(block.number);
-
+    // Convert 5 resource => 50 energy
     EnergySystem(system(EnergySystemID)).executeTyped(entity, 5);
-
+    // 5 - 5
     assertEq(resourceComponent.getValue(entity), 0);
-    assertEq(energyComponent.getValue(entity), 100);
+    // 950 + 50
+    assertEq(energyComponent.getValue(entity), 1000);
   }
 }

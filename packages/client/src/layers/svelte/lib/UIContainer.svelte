@@ -1,50 +1,72 @@
 <script lang="ts">
+  import { entities } from "../stores/entities";
+  import { playerAddress } from "../stores/player";
   import UIComponent from "./UIComponent.svelte";
+  import UISpawn from "./UISpawn.svelte";
   import UITextLog from "./UITextLog.svelte";
   import UIAvatar from "./UIAvatar.svelte";
-  import UIWorldStats from "./UIWorldStats.svelte";
   import UICharacterStats from "./UICharacterStats.svelte";
-  import UIOperationsEditor from "./UIOperationsEditor.svelte";
-  import UIMap from "./UIMap.svelte";
-  import UIView from "./UIView.svelte";
+  import UIVisualOperationsEditor from "./UIVisualOperationsEditor.svelte";
+  // import UIMap from "./UIMap.svelte";
+  // import UIView from "./UIView.svelte";
+  // import UIOperationsEditor from "./UIOperationsEditor.svelte";
+  // import UIWorldStats from "./UIWorldStats.svelte";
+  import UIDebugLog from "./UIDebugLog.svelte";
 </script>
 
 <div class="ui-container">
   <div class="ui-container-inner">
-    <!-- ***** AVATAR -->
-    <UIComponent title="Avatar">
-      <UIAvatar />
-    </UIComponent>
+    {#if !$entities[$playerAddress]}
+      <!-- ***** SPAWN -->
+      <UIComponent centered={true}>
+        <UISpawn />
+      </UIComponent>
+    {:else}
+      <!-- ***** AVATAR -->
+      <UIComponent title="Avatar">
+        <UIAvatar />
+      </UIComponent>
 
-    <!-- ***** TEXT LOG -->
-    <UIComponent title="Text Log">
-      <UITextLog />
-    </UIComponent>
+      <!-- ***** TEXT LOG -->
+      <UIComponent title="Text Log" large={true}>
+        <UITextLog />
+      </UIComponent>
 
-    <!-- ***** CHARACTER STATS -->
-    <UIComponent title="Character Stats">
-      <UICharacterStats />
-    </UIComponent>
+      <!-- ***** CHARACTER STATS -->
+      <!-- <UIComponent title="Character Stats">
+        <UICharacterStats />
+      </UIComponent> -->
 
-    <!-- ***** VIEW -->
-    <!-- <UIComponent title="View">
+      <!-- ***** DEBUG LOG -->
+      <UIComponent title="Debug Log">
+        <UIDebugLog />
+      </UIComponent>
+
+      <!-- ***** VIEW -->
+      <!-- <UIComponent title="View">
       <UIView />
     </UIComponent> -->
 
-    <!-- ***** WORLD STATS -->
-    <UIComponent title="World Stats">
+      <!-- ***** WORLD STATS -->
+      <!-- <UIComponent title="World Stats">
       <UIWorldStats />
-    </UIComponent>
+    </UIComponent> -->
 
-    <!-- ***** OPERATIONS EDITOR -->
-    <UIComponent title="Operations Editor">
+      <!-- ***** VISUAL OPERATIONS EDITOR -->
+      <UIComponent title="Visual Operations Editor" large={true}>
+        <UIVisualOperationsEditor />
+      </UIComponent>
+
+      <!-- ***** OPERATIONS EDITOR -->
+      <!-- <UIComponent title="Operations Editor" large={true}>
       <UIOperationsEditor />
-    </UIComponent>
+    </UIComponent> -->
 
-    <!-- ***** MAP -->
-    <UIComponent title="Map">
+      <!-- ***** MAP -->
+      <!-- <UIComponent title="Map">
       <UIMap />
-    </UIComponent>
+    </UIComponent> -->
+    {/if}
   </div>
 </div>
 

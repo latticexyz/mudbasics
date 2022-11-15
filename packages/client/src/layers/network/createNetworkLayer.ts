@@ -34,6 +34,7 @@ export async function createNetworkLayer(config: GameConfig) {
     Terrain: defineBoolComponent(world, { id: "Terrain", metadata: { contractId: "component.Terrain" } }),
     Name: defineStringComponent(world, { id: "Name", metadata: { contractId: "component.Name" } }),
     CoolDown: defineNumberComponent(world, { id: "CoolDown", metadata: { contractId: "component.CoolDown" } }),
+    Seed: defineNumberComponent(world, { id: "Seed", metadata: { contractId: "component.Seed" } }),
   };
 
   // --- SETUP ----------------------------------------------------------------------
@@ -46,8 +47,8 @@ export async function createNetworkLayer(config: GameConfig) {
   const actions = createActionSystem(world, txReduced$);
 
   // --- API ------------------------------------------------------------------------
-  function spawn(name: string) {
-    systems["system.Spawn"].executeTyped(BigNumber.from(network.connectedAddress.get()), name);
+  function spawn() {
+    systems["system.Spawn"].executeTyped(BigNumber.from(network.connectedAddress.get()));
   }
 
   function move(energyInput: number) {

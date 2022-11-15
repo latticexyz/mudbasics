@@ -2,9 +2,14 @@
   import { onMount } from "svelte";
   import { bootGame } from "./boot";
   import UIContainer from "./lib/UIContainer.svelte";
-  import { createPositionSystem, createEnergySystem, createResourceSystem, createNameSystem } from "./systems";
+  import {
+    createPositionSystem,
+    createEnergySystem,
+    createResourceSystem,
+    createCoolDownSystem,
+    createSeedSystem,
+  } from "./systems";
   import { network as networkStore, blockNumber } from "./stores/network";
-  import { createCoolDownSystem } from "./systems/createCoolDownSystem";
 
   onMount(async () => {
     console.log("Mounting app...");
@@ -17,8 +22,8 @@
     createPositionSystem(layers.network);
     createEnergySystem(layers.network);
     createResourceSystem(layers.network);
-    createNameSystem(layers.network);
     createCoolDownSystem(layers.network);
+    createSeedSystem(layers.network);
 
     networkStore.set(layers.network);
 

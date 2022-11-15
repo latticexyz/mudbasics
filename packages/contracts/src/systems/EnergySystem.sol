@@ -33,9 +33,9 @@ contract EnergySystem is System {
 
     int32 currentEnergyLevel = energyComponent.getValue(entity);
 
-    // 1 energy => 1 resource, capped at MAX_RESOURCE
+    // 1 resource => 10 energy, capped at MAX_RESOURCE
     resourceComponent.set(entity, currentResourceBalance - resourceInput);
-    energyComponent.set(entity, currentEnergyLevel + resourceInput);
+    energyComponent.set(entity, currentEnergyLevel + resourceInput * 10);
 
     coolDownComponent.set(entity, int32(int256(block.number)) + (COOLDOWN_PER_RESOURCE * resourceInput));
   }
