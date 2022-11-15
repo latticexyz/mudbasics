@@ -3,6 +3,7 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
+import { WORLD_HEIGHT, WORLD_WIDTH } from "../constants.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
@@ -23,9 +24,7 @@ contract MoveSystem is System {
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
 
     // Require cooldown period to be over
-    if (coolDownComponent.has(entity)) {
-      require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
-    }
+    require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
 
     // Require the player to have enough energy
     int32 currentEnergyLevel = energyComponent.getValue(entity);
@@ -39,31 +38,47 @@ contract MoveSystem is System {
     energyComponent.set(entity, currentEnergyLevel - energyInput);
 
     Coord memory currentPosition = positionComponent.getValue(entity);
-    Coord memory newPosition = Coord(currentPosition.x + steps, currentPosition.y + steps);
+    Coord memory newPosition = Coord(currentPosition.x, currentPosition.y);
 
-    // Move either horizontally or vertically
-    uint256 randomMovementPattern = uint256(
+    // Move either along the X (0) or Y (1) axis
+    uint256 randomAxis = uint256(
       keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, currentPosition.y))
     ) % 2;
 
-    // ... either forwards or backwards
+    // Either decrement (0) or increment (1) along the selected axis
     uint256 randomDirection = uint256(
       keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender, currentPosition.x))
     ) % 2;
 
-    if (randomMovementPattern == 0) {
-      newPosition.y = currentPosition.y;
-      // New random X position
+    // At eastern edge – move west
+    if (randomAxis == 0 && currentPosition.x == 0) randomDirection = 1;
+    // At western edge – move east
+    if (randomAxis == 0 && currentPosition.x == WORLD_WIDTH) randomDirection = 0;
+    // At northern edge – move south
+    if (randomAxis == 1 && currentPosition.y == 0) randomDirection = 1;
+    // At southern edge –  move north
+    if (randomAxis == 1 && currentPosition.y == WORLD_HEIGHT) randomDirection = 0;
+
+    // X-axis
+    if (randomAxis == 0) {
+      // Decrement
       if (randomDirection == 0) {
         newPosition.x = currentPosition.x - steps;
-      } else {
+      }
+      //Increment
+      if (randomDirection == 1) {
         newPosition.x = currentPosition.x + steps;
       }
-    } else {
-      // New random Y position
+    }
+
+    // Y-axis
+    if (randomAxis == 1) {
+      // Decrement
       if (randomDirection == 0) {
         newPosition.y = currentPosition.y - steps;
-      } else {
+      }
+      //Increment
+      if (randomDirection == 1) {
         newPosition.y = currentPosition.y + steps;
       }
     }

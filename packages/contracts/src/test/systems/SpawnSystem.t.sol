@@ -3,6 +3,7 @@ pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
+import { WORLD_HEIGHT, WORLD_WIDTH } from "../../constants.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { SeedComponent, ID as SeedComponentID } from "../../components/SeedComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../../components/EnergyComponent.sol";
@@ -18,7 +19,6 @@ contract SpawnSystemTest is MudTest {
     // --- Seed
     SeedComponent seedComponent = SeedComponent(component(SeedComponentID));
     int32 seed = seedComponent.getValue(entity);
-    console.logInt(seed);
     assertEq(seed, 1747333387);
     // --- Energy
     EnergyComponent energyComponent = EnergyComponent(component(EnergyComponentID));
@@ -27,12 +27,14 @@ contract SpawnSystemTest is MudTest {
     // --- Position
     PositionComponent positionComponent = PositionComponent(component(PositionComponentID));
     Coord memory newPosition = positionComponent.getValue(entity);
-    // X between 1 and 30
-    assertGt(newPosition.x, 2500);
-    assertLt(newPosition.x, 5000);
-    // Y between 1 and 30
-    assertGt(newPosition.y, 2500);
-    assertLt(newPosition.y, 5000);
+    // X between 0 and WORLD_WIDTH
+    console.logInt(newPosition.x);
+    assertGt(newPosition.x, 0);
+    assertLt(newPosition.x, WORLD_WIDTH);
+    // Y between 0 and WORLD_HEIGHT
+    console.logInt(newPosition.y);
+    assertGt(newPosition.y, 0);
+    assertLt(newPosition.y, WORLD_HEIGHT);
     // --- Resource
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     int32 initialResourceBalance = resourceComponent.getValue(entity);
