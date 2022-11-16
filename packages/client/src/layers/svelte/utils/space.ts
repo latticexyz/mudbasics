@@ -17,10 +17,10 @@ export function getDirection(previousPosition, currentPosition) {
   }
 
   if (currentPosition.y > previousPosition.y) {
-    return "north";
+    return "south";
   }
 
   if (currentPosition.y < previousPosition.y) {
-    return "south";
+    return "north";
   }
 }

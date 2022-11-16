@@ -16,7 +16,7 @@ contract MoveSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 entity, int32 energyInput) = abi.decode(arguments, (uint256, int32));
+    (uint256 entity, int32 energyInput, int32 direction) = abi.decode(arguments, (uint256, int32, int32));
 
     // Initialize components
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
@@ -33,6 +33,7 @@ contract MoveSystem is System {
     // 10 energy => 1 step, capped at MAX_DISTANCE
     int32 steps = energyInput / 10;
     if (steps > MAX_DISTANCE) steps = MAX_DISTANCE;
+
     coolDownComponent.set(entity, int32(int256(block.number)) + 20);
 
     energyComponent.set(entity, currentEnergyLevel - energyInput);
@@ -40,53 +41,68 @@ contract MoveSystem is System {
     Coord memory currentPosition = positionComponent.getValue(entity);
     Coord memory newPosition = Coord(currentPosition.x, currentPosition.y);
 
-    // Move either along the X (0) or Y (1) axis
-    uint256 randomAxis = uint256(
-      keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, currentPosition.y))
-    ) % 2;
+    if (direction == 1) {
+      // 1 == North
+      if (newPosition.y > 0) newPosition.y -= 1;
+    } else if (direction == 2) {
+      // 2 == east
+      if (newPosition.x < WORLD_WIDTH) newPosition.x += 1;
+    } else if (direction == 3) {
+      // 3 == south
+      if (newPosition.y < WORLD_HEIGHT) newPosition.y += 1;
+    } else if (direction == 4) {
+      // 4 == west
+      if (newPosition.x > 0) newPosition.x -= 1;
+    } else if (direction == 0) {
+      // 0 == random
+      // Move either along the X (0) or Y (1) axis
+      uint256 randomAxis = uint256(
+        keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, currentPosition.y))
+      ) % 2;
 
-    // Either decrement (0) or increment (1) along the selected axis
-    uint256 randomDirection = uint256(
-      keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender, currentPosition.x))
-    ) % 2;
+      // Either decrement (0) or increment (1) along the selected axis
+      uint256 randomDirection = uint256(
+        keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender, currentPosition.x))
+      ) % 2;
 
-    // At eastern edge – move west
-    if (randomAxis == 0 && currentPosition.x == 0) randomDirection = 1;
-    // At western edge – move east
-    if (randomAxis == 0 && currentPosition.x == WORLD_WIDTH) randomDirection = 0;
-    // At northern edge – move south
-    if (randomAxis == 1 && currentPosition.y == 0) randomDirection = 1;
-    // At southern edge –  move north
-    if (randomAxis == 1 && currentPosition.y == WORLD_HEIGHT) randomDirection = 0;
+      // At eastern edge – move west
+      if (randomAxis == 0 && currentPosition.x == 0) randomDirection = 1;
+      // At western edge – move east
+      if (randomAxis == 0 && currentPosition.x == WORLD_WIDTH) randomDirection = 0;
+      // At northern edge – move south
+      if (randomAxis == 1 && currentPosition.y == 0) randomDirection = 1;
+      // At southern edge –  move north
+      if (randomAxis == 1 && currentPosition.y == WORLD_HEIGHT) randomDirection = 0;
 
-    // X-axis
-    if (randomAxis == 0) {
-      // Decrement
-      if (randomDirection == 0) {
-        newPosition.x = currentPosition.x - steps;
+      // X-axis
+      if (randomAxis == 0) {
+        // Decrement
+        if (randomDirection == 0) {
+          newPosition.x = currentPosition.x - steps;
+        }
+        //Increment
+        if (randomDirection == 1) {
+          newPosition.x = currentPosition.x + steps;
+        }
       }
-      //Increment
-      if (randomDirection == 1) {
-        newPosition.x = currentPosition.x + steps;
-      }
-    }
 
-    // Y-axis
-    if (randomAxis == 1) {
-      // Decrement
-      if (randomDirection == 0) {
-        newPosition.y = currentPosition.y - steps;
-      }
-      //Increment
-      if (randomDirection == 1) {
-        newPosition.y = currentPosition.y + steps;
+      // Y-axis
+      if (randomAxis == 1) {
+        // Decrement
+        if (randomDirection == 0) {
+          newPosition.y = currentPosition.y - steps;
+        }
+        //Increment
+        if (randomDirection == 1) {
+          newPosition.y = currentPosition.y + steps;
+        }
       }
     }
 
     positionComponent.set(entity, newPosition);
   }
 
-  function executeTyped(uint256 entity, int32 energyInput) public returns (bytes memory) {
-    return execute(abi.encode(entity, energyInput));
+  function executeTyped(uint256 entity, int32 energyInput, int32 direction) public returns (bytes memory) {
+    return execute(abi.encode(entity, energyInput, direction));
   }
 }

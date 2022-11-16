@@ -1,4 +1,4 @@
-import { crawl, walk, run } from "./move";
+import { crawl, walk, run, east, west, north, south } from "./move";
 import { gather, hoard, stockpile } from "./gather";
 import { nibble, eat, feast } from "./consume";
 
@@ -9,6 +9,10 @@ export interface Operation {
 }
 
 export const operations: Operation[] = [
+  { name: "east", category: "move", f: east },
+  { name: "west", category: "move", f: west },
+  { name: "north", category: "move", f: north },
+  { name: "south", category: "move", f: south },
   { name: "crawl", category: "move", f: crawl },
   { name: "walk", category: "move", f: walk },
   { name: "run", category: "move", f: run },
