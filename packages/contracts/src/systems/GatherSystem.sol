@@ -4,6 +4,8 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
+import { Perlin } from "noise/Perlin.sol";
+import { ABDKMath64x64 as Math } from "abdk-libraries-solidity/ABDKMath64x64.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
@@ -12,7 +14,7 @@ import { TerrainComponent, ID as TerrainComponentID } from "../components/Terrai
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Gather"));
-int32 constant MAX_RESOURCE = 20;
+int32 constant INITIAL_RESOURCE_PER_POSITION = 100;
 int32 constant COOLDOWN_PER_RESOURCE = 3;
 
 contract GatherSystem is System {
@@ -29,22 +31,26 @@ contract GatherSystem is System {
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
 
     // Require cooldown period to be over
-    if (coolDownComponent.has(entity)) {
-      require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
-    }
+    require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
 
     // Require the player to have enough energy
     int32 currentEnergyLevel = energyComponent.getValue(entity);
     require(currentEnergyLevel >= energyInput, "not enough energy");
 
+    // Get player position
     int32 currentResourceBalance = resourceComponent.getValue(entity);
     Coord memory currentEntityPosition = positionComponent.getValue(entity);
 
-    // 10 energy => 1 resource, capped at MAX_RESOURCE
-    int32 resourceToExtract = energyInput / 10;
-    if (resourceToExtract > MAX_RESOURCE) resourceToExtract = MAX_RESOURCE;
-
-    coolDownComponent.set(entity, int32(int256(block.number)) + (COOLDOWN_PER_RESOURCE * resourceToExtract));
+    // Scale resource allocation by perlin noise value
+    // resources = energyInput * (perlin noise / 2**16 <= precision)
+    int32 resourceToExtract = int32(
+      Math.toInt(
+        Math.mul(
+          Math.fromInt(energyInput),
+          Math.div(Perlin.noise2d(currentEntityPosition.x, currentEntityPosition.y, 20, 16), 2 ** 16)
+        )
+      )
+    );
 
     // Check for terrain component in current location
     QueryFragment[] memory fragments = new QueryFragment[](2);
@@ -53,22 +59,40 @@ contract GatherSystem is System {
     uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
 
     if (entitiesAtPosition.length == 0) {
+      // The position has NOT been gathered before,
+      // there are INITIAL_RESOURCE_PER_POSITION resources available
+
+      // Cap resource extraction at INITIAL_RESOURCE_PER_POSITION
+      if (resourceToExtract > INITIAL_RESOURCE_PER_POSITION) resourceToExtract = INITIAL_RESOURCE_PER_POSITION;
+
+      // Update values on player entity
       resourceComponent.set(entity, currentResourceBalance + resourceToExtract);
       energyComponent.set(entity, currentEnergyLevel - energyInput);
+      coolDownComponent.set(entity, int32(int256(block.number)) + (COOLDOWN_PER_RESOURCE * resourceToExtract));
 
-      // Create new terrain block
+      // Create new terrain block at position
       uint256 newTerrainEntity = world.getUniqueEntityId();
       positionComponent.set(newTerrainEntity, currentEntityPosition);
       terrainComponent.set(newTerrainEntity);
-      resourceComponent.set(newTerrainEntity, MAX_RESOURCE - resourceToExtract);
+      resourceComponent.set(newTerrainEntity, INITIAL_RESOURCE_PER_POSITION - resourceToExtract);
     } else {
-      // If there is not enough resources, extract all there is
+      // The position HAS been gathered before,
+      // there are terrainResourceBalance resources available
+
       int32 terrainResourceBalance = resourceComponent.getValue(entitiesAtPosition[0]);
+
+      // Require there to be resources in the position
+      require(terrainResourceBalance > 0, "no resources in position");
+
+      // Cap resource extraction at available resources
       if (resourceToExtract > terrainResourceBalance) resourceToExtract = terrainResourceBalance;
 
+      // Update values on player entity
       resourceComponent.set(entity, currentResourceBalance + resourceToExtract);
       energyComponent.set(entity, currentEnergyLevel - energyInput);
+      coolDownComponent.set(entity, int32(int256(block.number)) + (COOLDOWN_PER_RESOURCE * resourceToExtract));
 
+      // Update value on terrain entity
       resourceComponent.set(entitiesAtPosition[0], terrainResourceBalance - resourceToExtract);
     }
   }

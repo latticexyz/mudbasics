@@ -23,9 +23,7 @@ contract EnergySystem is System {
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
 
     // Require cooldown period to be over
-    if (coolDownComponent.has(entity)) {
-      require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
-    }
+    require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
 
     // Require the player to have enough resource
     int32 currentResourceBalance = resourceComponent.getValue(entity);

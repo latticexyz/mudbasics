@@ -3,6 +3,7 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
+import { WORLD_HEIGHT, WORLD_WIDTH } from "../constants.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
@@ -27,21 +28,29 @@ contract SpawnSystem is System {
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     SeedComponent seedComponent = SeedComponent(getAddressById(components, SeedComponentID));
 
-    if (!positionComponent.has(entity)) {
-      int32 randomX = int32(
-        int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender))) % 2500)
-      ) + 2500;
-      int32 randomY = int32(
-        int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender))) % 2500)
-      ) + 2500;
-      Coord memory startingPosition = Coord(randomX, randomY);
-      seedComponent.set(entity, int32(int256(uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))))));
-      energyComponent.set(entity, 1000);
-      resourceComponent.set(entity, 0);
-      positionComponent.set(entity, startingPosition);
-      agentComponent.set(entity);
-      coolDownComponent.set(entity, 0);
-    }
+    // Require user to be un-spawned
+    require(!positionComponent.has(entity), "already spawned");
+
+    // Number used for naming the character etc...
+    seedComponent.set(entity, int32(int256(uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))))));
+    energyComponent.set(entity, 1000);
+    resourceComponent.set(entity, 0);
+    agentComponent.set(entity);
+    coolDownComponent.set(entity, 0);
+
+    int32 randomX = int32(
+      int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender)))) % WORLD_WIDTH
+    );
+    int32 randomY = int32(
+      int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender)))) % WORLD_HEIGHT
+    );
+
+    // Make sure the values are positive
+    if (randomX < 0) randomX *= -1;
+    if (randomY < 0) randomY *= -1;
+
+    Coord memory startingPosition = Coord(randomX, randomY);
+    positionComponent.set(entity, startingPosition);
   }
 
   function executeTyped(uint256 entity) public returns (bytes memory) {
