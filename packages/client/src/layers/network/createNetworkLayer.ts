@@ -51,8 +51,8 @@ export async function createNetworkLayer(config: GameConfig) {
     systems["system.Spawn"].executeTyped(BigNumber.from(network.connectedAddress.get()));
   }
 
-  function move(energyInput: number) {
-    systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
+  function move(energyInput: number, direction: number) {
+    systems["system.Move"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput, direction);
   }
 
   function gather(energyInput: number) {

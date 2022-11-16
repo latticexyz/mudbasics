@@ -12,13 +12,16 @@ contract MoveSystemTest is MudTest {
     uint256 entity = 1;
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
     PositionComponent positionComponent = PositionComponent(component(PositionComponentID));
-    MoveSystem(system(MoveSystemID)).executeTyped(entity, 3);
-    Coord memory newPosition = positionComponent.getValue(entity);
+    Coord memory initialPosition = positionComponent.getValue(entity);
     // X between 0 and WORLD_WIDTH
-    assertGt(newPosition.x, 0);
-    assertLt(newPosition.x, WORLD_WIDTH);
+    assertGt(initialPosition.x, 0);
+    assertLt(initialPosition.x, WORLD_WIDTH);
     // Y between 0 and WORLD_HEIGHT
-    assertGt(newPosition.y, 0);
-    assertLt(newPosition.y, WORLD_HEIGHT);
+    assertGt(initialPosition.y, 0);
+    assertLt(initialPosition.y, WORLD_HEIGHT);
+    // Move 1 step to the west
+    MoveSystem(system(MoveSystemID)).executeTyped(entity, 10, 4);
+    Coord memory newPosition = positionComponent.getValue(entity);
+    assertEq(newPosition.x, initialPosition.x - 1);
   }
 }
