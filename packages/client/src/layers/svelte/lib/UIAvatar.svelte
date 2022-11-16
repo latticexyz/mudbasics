@@ -7,6 +7,8 @@
 
   const energy = tweened($entities[$playerAddress].energy);
   const resource = tweened($entities[$playerAddress].resource);
+  const x = tweened($entities[$playerAddress].position?.x);
+  const y = tweened($entities[$playerAddress].position?.y);
 
   entities.subscribe((value) => {
     let duration = ($entities[$playerAddress].coolDownBlock - $blockNumber) * 1000;
@@ -25,6 +27,16 @@
     if (newResource !== $resource) {
       resource.set(newResource, { duration: duration });
     }
+
+    let newX = $entities[$playerAddress].position?.x;
+    if (newX !== $x) {
+      x.set(newX, { duration: duration });
+    }
+
+    let newY = $entities[$playerAddress].position?.y;
+    if (newY !== $y) {
+      y.set(newY, { duration: duration });
+    }
   });
 </script>
 
@@ -41,11 +53,11 @@
   </div>
   <div class="large-indicator">
     <div class="label">X</div>
-    <div class="value">{$entities[$playerAddress].position?.x}</div>
+    <div class="value">{$x.toFixed(2)}</div>
   </div>
   <div class="large-indicator">
     <div class="label">Y</div>
-    <div class="value">{$entities[$playerAddress].position?.y}</div>
+    <div class="value">{$y.toFixed(2)}</div>
   </div>
 </div>
 
