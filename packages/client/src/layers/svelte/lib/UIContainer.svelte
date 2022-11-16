@@ -5,13 +5,13 @@
   import UISpawn from "./UISpawn.svelte";
   import UITextLog from "./UITextLog.svelte";
   import UIAvatar from "./UIAvatar.svelte";
-  import UICharacterStats from "./UICharacterStats.svelte";
   import UIVisualOperationsEditor from "./UIVisualOperationsEditor.svelte";
-  // import UIMap from "./UIMap.svelte";
+  import UIMap from "./UIMap.svelte";
+  import UIDebugLog from "./UIDebugLog.svelte";
   // import UIView from "./UIView.svelte";
   // import UIOperationsEditor from "./UIOperationsEditor.svelte";
   // import UIWorldStats from "./UIWorldStats.svelte";
-  import UIDebugLog from "./UIDebugLog.svelte";
+  // import UICharacterStats from "./UICharacterStats.svelte";
 </script>
 
 <div class="ui-container">
@@ -27,20 +27,30 @@
         <UIAvatar />
       </UIComponent>
 
+      <!-- ***** VISUAL OPERATIONS EDITOR -->
+      <UIComponent title="Visual Operations Editor" large={true}>
+        <UIVisualOperationsEditor />
+      </UIComponent>
+
       <!-- ***** TEXT LOG -->
-      <UIComponent title="Text Log" large={true}>
+      <UIComponent title="Text Log">
         <UITextLog />
+      </UIComponent>
+
+      <!-- ***** MAP -->
+      <UIComponent title="Map" large={true}>
+        <UIMap />
+      </UIComponent>
+
+      <!-- ***** DEBUG LOG -->
+      <UIComponent title="Debug Log">
+        <UIDebugLog />
       </UIComponent>
 
       <!-- ***** CHARACTER STATS -->
       <!-- <UIComponent title="Character Stats">
         <UICharacterStats />
       </UIComponent> -->
-
-      <!-- ***** DEBUG LOG -->
-      <UIComponent title="Debug Log">
-        <UIDebugLog />
-      </UIComponent>
 
       <!-- ***** VIEW -->
       <!-- <UIComponent title="View">
@@ -52,19 +62,9 @@
       <UIWorldStats />
     </UIComponent> -->
 
-      <!-- ***** VISUAL OPERATIONS EDITOR -->
-      <UIComponent title="Visual Operations Editor" large={true}>
-        <UIVisualOperationsEditor />
-      </UIComponent>
-
       <!-- ***** OPERATIONS EDITOR -->
       <!-- <UIComponent title="Operations Editor" large={true}>
       <UIOperationsEditor />
-    </UIComponent> -->
-
-      <!-- ***** MAP -->
-      <!-- <UIComponent title="Map">
-      <UIMap />
     </UIComponent> -->
     {/if}
   </div>

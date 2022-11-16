@@ -39,6 +39,14 @@
     <div class="label">Resource</div>
     <div class="value">{$resource.toFixed(2)}</div>
   </div>
+  <div class="large-indicator">
+    <div class="label">X</div>
+    <div class="value">{$entities[$playerAddress].position?.x}</div>
+  </div>
+  <div class="large-indicator">
+    <div class="label">Y</div>
+    <div class="value">{$entities[$playerAddress].position?.y}</div>
+  </div>
 </div>
 
 <style>
@@ -48,6 +56,7 @@
 
   img {
     max-width: 100%;
+    max-height: 300px;
   }
 
   .large-indicator {
