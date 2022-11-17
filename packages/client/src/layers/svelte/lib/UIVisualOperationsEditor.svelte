@@ -72,6 +72,11 @@
 </script>
 
 <div class="ui-operations-editor">
+  {#if !sequencerActive && $entities[$playerAddress].coolDownBlock > $blockNumber}
+    <div class="cooldown-overlay">
+      <div>In cooldown for <strong>{$entities[$playerAddress].coolDownBlock - $blockNumber}</strong> seconds</div>
+    </div>
+  {/if}
   <div class="operation-grid">
     {#each sequence as operation, index}
       <div class="slot-container" class:hidden={sequencerActive && operation.category == "empty"}>
@@ -82,9 +87,9 @@
         >
           <div>
             {operation.name}
-            {#if sequencerActive && activeOperationIndex == index}
+            {#if activeOperationIndex == index && operation.category !== "empty"}
               <strong>
-                {#if $entities[$playerAddress].coolDownBlock - $blockNumber >= 0}
+                {#if $entities[$playerAddress].coolDownBlock - $blockNumber > 0}
                   {$entities[$playerAddress].coolDownBlock - $blockNumber}
                 {/if}
               </strong>
@@ -95,9 +100,13 @@
     {/each}
   </div>
   <div class="sequencer-controls">
-    {#if !sequencerActive && sequence.filter((item) => item.name !== "+").length > 0}
-      <button on:click={clearSequencer}>Clear sequencer</button>
-      <button on:click={startSequencer}>Start sequencer</button>
+    {#if !sequencerActive}
+      {#if sequence.filter((item) => item.name !== "+").length == 0}
+        <div>Click <strong>operations</strong> below to add to sequencer.</div>
+      {:else}
+        <button on:click={clearSequencer}>Clear sequencer</button>
+        <button on:click={startSequencer}>Start sequencer</button>
+      {/if}
     {/if}
     {#if sequencerActive}
       <button on:click={stopSequencer}>Stop sequencer</button>
@@ -120,9 +129,9 @@
 
 <style>
   button {
-    margin-bottom: 10px;
     display: block;
     margin-right: 5px;
+    user-select: none;
   }
 
   .running {
@@ -224,7 +233,7 @@
 
   .sequencer-controls {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     justify-content: flex-end;
     height: 40px;
   }
@@ -235,5 +244,25 @@
 
   .active {
     border: 2px solid black;
+  }
+
+  .cooldown-overlay {
+    position: absolute;
+    width: 100%;
+    background: rgba(127, 127, 127, 0.8);
+    backdrop-filter: gray(1);
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    font-size: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+
+  .ui-operations-editor {
+    position: relative;
   }
 </style>
