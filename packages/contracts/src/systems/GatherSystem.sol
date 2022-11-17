@@ -7,11 +7,12 @@ import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { Perlin } from "noise/Perlin.sol";
 import { ABDKMath64x64 as Math } from "abdk-libraries-solidity/ABDKMath64x64.sol";
 
+import { entityType } from "../constants.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
-import { TerrainComponent, ID as TerrainComponentID } from "../components/TerrainComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
+import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Gather"));
 int32 constant INITIAL_RESOURCE_PER_POSITION = 100;
@@ -27,8 +28,8 @@ contract GatherSystem is System {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
-    TerrainComponent terrainComponent = TerrainComponent(getAddressById(components, TerrainComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
 
     // Require cooldown period to be over
     require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
@@ -55,7 +56,7 @@ contract GatherSystem is System {
     // Check for terrain component in current location
     QueryFragment[] memory fragments = new QueryFragment[](2);
     fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(currentEntityPosition));
-    fragments[1] = QueryFragment(QueryType.Has, terrainComponent, new bytes(0));
+    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(uint32(entityType.Terrain)));
     uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
 
     if (entitiesAtPosition.length == 0) {
@@ -73,7 +74,7 @@ contract GatherSystem is System {
       // Create new terrain block at position
       uint256 newTerrainEntity = world.getUniqueEntityId();
       positionComponent.set(newTerrainEntity, currentEntityPosition);
-      terrainComponent.set(newTerrainEntity);
+      entityTypeComponent.set(newTerrainEntity, uint32(entityType.Terrain));
       resourceComponent.set(newTerrainEntity, INITIAL_RESOURCE_PER_POSITION - resourceToExtract);
     } else {
       // The position HAS been gathered before,

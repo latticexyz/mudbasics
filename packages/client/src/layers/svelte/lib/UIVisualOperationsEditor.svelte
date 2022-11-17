@@ -187,6 +187,10 @@
     background: #d37cff;
   }
 
+  .burn {
+    background: orangered;
+  }
+
   .empty {
     background: lightgrey;
   }
