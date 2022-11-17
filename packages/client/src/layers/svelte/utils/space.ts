@@ -3,6 +3,12 @@ interface Coord {
   y: number;
 }
 
+export enum EntityType {
+  Player,
+  Terrain,
+  Fire,
+}
+
 export function getDirection(previousPosition, currentPosition) {
   if (!previousPosition || !currentPosition) {
     return "";

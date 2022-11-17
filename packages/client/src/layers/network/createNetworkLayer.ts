@@ -5,7 +5,6 @@ import {
   setupMUDNetwork,
   defineCoordComponent,
   defineNumberComponent,
-  defineBoolComponent,
   defineStringComponent,
 } from "@latticexyz/std-client";
 import { defineLoadingStateComponent } from "./components";
@@ -30,11 +29,10 @@ export async function createNetworkLayer(config: GameConfig) {
     Position: defineCoordComponent(world, { id: "Position", metadata: { contractId: "component.Position" } }),
     Energy: defineNumberComponent(world, { id: "Energy", metadata: { contractId: "component.Energy" } }),
     Resource: defineNumberComponent(world, { id: "Resource", metadata: { contractId: "component.Resource" } }),
-    Agent: defineBoolComponent(world, { id: "Agent", metadata: { contractId: "component.Agent" } }),
-    Terrain: defineBoolComponent(world, { id: "Terrain", metadata: { contractId: "component.Terrain" } }),
     Name: defineStringComponent(world, { id: "Name", metadata: { contractId: "component.Name" } }),
     CoolDown: defineNumberComponent(world, { id: "CoolDown", metadata: { contractId: "component.CoolDown" } }),
     Seed: defineNumberComponent(world, { id: "Seed", metadata: { contractId: "component.Seed" } }),
+    EntityType: defineNumberComponent(world, { id: "EntityType", metadata: { contractId: "component.EntityType" } }),
   };
 
   // --- SETUP ----------------------------------------------------------------------
@@ -63,6 +61,10 @@ export async function createNetworkLayer(config: GameConfig) {
     systems["system.Energy"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
   }
 
+  function burn(resourceInput: number) {
+    systems["system.Fire"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
+  }
+
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
@@ -73,7 +75,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { spawn, move, gather, consume },
+    api: { spawn, move, gather, consume, burn },
     dev: setupDevSystems(world, encoders, systems),
   };
 

@@ -3,8 +3,7 @@
     "PositionComponent",
     "EnergyComponent",
     "ResourceComponent",
-    "AgentComponent",
-    "TerrainComponent",
+    "EntityTypeComponent",
     "SeedComponent",
     "CoolDownComponent"
   ],
@@ -37,9 +36,9 @@
         "PositionComponent",
         "EnergyComponent",
         "ResourceComponent",
-        "AgentComponent",
         "SeedComponent",
-        "CoolDownComponent"
+        "CoolDownComponent",
+        "EntityTypeComponent"
       ]
     },
     {
@@ -48,8 +47,18 @@
         "PositionComponent",
         "ResourceComponent",
         "EnergyComponent",
-        "TerrainComponent",
-        "CoolDownComponent"
+        "CoolDownComponent",
+        "EntityTypeComponent"
+      ]
+    },
+    {
+      "name": "FireSystem",
+      "writeAccess": [
+        "PositionComponent",
+        "ResourceComponent",
+        "EnergyComponent",
+        "CoolDownComponent",
+        "EntityTypeComponent"
       ]
     }
   ]

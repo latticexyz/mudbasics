@@ -8,6 +8,7 @@
     createResourceSystem,
     createCoolDownSystem,
     createSeedSystem,
+    createEntityTypeSystem,
   } from "./systems";
   import { network as networkStore, blockNumber } from "./stores/network";
 
@@ -24,6 +25,7 @@
     createResourceSystem(layers.network);
     createCoolDownSystem(layers.network);
     createSeedSystem(layers.network);
+    createEntityTypeSystem(layers.network);
 
     networkStore.set(layers.network);
 

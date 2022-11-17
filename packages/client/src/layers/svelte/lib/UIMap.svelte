@@ -3,6 +3,9 @@
   import { entities } from "../stores/entities";
   import { playerAddress } from "../stores/player";
   import { createPerlin, Perlin } from "@latticexyz/noise";
+  import { EntityType } from "../utils/space";
+
+  $: console.log($entities);
 
   let canvasEl = {};
   let ctx = {};
@@ -33,15 +36,16 @@
   <div class="map-container">
     {#each Object.entries($entities) as [address, value]}
       <div
-        class="agent"
-        class:player={address === $playerAddress}
-        class:block={!value.energy}
+        class="marker"
+        class:self={address === $playerAddress}
+        class:terrain={value.entityType == EntityType.Terrain}
+        class:fire={value.entityType == EntityType.Fire}
         style={"left: " +
           value.position?.x +
           "px; top: " +
           value.position?.y +
           "px; opacity: " +
-          (value.energy ? 1 : 1 - value.resource / 100) +
+          (value.entityType == EntityType.Terrain ? 1 - value.resource / 100 : 1) +
           ";"}
       />
     {/each}
@@ -78,20 +82,24 @@
     transform-origin: top left;
   }
 
-  .agent {
+  .marker {
     position: absolute;
     width: 1px;
     height: 1px;
-    background: yellow;
+    background: green;
     z-index: 100;
   }
 
-  .player {
+  .self {
     background: blue;
     z-index: 1000;
   }
 
-  .block {
+  .fire {
+    background: orangered;
+  }
+
+  .terrain {
     position: absolute;
     width: 1px;
     height: 1px;

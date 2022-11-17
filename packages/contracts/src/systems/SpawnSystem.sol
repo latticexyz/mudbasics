@@ -3,12 +3,12 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
-import { WORLD_HEIGHT, WORLD_WIDTH } from "../constants.sol";
+import { WORLD_HEIGHT, WORLD_WIDTH, entityType } from "../constants.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
-import { AgentComponent, ID as AgentComponentID } from "../components/AgentComponent.sol";
+import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 import { SeedComponent, ID as SeedComponentID } from "../components/SeedComponent.sol";
 
@@ -24,7 +24,7 @@ contract SpawnSystem is System {
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
-    AgentComponent agentComponent = AgentComponent(getAddressById(components, AgentComponentID));
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     SeedComponent seedComponent = SeedComponent(getAddressById(components, SeedComponentID));
 
@@ -34,8 +34,8 @@ contract SpawnSystem is System {
     // Number used for naming the character etc...
     seedComponent.set(entity, int32(int256(uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))))));
     energyComponent.set(entity, 1000);
-    resourceComponent.set(entity, 0);
-    agentComponent.set(entity);
+    resourceComponent.set(entity, 100);
+    entityTypeComponent.set(entity, uint32(entityType.Player));
     coolDownComponent.set(entity, 0);
 
     int32 randomX = int32(

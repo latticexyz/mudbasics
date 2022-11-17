@@ -3,14 +3,14 @@ pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
-import { WORLD_HEIGHT, WORLD_WIDTH } from "../../constants.sol";
+import { WORLD_HEIGHT, WORLD_WIDTH, entityType } from "../../constants.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { SeedComponent, ID as SeedComponentID } from "../../components/SeedComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../../components/EnergyComponent.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../../components/PositionComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../../components/ResourceComponent.sol";
-import { AgentComponent, ID as AgentComponentID } from "../../components/AgentComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../../components/CoolDownComponent.sol";
+import { EntityTypeComponent, ID as EntityTypeComponentID } from "../../components/EntityTypeComponent.sol";
 
 contract SpawnSystemTest is MudTest {
   function testExecute() public {
@@ -19,7 +19,7 @@ contract SpawnSystemTest is MudTest {
     // --- Seed
     SeedComponent seedComponent = SeedComponent(component(SeedComponentID));
     int32 seed = seedComponent.getValue(entity);
-    assertEq(seed, 1747333387);
+    assertEq(seed, 1445394868);
     // --- Energy
     EnergyComponent energyComponent = EnergyComponent(component(EnergyComponentID));
     int32 initialEnergy = energyComponent.getValue(entity);
@@ -38,11 +38,10 @@ contract SpawnSystemTest is MudTest {
     // --- Resource
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     int32 initialResourceBalance = resourceComponent.getValue(entity);
-    assertEq(initialResourceBalance, 0);
-    // --- Agent
-    AgentComponent agentComponent = AgentComponent(getAddressById(components, AgentComponentID));
-    bool isAgent = agentComponent.getValue(entity);
-    assertTrue(isAgent);
+    assertEq(initialResourceBalance, 100);
+    // --- Player entity type
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    assertEq(entityTypeComponent.getValue(entity), uint32(entityType.Player));
     // --- Cooldown
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     int32 initialCoolDownBlock = coolDownComponent.getValue(entity);
