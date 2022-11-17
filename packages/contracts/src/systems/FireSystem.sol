@@ -10,6 +10,7 @@ import { ResourceComponent, ID as ResourceComponentID } from "../components/Reso
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
+import { CreatorComponent, ID as CreatorComponentID } from "../components/CreatorComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Fire"));
 
@@ -25,6 +26,7 @@ contract FireSystem is System {
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    CreatorComponent creatorComponent = CreatorComponent(getAddressById(components, CreatorComponentID));
 
     // Require cooldown period to be over
     require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
@@ -44,6 +46,7 @@ contract FireSystem is System {
     positionComponent.set(newFireEntity, playerPosition);
     entityTypeComponent.set(newFireEntity, uint32(entityType.Fire));
     resourceComponent.set(newFireEntity, resourceInput);
+    creatorComponent.set(newFireEntity, entity);
 
     // Update values on player entity
     resourceComponent.set(entity, currentResourceLevel - resourceInput);

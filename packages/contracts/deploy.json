@@ -5,7 +5,8 @@
     "ResourceComponent",
     "EntityTypeComponent",
     "SeedComponent",
-    "CoolDownComponent"
+    "CoolDownComponent",
+    "CreatorComponent"
   ],
   "systems": [
     {
@@ -58,7 +59,8 @@
         "ResourceComponent",
         "EnergyComponent",
         "CoolDownComponent",
-        "EntityTypeComponent"
+        "EntityTypeComponent",
+        "CreatorComponent"
       ]
     }
   ]

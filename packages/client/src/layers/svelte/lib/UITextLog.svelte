@@ -8,9 +8,9 @@
 <div class="ui-text-log">
   <div class="inner-log">
     {#each $narrative as logEntry}
-      {#if seedToName($entities[logEntry.address].seed)}
+      {#if seedToName($entities[logEntry.address]?.seed)}
         <div class:player={logEntry.address == $playerAddress}>
-          <strong>{seedToName($entities[logEntry.address].seed)}</strong>
+          <strong>{seedToName($entities[logEntry.address]?.seed)}</strong>
           {logEntry.message}
         </div>
       {/if}

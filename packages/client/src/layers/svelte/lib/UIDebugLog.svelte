@@ -17,7 +17,7 @@
         <strong>👺 {seedToName($entities[address].seed)}</strong>
       {/if}
       {#if value.entityType == EntityType.Terrain}
-        <strong>🌻 {shortenAddress(address)}</strong>
+        <strong>🗺️ {shortenAddress(address)}</strong>
       {/if}
       {#if value.entityType == EntityType.Fire}
         <strong>🔥 {shortenAddress(address)}</strong>
@@ -28,6 +28,9 @@
         / e: {value.energy}
       {/if}
       / r: {value.resource}
+      {#if value.entityType == EntityType.Fire}
+        / => {seedToName($entities[value.creator].seed)}
+      {/if}
     </div>
   {/each}
 </div>

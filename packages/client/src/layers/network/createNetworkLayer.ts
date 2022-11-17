@@ -33,6 +33,7 @@ export async function createNetworkLayer(config: GameConfig) {
     CoolDown: defineNumberComponent(world, { id: "CoolDown", metadata: { contractId: "component.CoolDown" } }),
     Seed: defineNumberComponent(world, { id: "Seed", metadata: { contractId: "component.Seed" } }),
     EntityType: defineNumberComponent(world, { id: "EntityType", metadata: { contractId: "component.EntityType" } }),
+    Creator: defineNumberComponent(world, { id: "Creator", metadata: { contractId: "component.Creator" } }),
   };
 
   // --- SETUP ----------------------------------------------------------------------

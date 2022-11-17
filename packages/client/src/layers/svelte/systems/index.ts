@@ -4,3 +4,4 @@ export { createResourceSystem } from "./createResourceSystem";
 export { createCoolDownSystem } from "./createCoolDownSystem";
 export { createSeedSystem } from "./createSeedSystem";
 export { createEntityTypeSystem } from "./createEntityTypeSystem";
+export { createCreatorSystem } from "./createCreatorSystem";
