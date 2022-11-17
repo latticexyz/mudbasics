@@ -18,17 +18,17 @@
     f: () => false,
   };
 
-  // $: {
-  //   console.log($blockNumber);
-  // }
-
   let sequenceSuccess = [true, true, true, true];
 
   let sequence: Operation[] = [emptyOperation, emptyOperation, emptyOperation, emptyOperation];
 
   function executeOperation(operation: Operation) {
-    console.log("====> executing operation:", operation.name);
-    return operation.f();
+    if (operation) {
+      console.log("====> executing operation:", operation.name);
+      return operation.f();
+    } else {
+      stopSequencer();
+    }
   }
 
   function addToSequencer(operation: Operation) {
@@ -95,15 +95,15 @@
     {/each}
   </div>
   <div class="sequencer-controls">
-    {#if !sequencerActive}
+    {#if !sequencerActive && sequence.filter((item) => item.name !== "+").length > 0}
       <button on:click={clearSequencer}>Clear sequencer</button>
+      <button on:click={startSequencer}>Start sequencer</button>
     {/if}
     {#if sequencerActive}
       <button on:click={stopSequencer}>Stop sequencer</button>
-    {:else}
-      <button on:click={startSequencer}>Start sequencer</button>
     {/if}
   </div>
+
   <div class="inventory" class:disabled={sequencerActive}>
     {#each operations as operation}
       <div
@@ -226,6 +226,7 @@
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
+    height: 40px;
   }
 
   .failure {
