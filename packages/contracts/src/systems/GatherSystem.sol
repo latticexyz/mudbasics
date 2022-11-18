@@ -16,7 +16,7 @@ import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/
 
 uint256 constant ID = uint256(keccak256("system.Gather"));
 int32 constant INITIAL_RESOURCE_PER_POSITION = 100;
-int32 constant COOLDOWN_PER_RESOURCE = 3;
+int32 constant COOLDOWN_PER_ENERGY = 1;
 
 contract GatherSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
@@ -69,7 +69,7 @@ contract GatherSystem is System {
       // Update values on player entity
       resourceComponent.set(entity, currentResourceBalance + resourceToExtract);
       energyComponent.set(entity, currentEnergyLevel - energyInput);
-      coolDownComponent.set(entity, int32(int256(block.number)) + (COOLDOWN_PER_RESOURCE * resourceToExtract));
+      coolDownComponent.set(entity, int32(int256(block.number)) + (COOLDOWN_PER_ENERGY * energyInput));
 
       // Create new terrain block at position
       uint256 newTerrainEntity = world.getUniqueEntityId();
@@ -91,7 +91,7 @@ contract GatherSystem is System {
       // Update values on player entity
       resourceComponent.set(entity, currentResourceBalance + resourceToExtract);
       energyComponent.set(entity, currentEnergyLevel - energyInput);
-      coolDownComponent.set(entity, int32(int256(block.number)) + (COOLDOWN_PER_RESOURCE * resourceToExtract));
+      coolDownComponent.set(entity, int32(int256(block.number)) + (COOLDOWN_PER_ENERGY * energyInput));
 
       // Update value on terrain entity
       resourceComponent.set(entitiesAtPosition[0], terrainResourceBalance - resourceToExtract);
