@@ -41,20 +41,40 @@ contract MoveSystem is System {
     Coord memory currentPosition = positionComponent.getValue(entity);
     Coord memory newPosition = Coord(currentPosition.x, currentPosition.y);
 
+    //  | 8 | 1 | 2 |
+    //  | 7 | 0 | 3 |
+    //  | 6 | 5 | 4 |
+
     if (direction == 1) {
-      // 1 == North
+      // 1 => N
       if (newPosition.y > 0) newPosition.y -= 1;
     } else if (direction == 2) {
-      // 2 == east
+      // 2 => NE
+      if (newPosition.y > 0) newPosition.y -= 1;
       if (newPosition.x < WORLD_WIDTH) newPosition.x += 1;
     } else if (direction == 3) {
-      // 3 == south
-      if (newPosition.y < WORLD_HEIGHT) newPosition.y += 1;
+      // 3 => E
+      if (newPosition.x < WORLD_WIDTH) newPosition.x += 1;
     } else if (direction == 4) {
-      // 4 == west
+      // 4 => SE
+      if (newPosition.y < WORLD_HEIGHT) newPosition.y += 1;
+      if (newPosition.x < WORLD_WIDTH) newPosition.x += 1;
+    } else if (direction == 5) {
+      // 5 => S
+      if (newPosition.y < WORLD_HEIGHT) newPosition.y += 1;
+    } else if (direction == 6) {
+      // 6 => SW
+      if (newPosition.y < WORLD_HEIGHT) newPosition.y += 1;
+      if (newPosition.x > 0) newPosition.x -= 1;
+    } else if (direction == 7) {
+      // 7 => W
+      if (newPosition.x > 0) newPosition.x -= 1;
+    } else if (direction == 8) {
+      // 8 => NW
+      if (newPosition.y > 0) newPosition.y -= 1;
       if (newPosition.x > 0) newPosition.x -= 1;
     } else if (direction == 0) {
-      // 0 == random
+      // 0 => random
       // Move either along the X (0) or Y (1) axis
       uint256 randomAxis = uint256(
         keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, currentPosition.y))
