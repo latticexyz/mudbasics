@@ -1,4 +1,4 @@
-import { crawl, walk, run, east, west, north, south } from "./move";
+import { crawl, walk, run, east, west, north, south, southEast, southWest, northEast, northWest } from "./move";
 import { gather, hoard, stockpile } from "./gather";
 import { nibble, eat, feast } from "./consume";
 import { fire } from "./burn";
@@ -14,6 +14,10 @@ export const operations: Operation[] = [
   { name: "west", category: "move", f: west },
   { name: "north", category: "move", f: north },
   { name: "south", category: "move", f: south },
+  { name: "south-east", category: "move", f: southEast },
+  { name: "south-west", category: "move", f: southWest },
+  { name: "north-east", category: "move", f: northEast },
+  { name: "north-west", category: "move", f: northWest },
   { name: "crawl", category: "move", f: crawl },
   { name: "walk", category: "move", f: walk },
   { name: "run", category: "move", f: run },

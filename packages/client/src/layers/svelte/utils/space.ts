@@ -3,6 +3,18 @@ interface Coord {
   y: number;
 }
 
+export enum Directions {
+  Random,
+  North,
+  NorthEast,
+  East,
+  SouthEast,
+  South,
+  SouthWest,
+  West,
+  NorthWest,
+}
+
 export enum EntityType {
   Player,
   Terrain,
