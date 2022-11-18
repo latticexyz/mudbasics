@@ -1,3 +1,8 @@
 import { writable } from "svelte/store";
 
-export const narrative = writable([]);
+export interface LogEntry {
+  address: string;
+  message: string;
+}
+
+export const narrative = writable([] as LogEntry[]);

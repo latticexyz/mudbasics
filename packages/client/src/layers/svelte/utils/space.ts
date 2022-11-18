@@ -1,8 +1,3 @@
-interface Coord {
-  x: number;
-  y: number;
-}
-
 export enum Directions {
   Random,
   North,

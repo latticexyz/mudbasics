@@ -1,4 +1,4 @@
-import { narrative } from "../stores/narrative";
+import { narrative, LogEntry } from "../stores/narrative";
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { entities, indexToID } from "../stores/entities";
@@ -21,7 +21,7 @@ export function createPositionSystem(network: NetworkLayer) {
     });
 
     if (previousPosition) {
-      const logEntry = {
+      const logEntry: LogEntry = {
         address: indexToID(update.entity),
         message: "is moving " + getDirection(previousPosition, currentPosition),
       };
@@ -29,7 +29,7 @@ export function createPositionSystem(network: NetworkLayer) {
         return [logEntry, ...value];
       });
     } else {
-      const logEntry = {
+      const logEntry: LogEntry = {
         address: indexToID(update.entity),
         message: "spawned",
       };

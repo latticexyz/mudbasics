@@ -14,7 +14,7 @@ export function createCreatorSystem(network: NetworkLayer) {
     const creator = update.value[0]?.value;
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};
-      value[indexToID(update.entity)].creator = creator;
+      value[indexToID(update.entity)].creator = String(creator);
       return value;
     });
 

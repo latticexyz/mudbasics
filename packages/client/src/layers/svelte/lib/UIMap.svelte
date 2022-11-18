@@ -7,8 +7,8 @@
 
   $: console.log($entities);
 
-  let canvasEl = {};
-  let ctx = {};
+  let canvasEl: HTMLCanvasElement;
+  let ctx: CanvasRenderingContext2D;
   let perlin: Perlin;
 
   function paintPixel(x: number, y: number, factor: number) {

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Coord } from "@latticexyz/recs";
   import { onMount } from "svelte";
   import { entities } from "../stores/entities";
   import { playerAddress } from "../stores/player";
@@ -6,11 +7,6 @@
   import { EntityType } from "../utils/space";
 
   let perlin: Perlin;
-
-  interface Coord {
-    x: number;
-    y: number;
-  }
 
   interface GridItem {
     name: string;
