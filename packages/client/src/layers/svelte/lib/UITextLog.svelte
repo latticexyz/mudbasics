@@ -19,6 +19,10 @@
 </div>
 
 <style>
+  .ui-text-log {
+    height: 340px;
+  }
+
   .player {
     color: blue;
   }

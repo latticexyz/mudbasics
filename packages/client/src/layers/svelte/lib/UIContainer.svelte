@@ -7,6 +7,7 @@
   import UIAvatar from "./UIAvatar.svelte";
   import UIVisualOperationsEditor from "./UIVisualOperationsEditor.svelte";
   import UIMap from "./UIMap.svelte";
+  import UIGridMap from "./UIGridMap.svelte";
   import UIDebugLog from "./UIDebugLog.svelte";
   // import UIView from "./UIView.svelte";
   // import UIOperationsEditor from "./UIOperationsEditor.svelte";
@@ -38,8 +39,13 @@
       </UIComponent>
 
       <!-- ***** MAP -->
-      <UIComponent title="Map" large={true}>
+      <UIComponent title="Map">
         <UIMap />
+      </UIComponent>
+
+      <!-- ***** GRID MAP -->
+      <UIComponent title="Grid Map">
+        <UIGridMap />
       </UIComponent>
 
       <!-- ***** DEBUG LOG -->
