@@ -127,7 +127,11 @@
 <div class="ui-grid-map">
   <div class="grid-container">
     {#each grid as item}
-      <div class="grid-item {item.direction}" class:fire={item.fire} style={"opacity: " + item.perlinFactor + ";"}>
+      <div
+        class="grid-item {item.direction}"
+        class:fire={item.fire}
+        style={"background-color: rgba(0,0,0," + item.perlinFactor + ");"}
+      >
         <div>
           <strong>{item.name}</strong> <br />
           [{item.coordinates.x}:{item.coordinates.y}] <br />
@@ -152,7 +156,6 @@
   .grid-item {
     width: 80px;
     height: 80px;
-    background: black;
     float: left;
     display: flex;
     justify-content: center;
@@ -164,6 +167,6 @@
   }
 
   .fire {
-    background: orangered;
+    background-color: orangered !important;
   }
 </style>
