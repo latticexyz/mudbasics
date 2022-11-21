@@ -17,82 +17,25 @@
     fire: boolean;
   }
 
-  const grid: GridItem[] = [
-    {
-      name: "NW",
-      direction: "north-west",
-      transformation: { x: -1, y: -1 },
-      coordinates: { x: 0, y: 0 },
-      perlinFactor: 1,
-      fire: false,
-    },
-    {
-      name: "N",
-      direction: "north",
-      transformation: { x: 0, y: -1 },
-      coordinates: { x: 0, y: 0 },
-      perlinFactor: 1,
-      fire: false,
-    },
-    {
-      name: "NE",
-      direction: "north-east",
-      transformation: { x: 1, y: -1 },
-      coordinates: { x: 0, y: 0 },
-      perlinFactor: 1,
-      fire: false,
-    },
-    {
-      name: "W",
-      direction: "west",
-      transformation: { x: -1, y: 0 },
-      coordinates: { x: 0, y: 0 },
-      perlinFactor: 1,
-      fire: false,
-    },
-    {
-      name: "👺",
-      direction: "player",
-      transformation: { x: 0, y: 0 },
-      coordinates: { x: 0, y: 0 },
-      perlinFactor: 1,
-      fire: false,
-    },
-    {
-      name: "E",
-      direction: "east",
-      transformation: { x: 1, y: 0 },
-      coordinates: { x: 0, y: 0 },
-      perlinFactor: 1,
-      fire: false,
-    },
-    {
-      name: "SW",
-      direction: "south-west",
-      transformation: { x: -1, y: 1 },
-      coordinates: { x: 0, y: 0 },
-      perlinFactor: 1,
-      fire: false,
-    },
-    {
-      name: "s",
-      direction: "south",
-      transformation: { x: 0, y: 1 },
-      coordinates: { x: 0, y: 0 },
-      perlinFactor: 1,
-      fire: false,
-    },
-    {
-      name: "SE",
-      direction: "south-east",
-      transformation: { x: 1, y: 1 },
-      coordinates: { x: 0, y: 0 },
-      perlinFactor: 1,
-      fire: false,
-    },
-  ];
+  let grid: GridItem[] = [];
 
-  function updateGrid(centerPosition) {
+  function initGrid() {
+    for (let y = -2; y <= 2; y++) {
+      for (let x = -2; x <= 2; x++) {
+        let newGridItem: GridItem = {
+          name: "-",
+          direction: ".",
+          transformation: { x: x, y: y },
+          coordinates: { x: 0, y: 0 },
+          perlinFactor: 0,
+          fire: false,
+        };
+        grid = [...grid, newGridItem];
+      }
+    }
+  }
+
+  function updateGrid(centerPosition: Coord) {
     for (let i = 0; i < grid.length; i++) {
       grid[i].coordinates.x = centerPosition.x + grid[i].transformation.x;
       grid[i].coordinates.y = centerPosition.y + grid[i].transformation.y;
@@ -108,7 +51,6 @@
   }
 
   entities.subscribe((value) => {
-    console.log(value);
     if (perlin) {
       updateGrid(value[$playerAddress].position);
     }
@@ -116,6 +58,7 @@
 
   onMount(async () => {
     perlin = await createPerlin();
+    initGrid();
     updateGrid($entities[$playerAddress].position);
   });
 </script>
@@ -144,21 +87,21 @@
   }
 
   .grid-container {
-    width: 240px;
-    height: 240px;
+    width: 300px;
+    height: 300px;
     position: relative;
   }
 
   .grid-item {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     float: left;
     display: flex;
     justify-content: center;
     align-items: center;
     border: 1px solid red;
     color: white;
-    font-size: 10px;
+    font-size: 9px;
     text-align: center;
   }
 
