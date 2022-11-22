@@ -3,6 +3,7 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
+import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { entityType } from "../constants.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
@@ -39,14 +40,42 @@ contract FireSystem is System {
     int32 currentResourceLevel = resourceComponent.getValue(entity);
     require(currentResourceLevel >= resourceInput, "not enough resource");
 
+    // Check if there is  a fire at position
     Coord memory playerPosition = positionComponent.getValue(entity);
+    QueryFragment[] memory fragments = new QueryFragment[](2);
+    fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(playerPosition));
+    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(entityType.Fire));
+    uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
 
-    // Create fire at position
-    uint256 newFireEntity = world.getUniqueEntityId();
-    positionComponent.set(newFireEntity, playerPosition);
-    entityTypeComponent.set(newFireEntity, uint32(entityType.Fire));
-    resourceComponent.set(newFireEntity, resourceInput);
-    creatorComponent.set(newFireEntity, entity);
+    if (entitiesAtPosition.length == 0) {
+      // Create new fire at position
+      uint256 newFireEntity = world.getUniqueEntityId();
+      positionComponent.set(newFireEntity, playerPosition);
+      entityTypeComponent.set(newFireEntity, uint32(entityType.Fire));
+
+      // Cooldown = current block + resources burnt
+      coolDownComponent.set(newFireEntity, int32(int256(block.number)) + resourceInput * 2);
+
+      uint256[] memory creatorArray = new uint256[](1);
+      creatorArray[0] = entity;
+      creatorComponent.set(newFireEntity, creatorArray);
+    } else {
+      // Add to existing fire at position
+      // If cooldown block is passed (fire is burnt out), count up from current block number
+      int32 currentCoolDownBlock = coolDownComponent.getValue(entitiesAtPosition[0]) > int32(int256(block.number))
+        ? coolDownComponent.getValue(entitiesAtPosition[0])
+        : int32(int256(block.number));
+      coolDownComponent.set(entitiesAtPosition[0], currentCoolDownBlock + resourceInput * 2);
+
+      // Add player to creator list
+      uint256[] memory currentCreatorArray = creatorComponent.getValue(entitiesAtPosition[0]);
+      uint256[] memory newCreatorArray = new uint256[](currentCreatorArray.length + 1);
+      for (uint256 i = 0; i < currentCreatorArray.length; i++) {
+        newCreatorArray[i] = currentCreatorArray[i];
+      }
+      newCreatorArray[newCreatorArray.length - 1] = entity;
+      creatorComponent.set(entitiesAtPosition[0], newCreatorArray);
+    }
 
     // Update values on player entity
     resourceComponent.set(entity, currentResourceLevel - resourceInput);

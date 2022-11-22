@@ -38,7 +38,7 @@ contract SpawnSystemTest is MudTest {
     // --- Resource
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     int32 initialResourceBalance = resourceComponent.getValue(entity);
-    assertEq(initialResourceBalance, 100);
+    assertEq(initialResourceBalance, 200);
     // --- Player entity type
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     assertEq(entityTypeComponent.getValue(entity), uint32(entityType.Player));

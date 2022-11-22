@@ -39,8 +39,17 @@ contract GatherSystem is System {
     require(currentEnergyLevel >= energyInput, "not enough energy");
 
     // Get player position
+    Coord memory playerPosition = positionComponent.getValue(entity);
+
+    // Require there to not be a fire in position
+    // QueryFragment[] memory fireFragments = new QueryFragment[](2);
+    // fireFragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(playerPosition));
+    // fireFragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(entityType.Fire));
+    // uint256[] memory fireEntitiesAtPosition = LibQuery.query(fireFragments);
+    // require(fireEntitiesAtPosition.length == 0, "can not gather in fire");
+
+    // Get player resource balance
     int32 currentResourceBalance = resourceComponent.getValue(entity);
-    Coord memory currentEntityPosition = positionComponent.getValue(entity);
 
     // Scale resource allocation by perlin noise value
     // resources = energyInput * (perlin noise / 2**16 <= precision)
@@ -48,14 +57,14 @@ contract GatherSystem is System {
       Math.toInt(
         Math.mul(
           Math.fromInt(energyInput),
-          Math.div(Perlin.noise2d(currentEntityPosition.x, currentEntityPosition.y, 20, 16), 2 ** 16)
+          Math.div(Perlin.noise2d(playerPosition.x, playerPosition.y, 20, 16), 2 ** 16)
         )
       )
     );
 
     // Check for terrain component in current location
     QueryFragment[] memory fragments = new QueryFragment[](2);
-    fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(currentEntityPosition));
+    fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(playerPosition));
     fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(uint32(entityType.Terrain)));
     uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
 
@@ -73,7 +82,7 @@ contract GatherSystem is System {
 
       // Create new terrain block at position
       uint256 newTerrainEntity = world.getUniqueEntityId();
-      positionComponent.set(newTerrainEntity, currentEntityPosition);
+      positionComponent.set(newTerrainEntity, playerPosition);
       entityTypeComponent.set(newTerrainEntity, uint32(entityType.Terrain));
       resourceComponent.set(newTerrainEntity, INITIAL_RESOURCE_PER_POSITION - resourceToExtract);
     } else {
