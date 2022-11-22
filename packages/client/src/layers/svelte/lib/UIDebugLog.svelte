@@ -5,6 +5,7 @@
   import { EntityType } from "../utils/space";
   import { shortenAddress } from "../utils/ui";
   import { blockNumber } from "../stores/network";
+  import { uniq } from "lodash";
 
   const SECONDS_IN_DAY = 86400;
 
@@ -18,6 +19,13 @@
   function formatTime(seconds: number) {
     let currentTime = new Date(seconds * 1000);
     return (isNight(currentTime) ? "🌙 " : "🌞 ") + currentTime.toISOString().substr(11, 8);
+  }
+
+  function playerList(players: string[]) {
+    let playerNames = players.map((p) => ($entities[p] ? seedToName($entities[p].seed) : "not-found"));
+    console.log("playerNames", playerNames);
+    // HACK: should make sure that the creator array on contract level is unique instead...
+    return uniq(playerNames).join(", ");
   }
 </script>
 
@@ -42,9 +50,14 @@
       {#if value.entityType == EntityType.Player}
         / e: {value.energy}
       {/if}
-      / r: {value.resource}
+      {#if value.coolDownBlock}
+        / cdb: {value.coolDownBlock}
+      {/if}
+      {#if value.resource}
+        / r: {value.resource}
+      {/if}
       {#if value.entityType == EntityType.Fire}
-        / => {seedToName($entities[value.creator].seed)}
+        / => {playerList(value.creator)}
       {/if}
     </div>
   {/each}

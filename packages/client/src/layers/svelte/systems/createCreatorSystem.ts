@@ -11,16 +11,16 @@ export function createCreatorSystem(network: NetworkLayer) {
 
   defineComponentSystem(world, Creator, (update) => {
     console.log("==> Creator system: ", update);
-    const creator = update.value[0]?.value;
+    const creator: string[] = update.value[0]?.value;
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};
-      value[indexToID(update.entity)].creator = String(creator);
+      value[indexToID(update.entity)].creator = creator;
       return value;
     });
 
     const logEntry = {
       address: creator,
-      message: "made a fire",
+      message: "is making a fire.",
     };
     narrative.update((value) => {
       return [logEntry, ...value];

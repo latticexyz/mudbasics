@@ -42,7 +42,7 @@
 
 <div class="ui-avatar">
   <img src="/img/avatar-placeholder.jpg" alt="Avatar" />
-  <div><strong>{seedToName($entities[$playerAddress].seed)}</strong></div>
+  <div class="name">{seedToName($entities[$playerAddress].seed)}</div>
   <div class="large-indicator">
     <div class="label">Energy</div>
     <div class="value">{$energy.toFixed(2)}</div>
@@ -69,6 +69,11 @@
   img {
     max-width: 100%;
     max-height: 300px;
+  }
+
+  .name {
+    font-size: 1.5em;
+    font-weight: bold;
   }
 
   .large-indicator {

@@ -7,7 +7,7 @@ export interface Entity {
   entityType?: EntityType;
   position?: Coord;
   coolDownBlock?: number;
-  creator?: string;
+  creator?: string[];
   energy?: number;
   resource?: number;
   seed?: number;

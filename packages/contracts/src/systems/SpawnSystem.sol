@@ -34,7 +34,7 @@ contract SpawnSystem is System {
     // Number used for naming the character etc...
     seedComponent.set(entity, int32(int256(uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))))));
     energyComponent.set(entity, 1000);
-    resourceComponent.set(entity, 100);
+    resourceComponent.set(entity, 200);
     entityTypeComponent.set(entity, uint32(entityType.Player));
     coolDownComponent.set(entity, 0);
 
