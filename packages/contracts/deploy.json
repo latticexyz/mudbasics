@@ -1,4 +1,67 @@
 {
-  "components": ["ExampleComponent"],
-  "systems": [{ "name": "ComponentDevSystem", "writeAccess": ["*"] }]
+  "components": [
+    "PositionComponent",
+    "EnergyComponent",
+    "ResourceComponent",
+    "EntityTypeComponent",
+    "SeedComponent",
+    "CoolDownComponent",
+    "CreatorComponent"
+  ],
+  "systems": [
+    {
+      "name": "ComponentDevSystem",
+      "writeAccess": [
+        "*"
+      ]
+    },
+    {
+      "name": "MoveSystem",
+      "writeAccess": [
+        "PositionComponent",
+        "EnergyComponent",
+        "CoolDownComponent"
+      ]
+    },
+    {
+      "name": "EnergySystem",
+      "writeAccess": [
+        "EnergyComponent",
+        "ResourceComponent",
+        "CoolDownComponent"
+      ]
+    },
+    {
+      "name": "SpawnSystem",
+      "writeAccess": [
+        "PositionComponent",
+        "EnergyComponent",
+        "ResourceComponent",
+        "SeedComponent",
+        "CoolDownComponent",
+        "EntityTypeComponent"
+      ]
+    },
+    {
+      "name": "GatherSystem",
+      "writeAccess": [
+        "PositionComponent",
+        "ResourceComponent",
+        "EnergyComponent",
+        "CoolDownComponent",
+        "EntityTypeComponent"
+      ]
+    },
+    {
+      "name": "FireSystem",
+      "writeAccess": [
+        "PositionComponent",
+        "ResourceComponent",
+        "EnergyComponent",
+        "CoolDownComponent",
+        "EntityTypeComponent",
+        "CreatorComponent"
+      ]
+    }
+  ]
 }
