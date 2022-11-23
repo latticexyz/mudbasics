@@ -4,7 +4,7 @@
 
   let currentView = "";
 
-  const VIEWS = ["/img/view.png", "/img/view2.jpg", "/img/view3.png", "/img/view4.jpg", "/img/view5.jpg"];
+  const VIEWS = ["/images/view.png", "/images/view2.jpg", "/images/view3.png", "/images/view4.jpg", "/images/view5.jpg"];
 
   blockNumber.subscribe((newBlock) => {
     currentView = sample(VIEWS);
