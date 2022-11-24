@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte"
+  // import { useRipple } from "../utils/effects"
   const dispatch = createEventDispatcher()
 
   export let title = "";
@@ -14,6 +15,8 @@
   export let fluid = false
   export let bare = false
   export let layer = 1
+
+  let rippleEnabled = bare
 
   const close = () => dispatch('close')
 </script>
@@ -41,7 +44,8 @@
       {/if}
     </div>
   {/if}
-  <div class="ui-component-inner">
+  <div
+    class="ui-component-inner">
     <slot />
   </div>
 </div>
@@ -54,6 +58,7 @@
     overflow-y: scroll;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
+    position: relative;
   }
 
   .ui-component.backed {
