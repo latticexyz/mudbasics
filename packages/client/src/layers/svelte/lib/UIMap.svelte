@@ -66,7 +66,8 @@
 
 <style>
   .ui-map {
-    height: 320px;
+    /* height: 320px; */
+    position: relative;
   }
 
   .player {

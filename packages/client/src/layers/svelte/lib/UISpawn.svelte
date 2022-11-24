@@ -7,16 +7,18 @@
 </script>
 
 <div class="ui-spawn">
-  <div class="spawn">
-    <button on:click={spawn}>Spawn</button>
-  </div>
+  <button on:click={spawn}>Spawn</button>
 </div>
 
 <style>
+  .ui-spawn {
+    width: 100%;
+    height: 100%;
+  }
   button {
     display: block;
     width: 100%;
-    height: 200px;
+    height: 100%;
     cursor: pointer;
   }
 </style>
