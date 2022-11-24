@@ -83,6 +83,7 @@ export const uiState = writable({
     rowStart: 1,
     rowEnd: 4,
     fluid: true,
+    layer: 2,
   },
   view: {
     id: "view",
