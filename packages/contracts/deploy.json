@@ -6,7 +6,8 @@
     "EntityTypeComponent",
     "SeedComponent",
     "CoolDownComponent",
-    "CreatorComponent"
+    "CreatorComponent",
+    "StatsComponent"
   ],
   "systems": [
     {
@@ -20,7 +21,8 @@
       "writeAccess": [
         "PositionComponent",
         "EnergyComponent",
-        "CoolDownComponent"
+        "CoolDownComponent",
+        "StatsComponent"
       ]
     },
     {
@@ -28,7 +30,8 @@
       "writeAccess": [
         "EnergyComponent",
         "ResourceComponent",
-        "CoolDownComponent"
+        "CoolDownComponent",
+        "StatsComponent"
       ]
     },
     {
@@ -39,7 +42,8 @@
         "ResourceComponent",
         "SeedComponent",
         "CoolDownComponent",
-        "EntityTypeComponent"
+        "EntityTypeComponent",
+        "StatsComponent"
       ]
     },
     {
@@ -49,7 +53,8 @@
         "ResourceComponent",
         "EnergyComponent",
         "CoolDownComponent",
-        "EntityTypeComponent"
+        "EntityTypeComponent",
+        "StatsComponent"
       ]
     },
     {
@@ -60,7 +65,8 @@
         "EnergyComponent",
         "CoolDownComponent",
         "EntityTypeComponent",
-        "CreatorComponent"
+        "CreatorComponent",
+        "StatsComponent"
       ]
     }
   ]

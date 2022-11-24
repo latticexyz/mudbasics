@@ -12,6 +12,7 @@ import { EnergyComponent, ID as EnergyComponentID } from "../../components/Energ
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../../components/EntityTypeComponent.sol";
 import { CreatorComponent, ID as CreatorComponentID } from "../../components/CreatorComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../../components/CoolDownComponent.sol";
+import { StatsComponent, ID as StatsComponentID, Stats } from "../../components/StatsComponent.sol";
 
 contract FireSystemTest is MudTest {
   function testExecute() public {
@@ -24,6 +25,7 @@ contract FireSystemTest is MudTest {
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     CreatorComponent creatorComponent = CreatorComponent(getAddressById(components, CreatorComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
 
     // Spawn player
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
@@ -42,27 +44,30 @@ contract FireSystemTest is MudTest {
     fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(entityType.Fire));
     uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
     assertEq(entitiesAtPosition.length, 1);
-    // Cooldown on fire component should be blocknumber + resources added:
-    // 1 + 100 = 101
-    assertEq(coolDownComponent.getValue(entitiesAtPosition[0]), 101);
+    // Cooldown on fire component should be blocknumber + (resources added * 10):
+    // 1 + 1000 = 1001
+    assertEq(coolDownComponent.getValue(entitiesAtPosition[0]), 1001);
     // Creator should be set
-    console.logInt(int256(creatorComponent.getValue(entitiesAtPosition[0]).length));
-    console.logInt(int256(creatorComponent.getValue(entitiesAtPosition[0])[0]));
+    assertEq(uint256(creatorComponent.getValue(entitiesAtPosition[0])[0]), entity);
+    // Check stats are updated
+    assertEq(statsComponent.getValue(entity).burnt, 100);
 
     // Fast forward past player cool down block
     vm.roll(66);
 
+    // 66 block later...
     // Add to the existing fire
     FireSystem(system(FireSystemID)).executeTyped(entity, 100);
     // 100 - 100
     assertEq(resourceComponent.getValue(entity), 0);
     // 950 - 50
     assertEq(energyComponent.getValue(entity), 900);
-    // Cooldown on fire component should be cooldownblock + resources added:
-    // 101 + 100 = 201
-    assertEq(coolDownComponent.getValue(entitiesAtPosition[0]), 201);
+    // Cooldown on fire component should be cooldownblock + (resources added * 10):
+    // 1001 + 1000 = 2001
+    assertEq(coolDownComponent.getValue(entitiesAtPosition[0]), 2001);
     // Creator should be set
-    console.logInt(int256(creatorComponent.getValue(entitiesAtPosition[0]).length));
-    // console.logInt(int256(creatorComponent.getValue(entitiesAtPosition[0])[0]));
+    assertEq(int256(creatorComponent.getValue(entitiesAtPosition[0]).length), 2);
+    // Check stats are updated
+    assertEq(statsComponent.getValue(entity).burnt, 200);
   }
 }
