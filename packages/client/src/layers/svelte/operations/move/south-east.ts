@@ -5,8 +5,8 @@ import { playerAddress } from "../../stores/player";
 import { Directions } from "../../utils/space";
 
 export function southEast() {
-  if (get(entities)[get(playerAddress)].energy >= 30) {
-    get(network).api?.move(30, Directions.SouthEast);
+  if (get(entities)[get(playerAddress)].energy >= 10) {
+    get(network).api?.move(10, Directions.SouthEast);
     return true;
   } else {
     console.log("Walk: not enough energy");
