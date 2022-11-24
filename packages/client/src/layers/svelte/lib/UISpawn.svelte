@@ -7,7 +7,10 @@
 </script>
 
 <div class="ui-spawn">
-  <button on:click={spawn}>Spawn</button>
+  <button class="rectangles" on:click={spawn}>
+    Spawn<br>
+    ***
+  </button>
 </div>
 
 <style>
@@ -20,5 +23,11 @@
     width: 100%;
     height: 100%;
     cursor: pointer;
+    color: var(--foreground);
+    font-family: var(--font-family);
+    font-size: 2rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    position: relative;
   }
 </style>

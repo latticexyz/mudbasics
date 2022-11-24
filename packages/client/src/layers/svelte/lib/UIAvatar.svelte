@@ -41,7 +41,7 @@
 </script>
 
 <div class="ui-avatar">
-  <img src="/img/avatar-placeholder.jpg" alt="Avatar" />
+  <img src="/images/avatar-placeholder.png" alt="Avatar" class="ui-avatar-background" />
   <div class="name">{seedToName($entities[$playerAddress].seed)}</div>
   <div class="large-indicator">
     <div class="label">Energy</div>
@@ -63,23 +63,30 @@
 
 <style>
   .ui-avatar {
-    /* height: 400px; */
+    position: relative;
+    height: 100%;
   }
-
-  img {
-    max-width: 100%;
-    max-height: 300px;
+  .ui-avatar-background {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 
   .name {
-    font-size: 1.5em;
+    font-size: 2em;
     font-weight: bold;
   }
 
   .large-indicator {
     display: flex;
     width: 100%;
-    border: 1px solid black;
+    border-width: 1px;
     text-align: center;
     height: 60px;
     line-height: 60px;
@@ -88,15 +95,14 @@
   }
 
   .label {
-    background: black;
-    color: white;
+    background: var(--foreground);
+    color: var(--background);
     width: 30%;
   }
 
   .value {
     font-size: 2em;
     width: 70%;
-    font-family: monospace;
   }
 
   .up {

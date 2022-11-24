@@ -165,6 +165,10 @@
     display: flex;
   }
 
+  .operation-name {
+    color: var(--foreground);
+  }
+
   .indicator {
     height: 10px;
     width: 10px;

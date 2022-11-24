@@ -24,7 +24,7 @@
   }
 
   .player {
-    color: blue;
+    color: var(--blue);
   }
 
   .inner-log {

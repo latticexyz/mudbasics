@@ -12,7 +12,16 @@
   }
 </script>
 
+
+
+
+
 <div class="ui-container">
+  {#if !$entities[$playerAddress]}
+    <span></span>
+  {:else}
+    <UITaskBar />
+  {/if}
   <div class="ui-container-inner">
     {#if !$entities[$playerAddress]}
       <UIComponent
@@ -24,9 +33,6 @@
         <UISpawn />
       </UIComponent>
     {:else}
-      <!-- ***** TASKBAR -->
-      <UITaskBar />
-
       {#each Object.values($uiState) as attrs (attrs.id)}
         {#if attrs.active}
           <UIComponent
@@ -48,8 +54,15 @@
     top: 0;
     width: 100vw;
     height: 100vh;
-    background: red;
-    padding: 1rem;
+    background: var(--background);
+    color: var(--foreground);
+    padding: var(--row-gap) var(--col-gap) var(--col-gap);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 93%;
+    box-sizing: border-box;
+    align-items: stretch;
+    gap: var(--row-gap);
   }
 
   .ui-container-inner {
@@ -58,9 +71,8 @@
     height: 100%;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    grid-template-rows: min-content repeat(9, 1fr);
+    grid-template-rows: repeat(9, minmax(0, 1fr));
     grid-template-areas:
-    "taskbar taskbar taskbar"
     "tl tm tr"
     "tl tm tr"
     "tl tm tr"
@@ -71,6 +83,7 @@
     "bl bm br"
     "bl bm br";
     align-items: start;
-    gap: 0.5rem;
+    column-gap: var(--col-gap);
+    row-gap: var(--row-gap);
   }
 </style>

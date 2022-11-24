@@ -13,18 +13,23 @@
   export let centered = false;
   export let fluid = false
   export let bare = false
+  export let layer = 1
 
   const close = () => dispatch('close')
 </script>
 
 <div
   class="ui-component {area || `col-${colStart}-${colEnd} row-${rowStart}-${rowEnd}`}"
+  style:z-index={layer}
   class:large
   class:centered
   class:fluid
+  class:box={!bare}
+  class:rectangles={!bare}
+  class:backed={!bare}
 >
   {#if !bare}
-    <div class="titlebar">
+    <div class="titlebar" class:border={!bare}>
       {#if title}
         {title}
       {/if}
@@ -51,26 +56,39 @@
     scrollbar-width: none;  /* Firefox */
   }
 
+  .ui-component.backed {
+    background-color: rgba(0,0,0,0.7);
+  }
+
+  .ui-component.box {
+    border: 1px solid var(--foreground);
+  }
+
   .ui-component-inner {
     padding: 10px;
-    background: rgba(0,0,0,0.3);
   }
 
   .titlebar {
     width: 100%;
     padding: 10px;
     font-size: 12px;
-    background: black;
-    color: red;
+    /* background: var(--foreground); */
+    color: var(--foreground);
+    font-weight: bold;
     display: flex;
     justify-content: space-between;
   }
 
+  .titlebar.border {
+    border-bottom: 1px solid var(--foreground);
+  }
+
   .close {
     all: unset;
-    background: red;
-    color: black;
-    padding: 0 0.5rem;
+    color: var(--foreground);
+    background: var(--background);
+    padding: 0 calc(var(--row-gap) * 0.5);
+    border: 1px solid var(--foreground);
     cursor: pointer;
   }
 

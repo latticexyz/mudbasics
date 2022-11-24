@@ -1,11 +1,50 @@
+@import url("../../public/jetbrains/style.css");
+
+:root {
+  --background: black;
+  --background-offset: rgb(40, 40, 40);
+  --foreground: white;
+  --font-family: Jetbrains, Courier, monospaced;
+  --blue: #0033eb;
+  --col-gap: 4rem;
+  --row-gap: 2rem;
+}
+
+.rectangles {
+  background-color: var(--background);
+  background-image: repeating-linear-gradient(
+      45deg,
+      var(--background-offset) 25%,
+      transparent 25%,
+      transparent 75%,
+      var(--background-offset) 75%,
+      var(--background-offset)
+    ),
+    repeating-linear-gradient(
+      45deg,
+      var(--background-offset) 25%,
+      var(--background) 25%,
+      var(--background) 75%,
+      var(--background-offset) 75%,
+      var(--background-offset)
+    );
+  background-position: 5px 5px, 15px 15px;
+  background-size: 20px 20px;
+}
+
 * {
   box-sizing: border-box;
+  border-color: var(--foreground);
+  -webkit-font-feature-settings: "liga" on, "calt" on;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 body,
 html {
-  background: black;
-  font-family: Helvetica, sans-serif;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-family);
   font-size: 12px;
   margin: 0;
   padding: 0;

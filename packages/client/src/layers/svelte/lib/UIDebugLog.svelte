@@ -65,6 +65,6 @@
 
 <style>
   .player {
-    color: blue;
+    color: var(--blue);
   }
 </style>
