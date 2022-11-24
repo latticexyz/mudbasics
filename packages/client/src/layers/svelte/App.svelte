@@ -10,6 +10,7 @@
     createSeedSystem,
     createEntityTypeSystem,
     createCreatorSystem,
+    createStatsSystem,
   } from "./systems";
   import { network as networkStore, blockNumber } from "./stores/network";
 
@@ -28,6 +29,7 @@
     createSeedSystem(layers.network);
     createEntityTypeSystem(layers.network);
     createCreatorSystem(layers.network);
+    createStatsSystem(layers.network);
 
     networkStore.set(layers.network);
 

@@ -8,12 +8,20 @@ import { WORLD_HEIGHT, WORLD_WIDTH } from "../constants.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
+import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Move"));
 int32 constant MAX_DISTANCE = 5;
 
 contract MoveSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
+
+  function updateStats(uint256 entity, int32 steps) public {
+    StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
+    Stats memory currentStats = statsComponent.getValue(entity);
+    currentStats.traveled += steps;
+    statsComponent.set(entity, currentStats);
+  }
 
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 entity, int32 energyInput, int32 direction) = abi.decode(arguments, (uint256, int32, int32));
@@ -47,32 +55,32 @@ contract MoveSystem is System {
 
     if (direction == 1) {
       // 1 => N
-      if (newPosition.y > 0) newPosition.y -= 1;
+      if (newPosition.y > 0) newPosition.y -= steps;
     } else if (direction == 2) {
       // 2 => NE
-      if (newPosition.y > 0) newPosition.y -= 1;
-      if (newPosition.x < WORLD_WIDTH) newPosition.x += 1;
+      if (newPosition.y > 0) newPosition.y -= steps;
+      if (newPosition.x < WORLD_WIDTH) newPosition.x += steps;
     } else if (direction == 3) {
       // 3 => E
-      if (newPosition.x < WORLD_WIDTH) newPosition.x += 1;
+      if (newPosition.x < WORLD_WIDTH) newPosition.x += steps;
     } else if (direction == 4) {
       // 4 => SE
-      if (newPosition.y < WORLD_HEIGHT) newPosition.y += 1;
-      if (newPosition.x < WORLD_WIDTH) newPosition.x += 1;
+      if (newPosition.y < WORLD_HEIGHT) newPosition.y += steps;
+      if (newPosition.x < WORLD_WIDTH) newPosition.x += steps;
     } else if (direction == 5) {
       // 5 => S
-      if (newPosition.y < WORLD_HEIGHT) newPosition.y += 1;
+      if (newPosition.y < WORLD_HEIGHT) newPosition.y += steps;
     } else if (direction == 6) {
       // 6 => SW
-      if (newPosition.y < WORLD_HEIGHT) newPosition.y += 1;
-      if (newPosition.x > 0) newPosition.x -= 1;
+      if (newPosition.y < WORLD_HEIGHT) newPosition.y += steps;
+      if (newPosition.x > 0) newPosition.x -= steps;
     } else if (direction == 7) {
       // 7 => W
-      if (newPosition.x > 0) newPosition.x -= 1;
+      if (newPosition.x > 0) newPosition.x -= steps;
     } else if (direction == 8) {
       // 8 => NW
-      if (newPosition.y > 0) newPosition.y -= 1;
-      if (newPosition.x > 0) newPosition.x -= 1;
+      if (newPosition.y > 0) newPosition.y -= steps;
+      if (newPosition.x > 0) newPosition.x -= steps;
     } else if (direction == 0) {
       // 0 => random
       // Move either along the X (0) or Y (1) axis
@@ -120,6 +128,8 @@ contract MoveSystem is System {
     }
 
     positionComponent.set(entity, newPosition);
+
+    updateStats(entity, steps);
   }
 
   function executeTyped(uint256 entity, int32 energyInput, int32 direction) public returns (bytes memory) {

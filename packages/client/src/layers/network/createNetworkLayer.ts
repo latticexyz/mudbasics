@@ -7,7 +7,7 @@ import {
   defineNumberComponent,
   defineStringComponent,
 } from "@latticexyz/std-client";
-import { defineLoadingStateComponent } from "./components";
+import { defineLoadingStateComponent, defineStatsComponent } from "./components";
 import { SystemTypes } from "contracts/types/SystemTypes";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { GameConfig, getNetworkConfig } from "./config";
@@ -34,6 +34,7 @@ export async function createNetworkLayer(config: GameConfig) {
     Seed: defineNumberComponent(world, { id: "Seed", metadata: { contractId: "component.Seed" } }),
     EntityType: defineNumberComponent(world, { id: "EntityType", metadata: { contractId: "component.EntityType" } }),
     Creator: defineNumberComponent(world, { id: "Creator", metadata: { contractId: "component.Creator" } }),
+    Stats: defineStatsComponent(world),
   };
 
   // --- SETUP ----------------------------------------------------------------------

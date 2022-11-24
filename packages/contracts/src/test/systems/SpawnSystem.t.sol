@@ -11,21 +11,33 @@ import { PositionComponent, ID as PositionComponentID, Coord } from "../../compo
 import { ResourceComponent, ID as ResourceComponentID } from "../../components/ResourceComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../../components/CoolDownComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../../components/EntityTypeComponent.sol";
+import { StatsComponent, ID as StatsComponentID, Stats } from "../../components/StatsComponent.sol";
 
 contract SpawnSystemTest is MudTest {
   function testExecute() public {
     uint256 entity = 1;
-    SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
-    // --- Seed
+
+    // Initialize components
     SeedComponent seedComponent = SeedComponent(component(SeedComponentID));
-    int32 seed = seedComponent.getValue(entity);
-    assertEq(seed, 1445394868);
-    // --- Energy
     EnergyComponent energyComponent = EnergyComponent(component(EnergyComponentID));
+    PositionComponent positionComponent = PositionComponent(component(PositionComponentID));
+    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
+
+    // Spawn player
+    SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
+
+    // --- Seed
+    int32 seed = seedComponent.getValue(entity);
+    console.logInt(seed);
+
+    // --- Energy
     int32 initialEnergy = energyComponent.getValue(entity);
     assertEq(initialEnergy, 1000);
+
     // --- Position
-    PositionComponent positionComponent = PositionComponent(component(PositionComponentID));
     Coord memory newPosition = positionComponent.getValue(entity);
     // X between 0 and WORLD_WIDTH
     console.logInt(newPosition.x);
@@ -35,16 +47,23 @@ contract SpawnSystemTest is MudTest {
     console.logInt(newPosition.y);
     assertGt(newPosition.y, 0);
     assertLt(newPosition.y, WORLD_HEIGHT);
+
     // --- Resource
-    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     int32 initialResourceBalance = resourceComponent.getValue(entity);
     assertEq(initialResourceBalance, 200);
+
     // --- Player entity type
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     assertEq(entityTypeComponent.getValue(entity), uint32(entityType.Player));
+
     // --- Cooldown
-    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     int32 initialCoolDownBlock = coolDownComponent.getValue(entity);
     assertEq(initialCoolDownBlock, 0);
+
+    // --- Stats
+    Stats memory initialStats = statsComponent.getValue(entity);
+    assertEq(initialStats.traveled, 0);
+    assertEq(initialStats.gathered, 0);
+    assertEq(initialStats.burnt, 0);
+    assertEq(initialStats.eaten, 0);
   }
 }

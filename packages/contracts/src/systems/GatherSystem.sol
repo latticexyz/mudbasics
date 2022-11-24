@@ -13,13 +13,21 @@ import { ResourceComponent, ID as ResourceComponentID } from "../components/Reso
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
+import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Gather"));
+
 int32 constant INITIAL_RESOURCE_PER_POSITION = 100;
-int32 constant COOLDOWN_PER_ENERGY = 1;
 
 contract GatherSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
+
+  function updateStats(uint256 entity, int32 resourceToExtract) public {
+    StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
+    Stats memory currentStats = statsComponent.getValue(entity);
+    currentStats.gathered += resourceToExtract;
+    statsComponent.set(entity, currentStats);
+  }
 
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 entity, int32 energyInput) = abi.decode(arguments, (uint256, int32));
@@ -75,11 +83,6 @@ contract GatherSystem is System {
       // Cap resource extraction at INITIAL_RESOURCE_PER_POSITION
       if (resourceToExtract > INITIAL_RESOURCE_PER_POSITION) resourceToExtract = INITIAL_RESOURCE_PER_POSITION;
 
-      // Update values on player entity
-      resourceComponent.set(entity, currentResourceBalance + resourceToExtract);
-      energyComponent.set(entity, currentEnergyLevel - energyInput);
-      coolDownComponent.set(entity, int32(int256(block.number)) + (COOLDOWN_PER_ENERGY * energyInput));
-
       // Create new terrain block at position
       uint256 newTerrainEntity = world.getUniqueEntityId();
       positionComponent.set(newTerrainEntity, playerPosition);
@@ -97,14 +100,16 @@ contract GatherSystem is System {
       // Cap resource extraction at available resources
       if (resourceToExtract > terrainResourceBalance) resourceToExtract = terrainResourceBalance;
 
-      // Update values on player entity
-      resourceComponent.set(entity, currentResourceBalance + resourceToExtract);
-      energyComponent.set(entity, currentEnergyLevel - energyInput);
-      coolDownComponent.set(entity, int32(int256(block.number)) + (COOLDOWN_PER_ENERGY * energyInput));
-
       // Update value on terrain entity
       resourceComponent.set(entitiesAtPosition[0], terrainResourceBalance - resourceToExtract);
     }
+
+    // Update values on player entity
+    resourceComponent.set(entity, currentResourceBalance + resourceToExtract);
+    energyComponent.set(entity, currentEnergyLevel - energyInput);
+    coolDownComponent.set(entity, int32(int256(block.number)) + energyInput);
+
+    updateStats(entity, resourceToExtract);
   }
 
   function executeTyped(uint256 entity, int32 energyInput) public returns (bytes memory) {

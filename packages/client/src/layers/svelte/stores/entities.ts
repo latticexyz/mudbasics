@@ -3,6 +3,13 @@ import { writable, get } from "svelte/store";
 import { EntityType } from "../utils/space";
 import { network } from "./network";
 
+export interface StatsType {
+  traveled: number;
+  gathered: number;
+  burnt: number;
+  eaten: number;
+}
+
 export interface Entity {
   entityType?: EntityType;
   position?: Coord;
@@ -11,6 +18,7 @@ export interface Entity {
   energy?: number;
   resource?: number;
   seed?: number;
+  stats: StatsType;
 }
 
 interface Entities {

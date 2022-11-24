@@ -11,6 +11,7 @@ import { ResourceComponent, ID as ResourceComponentID } from "../components/Reso
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 import { SeedComponent, ID as SeedComponentID } from "../components/SeedComponent.sol";
+import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Spawn"));
 
@@ -27,6 +28,7 @@ contract SpawnSystem is System {
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     SeedComponent seedComponent = SeedComponent(getAddressById(components, SeedComponentID));
+    StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
 
     // Require user to be un-spawned
     require(!positionComponent.has(entity), "already spawned");
@@ -37,6 +39,12 @@ contract SpawnSystem is System {
     resourceComponent.set(entity, 200);
     entityTypeComponent.set(entity, uint32(entityType.Player));
     coolDownComponent.set(entity, 0);
+    Stats memory initialStats;
+    initialStats.traveled = 0;
+    initialStats.gathered = 0;
+    initialStats.burnt = 0;
+    initialStats.eaten = 0;
+    statsComponent.set(entity, initialStats);
 
     int32 randomX = int32(
       int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender)))) % WORLD_WIDTH

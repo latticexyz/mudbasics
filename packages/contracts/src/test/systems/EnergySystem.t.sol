@@ -9,6 +9,7 @@ import { GatherSystem, ID as GatherSystemID } from "../../systems/GatherSystem.s
 import { ResourceComponent, ID as ResourceComponentID } from "../../components/ResourceComponent.sol";
 import { EnergySystem, ID as EnergySystemID } from "../../systems/EnergySystem.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../../components/EnergyComponent.sol";
+import { StatsComponent, ID as StatsComponentID, Stats } from "../../components/StatsComponent.sol";
 
 contract EnergySystemTest is MudTest {
   function testExecute() public {
@@ -17,24 +18,18 @@ contract EnergySystemTest is MudTest {
     // Initialize components
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
+    StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
 
+    // Spawn player
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
 
-    // Convert 50 energy => 5 resource
-    GatherSystem(system(GatherSystemID)).executeTyped(entity, 50);
-    // 0 + 5
-    assertEq(resourceComponent.getValue(entity), 5);
-    // 1000 - 50
-    assertEq(energyComponent.getValue(entity), 950);
-
-    // Fast forward past cool down block
-    vm.roll(666);
-
-    // Convert 5 resource => 50 energy
-    EnergySystem(system(EnergySystemID)).executeTyped(entity, 5);
-    // 5 - 5
-    assertEq(resourceComponent.getValue(entity), 0);
-    // 950 + 50
-    assertEq(energyComponent.getValue(entity), 1000);
+    // Convert 50 resource => 250 energy
+    EnergySystem(system(EnergySystemID)).executeTyped(entity, 50);
+    // 200 - 50
+    assertEq(resourceComponent.getValue(entity), 150);
+    // 1000 + 250
+    assertEq(energyComponent.getValue(entity), 1250);
+    // Check stats are updated
+    assertEq(statsComponent.getValue(entity).eaten, 50);
   }
 }
