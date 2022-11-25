@@ -1,20 +1,32 @@
 @import url("../../public/jetbrains/style.css");
 
 :root {
-  --background: black;
+  /* Colors */
+  --background-rgb: 0, 0, 0;
+  --background: rgb(var(--background-rgb));
   --background-offset: rgb(40, 40, 40);
-  --foreground: white;
-  --font-family: Jetbrains, Courier, monospaced;
+  --foreground-rgb: 255, 255, 255;
+  --foreground: rgb(var(--foreground-rgb));
   --blue: #0033eb;
-  --font-size: 12px;
-  --font-size-large: 18px;
+
+  /* Sizing */
+  --padding-button: 6px 12px;
   --col-gap: 4rem;
   --row-gap: 2rem;
+  --taskbar-height: 28px;
+
+  /* Fonts */
+  --font-family: Jetbrains, Courier, monospaced;
+  --font-size: 12px;
+  --font-size-large: 18px;
+
+  /* Deco */
+  --outer-border: 1px solid rgba(var(--foreground-rgb), 0.7);
 }
 
 .rectangles {
   background-color: var(--background);
-  background-image: repeating-linear-gradient(
+  /* background-image: repeating-linear-gradient(
       45deg,
       var(--background-offset) 25%,
       transparent 25%,
@@ -29,9 +41,9 @@
       var(--background) 75%,
       var(--background-offset) 75%,
       var(--background-offset)
-    );
-  background-position: 5px 5px, 15px 15px;
-  background-size: 20px 20px;
+    ); */
+  /* background-position: 5px 5px, 15px 15px; */
+  /* background-size: 20px 20px; */
 }
 
 * {
@@ -50,6 +62,33 @@ html {
   font-size: var(--font-size);
   margin: 0;
   padding: 0;
+}
+
+@keyframes backgroundFlicker {
+  0% {
+    background: rgb(0, 0, 0);
+  }
+  12% {
+    background: rgb(20, 20, 20);
+  }
+  30% {
+    background: rgb(25, 25, 25);
+  }
+  45% {
+    background: rgb(12, 12, 12);
+  }
+  67% {
+    background: rgb(25, 25, 25);
+  }
+  78% {
+    background: rgb(6, 6, 6);
+  }
+  89% {
+    background: rgb(19, 19, 19);
+  }
+  100% {
+    background: rgb(0, 0, 0);
+  }
 }
 
 span.ripple {

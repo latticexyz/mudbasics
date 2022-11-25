@@ -6,6 +6,8 @@
   import { shortenAddress } from "../utils/ui";
   import { blockNumber } from "../stores/network";
   import { uniq } from "lodash";
+  import { speed, fragSpeed } from "../stores/ui"
+  import { fade } from "svelte/transition"
 
   const SECONDS_IN_DAY = 86400;
 
@@ -34,8 +36,8 @@
   <div class="clock-time">World time: {formatTime(clockTime)}</div>
   <div>Cooldown block: {$entities[$playerAddress].coolDownBlock}</div>
   <hr />
-  {#each Object.entries($entities) as [address, value]}
-    <div class:player={address === $playerAddress}>
+  {#each Object.entries($entities) as [address, value], i}
+    <div transition:fade={{ duration: $speed + $fragSpeed * i }} class:player={address === $playerAddress}>
       {#if value.entityType == EntityType.Player}
         <strong>👺 {seedToName($entities[address].seed)}</strong>
       {/if}

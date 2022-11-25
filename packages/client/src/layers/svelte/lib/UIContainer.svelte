@@ -6,15 +6,14 @@
   import UIComponent from "./UIComponent.svelte";
   import UISpawn from "./UISpawn.svelte";
 
+  const resetDelay = (id: String) => {
+    $uiState[id].delay = 0
+  }
+
   const close = (id: string) => {
-    // 2
     $uiState[id].active = false
   }
 </script>
-
-
-
-
 
 <div class="ui-container">
   {#if !$entities[$playerAddress]}
@@ -25,6 +24,7 @@
   <div class="ui-container-inner">
     {#if !$entities[$playerAddress]}
       <UIComponent
+        active={true}
         centered={true}
         fluid={true}
         bare={true}
@@ -36,7 +36,6 @@
       {#each Object.values($uiState) as attrs (attrs.id)}
         {#if attrs.active}
           <UIComponent
-            on:close={() => close(attrs.id)}
             {...attrs}
           >
             <svelte:component this={attrs.component} />
@@ -63,6 +62,7 @@
     box-sizing: border-box;
     align-items: stretch;
     gap: var(--row-gap);
+    animation: backgroundFlicker 20s infinite;
   }
 
   .ui-container-inner {

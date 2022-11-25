@@ -45,18 +45,6 @@
 
   <div class="ui-avatar-header">
     <div class="name">{seedToName($entities[$playerAddress].seed)}</div>
-
-    <!-- <div class="stats">
-      <div style:text-align="right">
-        <div class="">X:</div>
-        <div class="">{$x.toFixed(2)}</div>
-      </div>
-  
-      <div class="">
-        <div class="">Y:</div>
-        <div class="">{$y.toFixed(2)}</div>
-      </div>
-    </div> -->
   
     <div class="resources">
       <div class="large-indicator">
@@ -89,7 +77,6 @@
   }
 
   .ui-avatar-header {
-    background: #000;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-auto-rows: auto;
@@ -113,16 +100,17 @@
     /* line-height: 60px; */
     margin-bottom: 10px;
     margin-top: 10px;
-    border: 1px solid var(--foreground);
+    border: var(--outer-border);
     overflow: hidden;
   }
 
   .label {
     width: 120px;
     flex-shrink: 0;
-    background: var(--foreground);
-    color: var(--background);
+    background: rgba(var(--foreground-rgb), 0.3);
+    color: var(--foreground);
     padding: 4px 12px;
+    font-weight: bold;
   }
 
   .stats {
@@ -140,6 +128,7 @@
   .value {
     width: 100%;
     align-self: center;
+    font-weight: bold;
   }
 
   .up {

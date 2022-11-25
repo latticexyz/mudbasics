@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { bootGame } from "./boot";
   import UIContainer from "./lib/UIContainer.svelte";
+  import UIMenu from "./lib/UIMenu.svelte"
   import {
     createPositionSystem,
     createEnergySystem,
@@ -14,11 +15,7 @@
   import { network as networkStore, blockNumber } from "./stores/network";
 
   onMount(async () => {
-    console.log("Mounting app...");
-
     const layers = await bootGame();
-
-    console.log(layers);
 
     // ---- Systems
     createPositionSystem(layers.network);
@@ -36,6 +33,9 @@
     });
   });
 </script>
+
+
+<UIMenu />
 
 <main>
   <UIContainer />

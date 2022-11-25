@@ -5,6 +5,9 @@
   import { operations, Operation } from "../operations/";
   import { tweened } from "svelte/motion";
   import { playSound } from "../../howler";
+  import { uiState } from "../stores/ui"
+
+  let id = 'visual-operations-editor'
 
   const progress = tweened(0);
 
@@ -27,7 +30,9 @@
 
   function executeOperation(operation: Operation) {
     if (operation) {
-      playSound("bell");
+      if (!$uiState[id].muted) {
+        playSound("bell");
+      }
       console.log("====> executing operation:", operation.name);
       return operation.f();
     } else {

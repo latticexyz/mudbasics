@@ -1,8 +1,12 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte"
-  // import { useRipple } from "../utils/effects"
+  import { createEventDispatcher, onMount } from "svelte"
+  import { fade } from "svelte/transition"
+  import { uiState } from "../stores/ui"
+
   const dispatch = createEventDispatcher()
 
+  export let id:string
+  export let active = false
   export let title = "";
   export let area = ""
   export let rowStart = 1
@@ -15,40 +19,57 @@
   export let fluid = false
   export let bare = false
   export let layer = 1
+  export let muted = undefined
+  // On first render, make sure there is some random delay 
+  // so the modules show up with some offset timing
+  export let delay
 
   let rippleEnabled = bare
-
-  const close = () => dispatch('close')
 </script>
 
-<div
-  class="ui-component {area || `col-${colStart}-${colEnd} row-${rowStart}-${rowEnd}`}"
-  style:z-index={layer}
-  class:large
-  class:centered
-  class:fluid
-  class:box={!bare}
-  class:rectangles={!bare}
-  class:backed={!bare}
->
-  {#if !bare}
-    <div class="titlebar" class:border={!bare}>
-      {#if title}
-        {title}
-      {/if}
 
-      {#if !persistent}
-        <button class="close" on:click={close}>
-          ×
-        </button>
-      {/if}
-    </div>
-  {/if}
+{#if active}
   <div
-    class="ui-component-inner">
-    <slot />
+    in:fade={{ duration: 200, delay }}
+    out:fade={{ duration: 200 }}
+    on:introend={() => uiState.alter(id, 'delay', 0)}
+    class="ui-component {area || `col-${colStart}-${colEnd} row-${rowStart}-${rowEnd}`}"
+    style:z-index={layer}
+    class:large
+    class:centered
+    class:fluid
+    class:box={!bare}
+    class:rectangles={!bare}
+    class:backed={!bare}
+    class:blend={layer === 0}
+  >
+    {#if !bare}
+      <div class="titlebar" class:border={!bare}>
+        {#if title}
+          {title}
+        {/if}
+
+        <div>
+          <button class="close" on:click={() => uiState.toggle(id, 'muted')}>
+            {#if muted !== undefined}
+              {!muted ? '[mut]' : '[unm]'}
+            {/if}
+          </button>
+  
+          {#if !persistent}
+            <button class="close" on:click={uiState.close(id)}>
+              [×]
+            </button>
+          {/if}
+        </div>
+      </div>
+    {/if}
+    <div
+      class="ui-component-inner">
+      <slot />
+    </div>
   </div>
-</div>
+{/if}
 
 <style>
   .ui-component {
@@ -61,12 +82,17 @@
     position: relative;
   }
 
+  .ui-component.blend {
+    mix-blend-mode: screen;
+    background-blend-mode: screen;
+  }
+
   .ui-component.backed {
     background-color: rgba(0,0,0,0.7);
   }
 
   .ui-component.box {
-    border: 1px solid var(--foreground);
+    border: 1px solid rgba(var(--foreground-rgb), 0.7);
   }
 
   .ui-component-inner {
@@ -75,8 +101,8 @@
 
   .titlebar {
     width: 100%;
-    padding: 10px;
-    font-size: 12px;
+    padding: var(--padding-button);
+    font-size: var(--font-size);
     /* background: var(--foreground); */
     color: var(--foreground);
     font-weight: bold;
@@ -92,8 +118,6 @@
     all: unset;
     color: var(--foreground);
     background: var(--background);
-    padding: 0 calc(var(--row-gap) * 0.5);
-    border: 1px solid var(--foreground);
     cursor: pointer;
   }
 
