@@ -2,6 +2,8 @@
   import { onMount, onDestroy } from "svelte"
 	import { flip } from 'svelte/animate';
   import { cubicInOut as easing } from 'svelte/easing'
+  import { entities } from "../../../stores/entities";
+  import { playerAddress } from "../../../stores/player";
 
   let interval
   let picked = 'gluttony'
@@ -40,6 +42,8 @@
     hoarding: 'gathered'
   }
 
+  $: console.log($entities)  
+
   const dummy = (name:string) => new Minion(name)
 
   let minions = [
@@ -74,6 +78,11 @@
     butcher()
   }
 
+  function getDevelopment (i) {
+    const player = minions[i]
+    return player[mappings[picked]] - history.find(m => m.name === player.name)[mappings[picked]]
+  }
+
   const rank = (arr, category) => {
     const key = mappings[category]
     const result = [...arr].sort((a, b) => {
@@ -83,7 +92,7 @@
   }
 
   onMount(() => {
-    interval = setInterval(butcher, 1000)
+    interval = setInterval(butcher, 2500)
   })
 
   onDestroy(() => clearInterval(interval))
@@ -123,7 +132,7 @@
     {#each minions as player, i (player.name)}
     <div
         class="ui-stat-row">
-      <span>: {player[mappings[picked]]}</span> <span>({player[mappings[picked]] - history.find(m => m.name === player.name)[mappings[picked]]})</span>
+      <span>{player[mappings[picked]]}</span> <span>({getDevelopment(i)})</span>
     </div>
     {/each}
   </div>
@@ -148,7 +157,7 @@
     justify-content: space-between;
   }
   .ui-category {
-    opacity: 0.7;
+    opacity: var(--muted-opacity);
     cursor: pointer;
     text-align: center;
   }
@@ -161,7 +170,7 @@
 
   .ui-stat-rank {
     text-align: right;
-    opacity: 0.7;
+    opacity: var(--muted-opacity);
   }
 
   .ui-stat-player {

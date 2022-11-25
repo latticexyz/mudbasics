@@ -8,6 +8,7 @@
   --foreground-rgb: 255, 255, 255;
   --foreground: rgb(var(--foreground-rgb));
   --blue: #0033eb;
+  --muted-opacity: 0.7;
 
   /* Sizing */
   --padding-button: 6px 12px;
@@ -22,7 +23,7 @@
 
   /* Deco */
   --backdrop: blur(10px);
-  --outer-border: 1px solid rgba(var(--foreground-rgb), 0.7);
+  --outer-border: 1px solid rgba(var(--foreground-rgb), var(--muted-opacity));
 }
 
 .rectangles {
@@ -97,7 +98,7 @@ span.ripple {
   border-radius: 50%;
   transform: scale(0);
   animation: ripple 600ms linear;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, var(--muted-opacity));
 }
 
 @keyframes ripple {

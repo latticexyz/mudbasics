@@ -48,7 +48,7 @@
     transition: all 0.3s ease;
     height: var(--taskbar-height);
     width: 56px;
-    /* background-color: rgba(var(--background-rgb), 0.7); */
+    /* background-color: rgba(var(--background-rgb), var(--muted-opacity)); */
     backdrop-filter: var(--backdrop);
     user-select: none
   }
