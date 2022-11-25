@@ -21,6 +21,7 @@
   --font-size-large: 18px;
 
   /* Deco */
+  --backdrop: blur(10px);
   --outer-border: 1px solid rgba(var(--foreground-rgb), 0.7);
 }
 

@@ -96,6 +96,37 @@
     align-self: start;
   }
 
+  .large-indicator {
+    display: flex;
+    width: 100%;
+    border-width: 1px;
+    text-align: center;
+    /* height: 60px; */
+    /* line-height: 60px; */
+    margin-bottom: 10px;
+    margin-top: 10px;
+    border: var(--outer-border);
+    overflow: hidden;
+  }
+
+  .label {
+    width: 120px;
+    flex-shrink: 0;
+    background: rgba(var(--foreground-rgb), 0.3);
+    color: var(--foreground);
+    padding: 4px 12px;
+    font-weight: bold;
+  }
+
+  .stats {
+    padding-top: 1rem;
+    align-self: start;
+    display: flex;
+    gap: var(--col-gap);
+  }
+
+
+
   .value {
     width: 100%;
     align-self: center;

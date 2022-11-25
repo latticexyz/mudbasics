@@ -49,7 +49,7 @@
     height: var(--taskbar-height);
     width: 56px;
     /* background-color: rgba(var(--background-rgb), 0.7); */
-    backdrop-filter: blur(10px);
+    backdrop-filter: var(--backdrop);
     user-select: none
   }
   .ui-menu-container.open {
