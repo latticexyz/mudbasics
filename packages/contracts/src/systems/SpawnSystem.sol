@@ -13,6 +13,7 @@ import { CoolDownComponent, ID as CoolDownComponentID } from "../components/Cool
 import { SeedComponent, ID as SeedComponentID } from "../components/SeedComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
 import { BirthComponent, ID as BirthComponentID } from "../components/BirthComponent.sol";
+import { CannibalComponent, ID as CannibalComponentID } from "../components/CannibalComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Spawn"));
 
@@ -31,17 +32,30 @@ contract SpawnSystem is System {
     SeedComponent seedComponent = SeedComponent(getAddressById(components, SeedComponentID));
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
     BirthComponent birthComponent = BirthComponent(getAddressById(components, BirthComponentID));
+    CannibalComponent cannibalComponent = CannibalComponent(getAddressById(components, CannibalComponentID));
 
     // Require user to be un-spawned
     require(!birthComponent.has(entity), "already spawned");
 
-    // Number used for naming the character etc...
+    // --- Seed (Number used for naming the character etc...)
     seedComponent.set(entity, int32(int256(uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))))));
+
+    // --- Energy
     energyComponent.set(entity, 1000);
+
+    // --- Resource
     resourceComponent.set(entity, 200);
+
+    // --- Entity type
     entityTypeComponent.set(entity, uint32(entityType.Player));
+
+    // --- Cooldown
     coolDownComponent.set(entity, 0);
+
+    // --- Birth block
     birthComponent.set(entity, int32(int256(block.number)));
+
+    // --- Stats
     Stats memory initialStats;
     initialStats.traveled = 0;
     initialStats.gathered = 0;
@@ -49,19 +63,21 @@ contract SpawnSystem is System {
     initialStats.eaten = 0;
     statsComponent.set(entity, initialStats);
 
+    // --- Cannibal list
+    uint256[] memory initialCannibalArray = new uint256[](0);
+    cannibalComponent.set(entity, initialCannibalArray);
+
+    // --- Position
     int32 randomX = int32(
       int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender)))) % WORLD_WIDTH
     );
     int32 randomY = int32(
       int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender)))) % WORLD_HEIGHT
     );
-
     // Make sure the values are positive
     if (randomX < 0) randomX *= -1;
     if (randomY < 0) randomY *= -1;
-
-    Coord memory startingPosition = Coord(randomX, randomY);
-    positionComponent.set(entity, startingPosition);
+    positionComponent.set(entity, Coord(randomX, randomY));
   }
 
   function executeTyped(uint256 entity) public returns (bytes memory) {

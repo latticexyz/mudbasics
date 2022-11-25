@@ -8,7 +8,8 @@
     "CoolDownComponent",
     "CreatorComponent",
     "StatsComponent",
-    "BirthComponent"
+    "BirthComponent",
+    "CannibalComponent"
   ],
   "systems": [
     {
@@ -47,7 +48,8 @@
         "CoolDownComponent",
         "EntityTypeComponent",
         "StatsComponent",
-        "BirthComponent"
+        "BirthComponent",
+        "CannibalComponent"
       ]
     },
     {
@@ -58,7 +60,8 @@
         "EnergyComponent",
         "CoolDownComponent",
         "EntityTypeComponent",
-        "StatsComponent"
+        "StatsComponent",
+        "CannibalComponent"
       ]
     },
     {

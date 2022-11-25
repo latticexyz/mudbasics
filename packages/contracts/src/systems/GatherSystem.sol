@@ -15,6 +15,7 @@ import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyCo
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
+import { CannibalComponent, ID as CannibalComponentID } from "../components/CannibalComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Gather"));
 
@@ -30,15 +31,43 @@ contract GatherSystem is System {
     statsComponent.set(entity, currentStats);
   }
 
+  function checkForEntity(Coord memory position, uint32 t) public returns (uint256[] memory) {
+    PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+
+    QueryFragment[] memory fragments = new QueryFragment[](2);
+    fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(position));
+    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(t));
+    return LibQuery.query(fragments);
+  }
+
+  function cannabalize(uint256 entity, uint256 corpse) public {
+    CannibalComponent cannibalComponent = CannibalComponent(getAddressById(components, CannibalComponentID));
+    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
+
+    // Transfer all resources from corpse to player
+    resourceComponent.set(entity, resourceComponent.getValue(entity) + resourceComponent.getValue(corpse));
+    resourceComponent.set(corpse, 0);
+
+    // Add corpse to player's cannibal list
+    uint256[] memory currentCannibalArray = cannibalComponent.getValue(entity);
+    uint256[] memory newCannibalArray = new uint256[](currentCannibalArray.length + 1);
+    for (uint256 i = 0; i < currentCannibalArray.length; i++) {
+      newCannibalArray[i] = currentCannibalArray[i];
+    }
+    newCannibalArray[newCannibalArray.length - 1] = corpse;
+    cannibalComponent.set(entity, newCannibalArray);
+  }
+
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 entity, int32 energyInput) = abi.decode(arguments, (uint256, int32));
 
     // Initialize components
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
-    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
-    PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
 
     // Require entity to be player
     require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only player can gather.");
@@ -54,11 +83,7 @@ contract GatherSystem is System {
     Coord memory playerPosition = positionComponent.getValue(entity);
 
     // Require there to not be a fire in position
-    // QueryFragment[] memory fireFragments = new QueryFragment[](2);
-    // fireFragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(playerPosition));
-    // fireFragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(entityType.Fire));
-    // uint256[] memory fireEntitiesAtPosition = LibQuery.query(fireFragments);
-    // require(fireEntitiesAtPosition.length == 0, "can not gather in fire");
+    require(checkForEntity(playerPosition, uint32(entityType.Fire)).length == 0, "can not gather in fire");
 
     // Get player resource balance
     int32 currentResourceBalance = resourceComponent.getValue(entity);
@@ -74,13 +99,15 @@ contract GatherSystem is System {
       )
     );
 
-    // Check for terrain component in current location
-    QueryFragment[] memory fragments = new QueryFragment[](2);
-    fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(playerPosition));
-    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(uint32(entityType.Terrain)));
-    uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
+    // Check for corpses in current location
+    uint256[] memory corpsesAtPosition = checkForEntity(playerPosition, uint32(entityType.Corpse));
 
-    if (entitiesAtPosition.length == 0) {
+    if (corpsesAtPosition.length > 0) cannabalize(entity, corpsesAtPosition[0]);
+
+    // Check for terrain component in current location
+    uint256[] memory terrainAtPosition = checkForEntity(playerPosition, uint32(entityType.Terrain));
+
+    if (terrainAtPosition.length == 0) {
       // The position has NOT been gathered before,
       // there are INITIAL_RESOURCE_PER_POSITION resources available
 
@@ -96,7 +123,7 @@ contract GatherSystem is System {
       // The position HAS been gathered before,
       // there are terrainResourceBalance resources available
 
-      int32 terrainResourceBalance = resourceComponent.getValue(entitiesAtPosition[0]);
+      int32 terrainResourceBalance = resourceComponent.getValue(terrainAtPosition[0]);
 
       // Require there to be resources in the position
       require(terrainResourceBalance > 0, "no resources in position");
@@ -105,7 +132,7 @@ contract GatherSystem is System {
       if (resourceToExtract > terrainResourceBalance) resourceToExtract = terrainResourceBalance;
 
       // Update value on terrain entity
-      resourceComponent.set(entitiesAtPosition[0], terrainResourceBalance - resourceToExtract);
+      resourceComponent.set(terrainAtPosition[0], terrainResourceBalance - resourceToExtract);
     }
 
     // Update values on player entity
@@ -115,7 +142,7 @@ contract GatherSystem is System {
     updateStats(entity, resourceToExtract);
 
     // Check if dead
-    if (energyComponent.getValue(entity) <= 0) {
+    if (currentEnergyLevel - energyInput <= 0) {
       entityTypeComponent.set(entity, uint32(entityType.Corpse));
       resourceComponent.set(entity, 500);
       coolDownComponent.set(entity, 0);
