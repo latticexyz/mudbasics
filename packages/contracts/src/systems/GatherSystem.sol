@@ -6,6 +6,7 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { Perlin } from "noise/Perlin.sol";
 import { ABDKMath64x64 as Math } from "abdk-libraries-solidity/ABDKMath64x64.sol";
+import { entityType } from "../constants.sol";
 
 import { entityType } from "../constants.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
@@ -38,6 +39,9 @@ contract GatherSystem is System {
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+
+    // Require entity to be player
+    require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only player can gather.");
 
     // Require cooldown period to be over
     require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
@@ -108,8 +112,14 @@ contract GatherSystem is System {
     resourceComponent.set(entity, currentResourceBalance + resourceToExtract);
     energyComponent.set(entity, currentEnergyLevel - energyInput);
     coolDownComponent.set(entity, int32(int256(block.number)) + energyInput);
-
     updateStats(entity, resourceToExtract);
+
+    // Check if dead
+    if (energyComponent.getValue(entity) <= 0) {
+      entityTypeComponent.set(entity, uint32(entityType.Corpse));
+      resourceComponent.set(entity, 500);
+      coolDownComponent.set(entity, 0);
+    }
   }
 
   function executeTyped(uint256 entity, int32 energyInput) public returns (bytes memory) {

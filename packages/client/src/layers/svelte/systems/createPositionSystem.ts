@@ -28,14 +28,6 @@ export function createPositionSystem(network: NetworkLayer) {
       narrative.update((value) => {
         return [logEntry, ...value];
       });
-    } else {
-      const logEntry: LogEntry = {
-        address: indexToID(update.entity),
-        message: "spawned",
-      };
-      narrative.update((value) => {
-        return [logEntry, ...value];
-      });
     }
   });
 }

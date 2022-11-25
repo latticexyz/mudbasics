@@ -23,7 +23,9 @@
         "PositionComponent",
         "EnergyComponent",
         "CoolDownComponent",
-        "StatsComponent"
+        "StatsComponent",
+        "EntityTypeComponent",
+        "ResourceComponent"
       ]
     },
     {

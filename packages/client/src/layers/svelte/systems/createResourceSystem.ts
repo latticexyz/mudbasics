@@ -11,8 +11,8 @@ export function createResourceSystem(network: NetworkLayer) {
 
   defineComponentSystem(world, Resource, (update) => {
     // console.log("==> Resource system: ", update);
-    const oldResource = update.value[1]?.value;
-    const resource = update.value[0]?.value;
+    const oldResource = update.value[1]?.value || 0;
+    const resource = update.value[0]?.value || 0;
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};
       value[indexToID(update.entity)].resource = resource;
