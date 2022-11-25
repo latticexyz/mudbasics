@@ -1,28 +1,27 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte"
   import { fade } from "svelte/transition"
-  import { uiState } from "../stores/ui"
+  import { uiState } from "../../stores/ui"
 
   const dispatch = createEventDispatcher()
 
   export let id:string
-  export let active = false
-  export let title = "";
-  export let area = ""
-  export let rowStart = 1
-  export let rowEnd = 9
-  export let colStart = 1
-  export let colEnd = 2
-  export let large = false;
-  export let persistent = false // no option to close
-  export let centered = false;
-  export let fluid = false
-  export let bare = false
-  export let layer = 1
-  export let muted = undefined
-  // On first render, make sure there is some random delay 
-  // so the modules show up with some offset timing
-  export let delay
+  export let active:boolean = false
+  export let title:string = "";
+
+  export let area:string = ""
+  export let rowStart:number = 1
+  export let rowEnd:number = 9
+  export let colStart:number = 1
+  export let colEnd:number = 2
+
+  export let persistent:boolean = false // no option to close
+  export let centered:boolean = false;
+  export let fluid:boolean = false
+  export let bare:boolean = false
+  export let layer:number = 1
+  export let muted:any = undefined
+  export let delay:number = 0
 
   let rippleEnabled = bare
 </script>
@@ -35,7 +34,6 @@
     on:introend={() => uiState.alter(id, 'delay', 0)}
     class="ui-component {area || `col-${colStart}-${colEnd} row-${rowStart}-${rowEnd}`}"
     style:z-index={layer}
-    class:large
     class:centered
     class:fluid
     class:box={!bare}

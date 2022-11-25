@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { entities } from "../stores/entities";
-  import { playerAddress } from "../stores/player";
-  import { seedToName } from "../utils/name";
-  import { EntityType } from "../utils/space";
-  import { shortenAddress } from "../utils/ui";
-  import { blockNumber } from "../stores/network";
+  import { entities } from "../../../stores/entities";
+  import { playerAddress } from "../../../stores/player";
+  import { seedToName } from "../../../utils/name";
+  import { EntityType } from "../../../utils/space";
+  import { shortenAddress } from "../../../utils/ui";
+  import { blockNumber } from "../../../stores/network";
   import { uniq } from "lodash";
-  import { speed, fragSpeed } from "../stores/ui"
+  import { speed, fragSpeed } from "../../../stores/ui"
   import { fade } from "svelte/transition"
 
   const SECONDS_IN_DAY = 86400;

@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { entities } from "../stores/entities";
-  import { playerAddress } from "../stores/player";
+  import { entities } from "../../../stores/entities";
+  import { playerAddress } from "../../../stores/player";
   import { createPerlin, Perlin } from "@latticexyz/noise";
-  import { EntityType } from "../utils/space";
+  import { EntityType } from "../../../utils/space";
 
   $: console.log($entities);
 

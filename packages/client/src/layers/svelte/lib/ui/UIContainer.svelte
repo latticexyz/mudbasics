@@ -1,18 +1,12 @@
 <script lang="ts">
-  import { uiState } from "../stores/ui";
-  import { entities } from "../stores/entities";
-  import { playerAddress } from "../stores/player";
+  import { uiState } from "../../stores/ui";
+  import { entities } from "../../stores/entities";
+  import { playerAddress } from "../../stores/player";
   import UITaskBar from "./UITaskBar.svelte";
   import UIComponent from "./UIComponent.svelte";
-  import UISpawn from "./UISpawn.svelte";
+  import UISpawn from "./components/UISpawn.svelte";
 
-  const resetDelay = (id: String) => {
-    $uiState[id].delay = 0
-  }
-
-  const close = (id: string) => {
-    $uiState[id].active = false
-  }
+  const makeDelay = () => { 200 + Math.floor(Math.random() * 2000) }
 </script>
 
 <div class="ui-container">

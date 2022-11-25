@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { network } from "../stores/network";
+  import { network } from "../../../stores/network";
 
   function spawn() {
     $network.api?.spawn();

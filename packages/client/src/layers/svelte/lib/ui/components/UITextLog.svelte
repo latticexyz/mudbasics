@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { narrative } from "../stores/narrative";
-  import { entities } from "../stores/entities";
-  import { playerAddress } from "../stores/player";
-  import { seedToName } from "../utils/name";
-  import { speed, fragSpeed } from "../stores/ui"
+  import { narrative } from "../../../stores/narrative";
+  import { entities } from "../../../stores/entities";
+  import { playerAddress } from "../../../stores/player";
+  import { seedToName } from "../../../utils/name";
+  import { speed, fragSpeed } from "../../../stores/ui"
   import { fade } from "svelte/transition"
 </script>
 

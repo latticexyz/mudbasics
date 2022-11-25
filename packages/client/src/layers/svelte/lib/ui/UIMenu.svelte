@@ -1,10 +1,10 @@
 <script>
   import { values } from "mobx";
-  import { entities } from "../stores/entities";
-  import { playerAddress } from "../stores/player";
-  import { menuVisible, uiState } from "../stores/ui"
+  import { entities } from "../../stores/entities";
+  import { playerAddress } from "../../stores/player";
+  import { menuVisible, uiState } from "../../stores/ui"
   import { fade } from "svelte/transition"
-  import { speed, fragSpeed } from "../stores/ui"
+  import { speed, fragSpeed } from "../../stores/ui"
 
   const toggle = () => {
     $menuVisible = !$menuVisible

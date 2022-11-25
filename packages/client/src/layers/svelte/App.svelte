@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { bootGame } from "./boot";
-  import UIContainer from "./lib/UIContainer.svelte";
-  import UIMenu from "./lib/UIMenu.svelte"
+  import UIContainer from "./lib/ui/UIContainer.svelte";
+  import UIMenu from "./lib/ui/UIMenu.svelte"
   import {
     createPositionSystem,
     createEnergySystem,

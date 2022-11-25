@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { blockNumber } from "../stores/network";
-  import { entities } from "../stores/entities";
-  import { playerAddress } from "../stores/player";
-  import { operations, Operation } from "../operations/";
+  import { blockNumber } from "../../../stores/network";
+  import { entities } from "../../../stores/entities";
+  import { playerAddress } from "../../../stores/player";
+  import { operations, Operation } from "../../../operations/";
   import { tweened } from "svelte/motion";
-  import { playSound } from "../../howler";
-  import { uiState } from "../stores/ui"
+  import { playSound } from "../../../../howler";
+  import { uiState } from "../../../stores/ui"
 
   let id = 'visual-operations-editor'
 

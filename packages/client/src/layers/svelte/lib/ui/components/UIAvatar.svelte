@@ -1,9 +1,9 @@
 <script lang="ts">
   import { tweened } from "svelte/motion";
-  import { playerAddress } from "../stores/player";
-  import { entities } from "../stores/entities";
-  import { seedToName } from "../utils/name";
-  import { blockNumber } from "../stores/network";
+  import { playerAddress } from "../../../stores/player";
+  import { entities } from "../../../stores/entities";
+  import { seedToName } from "../../../utils/name";
+  import { blockNumber } from "../../../stores/network";
 
   const energy = tweened($entities[$playerAddress].energy);
   const resource = tweened($entities[$playerAddress].resource);

@@ -1,13 +1,13 @@
 import { writable } from "svelte/store";
 
 // Components
-import UITextLog from "../lib/UITextLog.svelte";
-import UIAvatar from "../lib/UIAvatar.svelte";
-import UIVisualOperationsEditor from "../lib/UIVisualOperationsEditor.svelte";
-import UIMap from "../lib/UIMap.svelte";
-import UIGridMap from "../lib/UIGridMap.svelte";
-import UIView from "../lib/UIView.svelte";
-import UIDebugLog from "../lib/UIDebugLog.svelte";
+import UITextLog from "../lib/ui/components/UITextLog.svelte";
+import UIAvatar from "../lib/ui/components/UIAvatar.svelte";
+import UIVisualOperationsEditor from "../lib/ui/components/UIVisualOperationsEditor.svelte";
+import UIMap from "../lib/ui/components/UIMap.svelte";
+import UIGridMap from "../lib/ui/components/UIGridMap.svelte";
+import UIView from "../lib/ui/components/UIView.svelte";
+import UIDebugLog from "../lib/ui/components/UIDebugLog.svelte";
 
 // Utilities
 const makeDelay = () => 200 + Math.floor(Math.random() * 2000);
@@ -25,6 +25,7 @@ const initialState = () => ({
     title: "Avatar",
     component: UIAvatar,
     active: true,
+    delay: makeDelay(),
     fluid: true,
     bare: true,
     persistent: true,
@@ -33,7 +34,6 @@ const initialState = () => ({
     rowStart: 1,
     rowEnd: 10,
     layer: 0,
-    delay: makeDelay(),
   },
   "visual-operations-editor": {
     id: "visual-operations-editor",
@@ -41,32 +41,30 @@ const initialState = () => ({
     title: "Visual Operations Editor",
     component: UIVisualOperationsEditor,
     active: true,
+    delay: makeDelay(),
     colStart: 1,
     colEnd: 3,
     rowStart: 6,
     rowEnd: 10,
     fluid: true,
-    delay: makeDelay(),
     // large: true,
   },
   "text-log": {
     id: "text-log",
+    active: true,
+    delay: makeDelay(),
     muted: false,
     title: "Text Log",
     component: UITextLog,
-    active: true,
     fluid: true,
     rowStart: 1,
     rowEnd: 6,
-    delay: makeDelay(),
   },
   map: {
     id: "map",
     title: "Map",
     component: UIMap,
     active: false,
-    area: "ml",
-    delay: makeDelay(),
   },
   "grid-map": {
     id: "grid-map",
@@ -91,7 +89,6 @@ const initialState = () => ({
     rowEnd: 4,
     fluid: true,
     layer: 2,
-    delay: makeDelay(),
   },
   view: {
     id: "view",
