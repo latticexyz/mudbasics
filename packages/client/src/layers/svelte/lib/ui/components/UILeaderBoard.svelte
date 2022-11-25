@@ -4,6 +4,12 @@
   import { entities } from "../../../stores/entities";
   import { shortenAddress } from "../../../utils/ui";
   import { seedToName } from "../../../utils/name";
+
+  $: console.log($entities[$playerAddress])
+  $: console.log($entities[$playerAddress].stats)
+  $: console.log($entities[$playerAddress].stats)
+  $: console.log($entities[$playerAddress].stats)
+  $: console.log($entities[$playerAddress].stats)
 </script>
 
 <div class="ui-character-stats">
