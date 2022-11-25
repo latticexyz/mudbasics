@@ -47,6 +47,9 @@
       {#if value.entityType == EntityType.Fire}
         <strong>🔥 {shortenAddress(address)}</strong>
       {/if}
+      {#if value.entityType == EntityType.Corpse}
+        <strong>💀 {seedToName($entities[address].seed)}</strong>
+      {/if}
       / x:{value.position?.x}
       / y: {value.position?.y}
       {#if value.entityType == EntityType.Player}

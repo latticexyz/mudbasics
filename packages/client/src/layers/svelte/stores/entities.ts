@@ -18,7 +18,9 @@ export interface Entity {
   energy?: number;
   resource?: number;
   seed?: number;
-  stats: StatsType;
+  stats?: StatsType;
+  birth?: number;
+  cannibal: string[];
 }
 
 interface Entities {

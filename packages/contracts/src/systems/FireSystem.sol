@@ -37,6 +37,9 @@ contract FireSystem is System {
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     CreatorComponent creatorComponent = CreatorComponent(getAddressById(components, CreatorComponentID));
 
+    // Require entity to be player
+    require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only player can burn.");
+
     // Require cooldown period to be over
     require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
 
@@ -92,8 +95,14 @@ contract FireSystem is System {
     resourceComponent.set(entity, currentResourceLevel - resourceInput);
     energyComponent.set(entity, currentEnergyLevel - 50);
     coolDownComponent.set(entity, int32(int256(block.number)) + 20);
-
     updateStats(entity, resourceInput);
+
+    // Check if dead
+    if (energyComponent.getValue(entity) <= 0) {
+      entityTypeComponent.set(entity, uint32(entityType.Corpse));
+      resourceComponent.set(entity, 500);
+      coolDownComponent.set(entity, 0);
+    }
   }
 
   function executeTyped(uint256 entity, int32 resourceInput) public returns (bytes memory) {
