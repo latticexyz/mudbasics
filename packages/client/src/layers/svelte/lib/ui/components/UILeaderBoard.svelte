@@ -4,6 +4,7 @@
   import { cubicInOut as easing } from 'svelte/easing'
   import { entities } from "../../../stores/entities";
   import { playerAddress } from "../../../stores/player";
+  import { seedToName } from "../../../utils/name";
 
   let interval
   let picked = 'gluttony'
@@ -42,7 +43,8 @@
     hoarding: 'gathered'
   }
 
-  $: console.log($entities)  
+  // $: {console.log($entities.map($entity => $entity.stats))}
+  // $: console.log($entities[$playerAddress].stats)
 
   const dummy = (name:string) => new Minion(name)
 
@@ -110,9 +112,14 @@
   {/each}
 </div>
 
+<!-- {#each Object.entries($entities) as [address, entity], i (seedToName(address))}
+  {address}
+  {entity}
+{/each} -->
+
 <div class="ui-stats">
   <div class="ranks">
-    {#each minions as player, i (player.name)}
+    {#each Object.entries($entities) as [address, entity], i (seedToName(address))}
       <div
         class="ui-stat-row">
         <span class="ui-stat-rank">{++i}</span>
@@ -120,23 +127,22 @@
     {/each}
   </div>
   <div class="players">
-    {#each minions as player, i (player.name)}
+    {#each Object.entries($entities) as [address, entity], i (seedToName(address))}
       <div
         animate:flip={{ duration: 400, easing }}
         class="ui-stat-row">
-        <span class="ui-stat-player">{player.name}</span>
+        <span class="ui-stat-player">{seedToName(address)}</span>
       </div>
     {/each}
   </div>
   <div class="scores">
-    {#each minions as player, i (player.name)}
+    {#each Object.entries($entities) as [address, entity], i (seedToName(address))}
     <div
         class="ui-stat-row">
-      <span>{player[mappings[picked]]}</span> <span>({getDevelopment(i)})</span>
+      <span>{entity.stats[mappings[picked]]}</span>
     </div>
     {/each}
   </div>
-
 </div>
 
 
