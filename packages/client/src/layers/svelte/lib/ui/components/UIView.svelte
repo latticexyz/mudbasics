@@ -1,6 +1,6 @@
 <script lang="ts">
   import { sample } from "lodash";
-  import { blockNumber } from "../stores/network";
+  import { blockNumber } from "../../../stores/network";
 
   let currentView = "";
 
