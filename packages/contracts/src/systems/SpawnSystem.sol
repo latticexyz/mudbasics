@@ -12,6 +12,7 @@ import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 import { SeedComponent, ID as SeedComponentID } from "../components/SeedComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
+import { BirthComponent, ID as BirthComponentID } from "../components/BirthComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Spawn"));
 
@@ -29,9 +30,10 @@ contract SpawnSystem is System {
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     SeedComponent seedComponent = SeedComponent(getAddressById(components, SeedComponentID));
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
+    BirthComponent birthComponent = BirthComponent(getAddressById(components, BirthComponentID));
 
     // Require user to be un-spawned
-    require(!positionComponent.has(entity), "already spawned");
+    require(!birthComponent.has(entity), "already spawned");
 
     // Number used for naming the character etc...
     seedComponent.set(entity, int32(int256(uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))))));
@@ -39,6 +41,7 @@ contract SpawnSystem is System {
     resourceComponent.set(entity, 200);
     entityTypeComponent.set(entity, uint32(entityType.Player));
     coolDownComponent.set(entity, 0);
+    birthComponent.set(entity, int32(int256(block.number)));
     Stats memory initialStats;
     initialStats.traveled = 0;
     initialStats.gathered = 0;

@@ -7,7 +7,8 @@
     "SeedComponent",
     "CoolDownComponent",
     "CreatorComponent",
-    "StatsComponent"
+    "StatsComponent",
+    "BirthComponent"
   ],
   "systems": [
     {
@@ -43,7 +44,8 @@
         "SeedComponent",
         "CoolDownComponent",
         "EntityTypeComponent",
-        "StatsComponent"
+        "StatsComponent",
+        "BirthComponent"
       ]
     },
     {
