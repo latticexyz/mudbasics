@@ -6,7 +6,7 @@ export type GameConfig = {
   chainId: number;
   jsonRpc: string;
   wsRpc?: string;
-  checkpointUrl?: string;
+  snapshotServiceUrl?: string;
   devMode: boolean;
   initialBlockNumber: number;
 };
@@ -27,7 +27,7 @@ export const getNetworkConfig: (networkConfig: GameConfig) => SetupContractConfi
   },
   privateKey: config.privateKey,
   chainId: config.chainId,
-  checkpointServiceUrl: config.checkpointUrl,
+  snapshotServiceUrl: config.snapshotServiceUrl,
   initialBlockNumber: config.initialBlockNumber,
   worldAddress: config.worldAddress,
   devMode: config.devMode,

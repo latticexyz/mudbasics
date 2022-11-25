@@ -11,7 +11,7 @@ export async function bootGame() {
   const chainIdString = params.get("chainId");
   const jsonRpc = params.get("rpc") || undefined;
   const wsRpc = params.get("wsRpc") || undefined; // || (jsonRpc && jsonRpc.replace("http", "ws"));
-  const checkpointUrl = params.get("checkpoint") || undefined;
+  const snapshotServiceUrl = params.get("snapshot") || undefined;
   const devMode = params.get("dev") === "true";
   const initialBlockNumberString = params.get("initialBlockNumber");
   const initialBlockNumber = initialBlockNumberString ? parseInt(initialBlockNumberString) : 0;
@@ -29,7 +29,7 @@ export async function bootGame() {
       chainId: parseInt(chainIdString),
       jsonRpc,
       wsRpc,
-      checkpointUrl,
+      snapshotServiceUrl,
       devMode,
       initialBlockNumber,
     };

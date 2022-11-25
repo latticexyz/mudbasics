@@ -1,10 +1,10 @@
 <script lang="ts">
   import { Coord } from "@latticexyz/recs";
   import { onMount } from "svelte";
-  import { entities } from "../stores/entities";
-  import { playerAddress } from "../stores/player";
+  import { entities } from "../../../stores/entities";
+  import { playerAddress } from "../../../stores/player";
   import { createPerlin, Perlin } from "@latticexyz/noise";
-  import { EntityType } from "../utils/space";
+  import { EntityType } from "../../../utils/space";
 
   let perlin: Perlin;
 
@@ -99,7 +99,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid red;
+    border: 1px solid var(--foreground);
     color: white;
     font-size: 9px;
     text-align: center;

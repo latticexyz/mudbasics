@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { entities } from "../stores/entities";
-  import { playerAddress } from "../stores/player";
+  import { entities } from "../../../stores/entities";
+  import { playerAddress } from "../../../stores/player";
   import { createPerlin, Perlin } from "@latticexyz/noise";
-  import { EntityType } from "../utils/space";
+  import { EntityType } from "../../../utils/space";
 
   $: console.log($entities);
 
@@ -66,11 +66,12 @@
 
 <style>
   .ui-map {
-    height: 320px;
+    /* height: 320px; */
+    position: relative;
   }
 
   .player {
-    color: blue;
+    color: var(--blue);
   }
 
   .map-container {
@@ -91,7 +92,7 @@
   }
 
   .self {
-    background: blue;
+    background: var(--blue);
     z-index: 1000;
   }
 
@@ -103,7 +104,7 @@
     position: absolute;
     width: 1px;
     height: 1px;
-    background: black;
+    background: var(--foreground);
     z-index: 99;
   }
 
@@ -118,7 +119,7 @@
   .large-indicator {
     display: flex;
     width: 100%;
-    border: 1px solid black;
+    border-width: 1px;
     text-align: center;
     height: 60px;
     line-height: 60px;
@@ -127,7 +128,7 @@
   }
 
   .label {
-    background: black;
+    background: var(--foreground);
     color: white;
     width: 30%;
   }
