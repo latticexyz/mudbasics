@@ -7,7 +7,9 @@
     "SeedComponent",
     "CoolDownComponent",
     "CreatorComponent",
-    "StatsComponent"
+    "StatsComponent",
+    "BirthComponent",
+    "CannibalComponent"
   ],
   "systems": [
     {
@@ -22,7 +24,9 @@
         "PositionComponent",
         "EnergyComponent",
         "CoolDownComponent",
-        "StatsComponent"
+        "StatsComponent",
+        "EntityTypeComponent",
+        "ResourceComponent"
       ]
     },
     {
@@ -43,7 +47,9 @@
         "SeedComponent",
         "CoolDownComponent",
         "EntityTypeComponent",
-        "StatsComponent"
+        "StatsComponent",
+        "BirthComponent",
+        "CannibalComponent"
       ]
     },
     {
@@ -54,7 +60,8 @@
         "EnergyComponent",
         "CoolDownComponent",
         "EntityTypeComponent",
-        "StatsComponent"
+        "StatsComponent",
+        "CannibalComponent"
       ]
     },
     {

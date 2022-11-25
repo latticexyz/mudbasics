@@ -14,6 +14,7 @@ export enum EntityType {
   Player,
   Terrain,
   Fire,
+  Corpse,
 }
 
 export function getDirection(previousPosition, currentPosition) {

@@ -7,5 +7,6 @@ int32 constant WORLD_WIDTH = 100;
 enum entityType {
   Player,
   Terrain,
-  Fire
+  Fire,
+  Corpse
 }

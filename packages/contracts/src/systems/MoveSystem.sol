@@ -4,11 +4,14 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { WORLD_HEIGHT, WORLD_WIDTH } from "../constants.sol";
+import { entityType } from "../constants.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
+import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
+import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Move"));
 int32 constant MAX_DISTANCE = 5;
@@ -30,6 +33,11 @@ contract MoveSystem is System {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
+
+    // Require entity to be player
+    require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only player can move.");
 
     // Require cooldown period to be over
     require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
@@ -41,10 +49,6 @@ contract MoveSystem is System {
     // 10 energy => 1 step, capped at MAX_DISTANCE
     int32 steps = energyInput / 10;
     if (steps > MAX_DISTANCE) steps = MAX_DISTANCE;
-
-    coolDownComponent.set(entity, int32(int256(block.number)) + 20);
-
-    energyComponent.set(entity, currentEnergyLevel - energyInput);
 
     Coord memory currentPosition = positionComponent.getValue(entity);
     Coord memory newPosition = Coord(currentPosition.x, currentPosition.y);
@@ -127,9 +131,18 @@ contract MoveSystem is System {
       }
     }
 
+    // Update values of
     positionComponent.set(entity, newPosition);
-
+    coolDownComponent.set(entity, int32(int256(block.number)) + 20);
+    energyComponent.set(entity, currentEnergyLevel - energyInput);
     updateStats(entity, steps);
+
+    // Check if dead
+    if (energyComponent.getValue(entity) <= 0) {
+      entityTypeComponent.set(entity, uint32(entityType.Corpse));
+      resourceComponent.set(entity, 500);
+      coolDownComponent.set(entity, 0);
+    }
   }
 
   function executeTyped(uint256 entity, int32 energyInput, int32 direction) public returns (bytes memory) {

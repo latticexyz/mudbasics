@@ -202,6 +202,10 @@
     background: orangered;
   }
 
+  .special {
+    background: #ff7ce7;
+  }
+
   .empty {
     background: lightgrey;
   }

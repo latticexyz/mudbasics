@@ -12,6 +12,7 @@ import { ResourceComponent, ID as ResourceComponentID } from "../../components/R
 import { CoolDownComponent, ID as CoolDownComponentID } from "../../components/CoolDownComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../../components/EntityTypeComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../../components/StatsComponent.sol";
+import { BirthComponent, ID as BirthComponentID } from "../../components/BirthComponent.sol";
 
 contract SpawnSystemTest is MudTest {
   function testExecute() public {
@@ -25,6 +26,7 @@ contract SpawnSystemTest is MudTest {
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
+    BirthComponent birthComponent = BirthComponent(getAddressById(components, BirthComponentID));
 
     // Spawn player
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
@@ -34,8 +36,7 @@ contract SpawnSystemTest is MudTest {
     console.logInt(seed);
 
     // --- Energy
-    int32 initialEnergy = energyComponent.getValue(entity);
-    assertEq(initialEnergy, 1000);
+    assertEq(energyComponent.getValue(entity), 1000);
 
     // --- Position
     Coord memory newPosition = positionComponent.getValue(entity);
@@ -49,15 +50,16 @@ contract SpawnSystemTest is MudTest {
     assertLt(newPosition.y, WORLD_HEIGHT);
 
     // --- Resource
-    int32 initialResourceBalance = resourceComponent.getValue(entity);
-    assertEq(initialResourceBalance, 200);
+    assertEq(resourceComponent.getValue(entity), 200);
 
     // --- Player entity type
     assertEq(entityTypeComponent.getValue(entity), uint32(entityType.Player));
 
     // --- Cooldown
-    int32 initialCoolDownBlock = coolDownComponent.getValue(entity);
-    assertEq(initialCoolDownBlock, 0);
+    assertEq(coolDownComponent.getValue(entity), 0);
+
+    // --- Birth
+    assertEq(birthComponent.getValue(entity), 1);
 
     // --- Stats
     Stats memory initialStats = statsComponent.getValue(entity);

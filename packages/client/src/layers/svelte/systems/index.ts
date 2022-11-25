@@ -6,3 +6,5 @@ export { createSeedSystem } from "./createSeedSystem";
 export { createEntityTypeSystem } from "./createEntityTypeSystem";
 export { createCreatorSystem } from "./createCreatorSystem";
 export { createStatsSystem } from "./createStatsSystem";
+export { createBirthSystem } from "./createBirthSystem";
+export { createCannibalSystem } from "./createCannibalSystem";
