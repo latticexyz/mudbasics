@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { blockNumber } from "../stores/network";
-  import { playerAddress } from "../stores/player";
-  import { entities } from "../stores/entities";
-  import { shortenAddress } from "../utils/ui";
-  import { seedToName } from "../utils/name";
+  import { blockNumber } from "../../../stores/network";
+  import { playerAddress } from "../../../stores/player";
+  import { entities } from "../../../stores/entities";
+  import { shortenAddress } from "../../../utils/ui";
+  import { seedToName } from "../../../utils/name";
 </script>
 
 <div class="ui-character-stats">

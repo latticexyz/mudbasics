@@ -8,9 +8,10 @@ import UIMap from "../lib/ui/components/UIMap.svelte";
 import UIGridMap from "../lib/ui/components/UIGridMap.svelte";
 import UIView from "../lib/ui/components/UIView.svelte";
 import UIDebugLog from "../lib/ui/components/UIDebugLog.svelte";
+import UILeaderBoard from "../lib/ui/components/UILeaderBoard.svelte";
 
 // Utilities
-const makeDelay = () => 200 + Math.floor(Math.random() * 2000);
+const makeDelay = () => 500 + Math.floor(Math.random() * 2000);
 
 // UI
 export const menuVisible = writable(false);
@@ -25,7 +26,7 @@ const initialState = () => ({
     title: "Avatar",
     component: UIAvatar,
     active: true,
-    delay: makeDelay(),
+    delay: 0,
     fluid: true,
     bare: true,
     persistent: true,
@@ -90,11 +91,23 @@ const initialState = () => ({
     fluid: true,
     layer: 2,
   },
+  leaderboard: {
+    id: "leaderboard",
+    title: "Leaderboard",
+    component: UILeaderBoard,
+    active: true,
+    fluid: true,
+    colStart: 3,
+    colEnd: 4,
+    rowStart: 1,
+    rowEnd: 5,
+    delay: makeDelay(),
+  },
   view: {
     id: "view",
     title: "View",
     component: UIView,
-    active: true,
+    active: false,
     fluid: true,
     colStart: 3,
     colEnd: 4,

@@ -91,6 +91,11 @@
     /* font-weight: bold; */
   }
 
+  .resources {
+    grid-column: 1 / 3;
+    align-self: start;
+  }
+
   .large-indicator {
     display: flex;
     width: 100%;
@@ -120,10 +125,7 @@
     gap: var(--col-gap);
   }
 
-  .resources {
-    grid-column: 1 / 3;
-    align-self: start;
-  }
+
 
   .value {
     width: 100%;

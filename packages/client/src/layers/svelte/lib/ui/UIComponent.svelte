@@ -86,11 +86,11 @@
   }
 
   .ui-component.backed {
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(0,0,0,var(--muted-opacity));
   }
 
   .ui-component.box {
-    border: 1px solid rgba(var(--foreground-rgb), 0.7);
+    border: 1px solid rgba(var(--foreground-rgb), var(--muted-opacity));
   }
 
   .ui-component-inner {

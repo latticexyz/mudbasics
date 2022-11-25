@@ -228,7 +228,7 @@
     margin: 5px;
     cursor: pointer;
     user-select: none;
-    opacity: 0.7;
+    opacity: var(--muted-opacity);
   }
 
   .operation:hover {

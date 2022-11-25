@@ -70,10 +70,6 @@
     position: relative;
   }
 
-  .player {
-    color: var(--blue);
-  }
-
   .map-container {
     width: 100px;
     height: 100px;
@@ -114,29 +110,6 @@
     position: absolute;
     top: 0;
     left: 0;
-  }
-
-  .large-indicator {
-    display: flex;
-    width: 100%;
-    border-width: 1px;
-    text-align: center;
-    height: 60px;
-    line-height: 60px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-  }
-
-  .label {
-    background: var(--foreground);
-    color: white;
-    width: 30%;
-  }
-
-  .value {
-    font-size: 2em;
-    width: 70%;
-    font-family: monospace;
   }
 
   .info {
