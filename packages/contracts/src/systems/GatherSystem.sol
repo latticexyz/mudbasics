@@ -102,44 +102,47 @@ contract GatherSystem is System {
     // Check for corpses in current location
     uint256[] memory corpsesAtPosition = checkForEntity(playerPosition, uint32(entityType.Corpse));
 
-    if (corpsesAtPosition.length > 0) cannabalize(entity, corpsesAtPosition[0]);
-
-    // Check for terrain component in current location
-    uint256[] memory terrainAtPosition = checkForEntity(playerPosition, uint32(entityType.Terrain));
-
-    if (terrainAtPosition.length == 0) {
-      // The position has NOT been gathered before,
-      // there are INITIAL_RESOURCE_PER_POSITION resources available
-
-      // Cap resource extraction at INITIAL_RESOURCE_PER_POSITION
-      if (resourceToExtract > INITIAL_RESOURCE_PER_POSITION) resourceToExtract = INITIAL_RESOURCE_PER_POSITION;
-
-      // Create new terrain block at position
-      uint256 newTerrainEntity = world.getUniqueEntityId();
-      positionComponent.set(newTerrainEntity, playerPosition);
-      entityTypeComponent.set(newTerrainEntity, uint32(entityType.Terrain));
-      resourceComponent.set(newTerrainEntity, INITIAL_RESOURCE_PER_POSITION - resourceToExtract);
+    if (corpsesAtPosition.length > 0) {
+      cannabalize(entity, corpsesAtPosition[0]);
     } else {
-      // The position HAS been gathered before,
-      // there are terrainResourceBalance resources available
+      // Check for terrain component in current location
+      uint256[] memory terrainAtPosition = checkForEntity(playerPosition, uint32(entityType.Terrain));
 
-      int32 terrainResourceBalance = resourceComponent.getValue(terrainAtPosition[0]);
+      if (terrainAtPosition.length == 0) {
+        // The position has NOT been gathered before,
+        // there are INITIAL_RESOURCE_PER_POSITION resources available
 
-      // Require there to be resources in the position
-      require(terrainResourceBalance > 0, "no resources in position");
+        // Cap resource extraction at INITIAL_RESOURCE_PER_POSITION
+        if (resourceToExtract > INITIAL_RESOURCE_PER_POSITION) resourceToExtract = INITIAL_RESOURCE_PER_POSITION;
 
-      // Cap resource extraction at available resources
-      if (resourceToExtract > terrainResourceBalance) resourceToExtract = terrainResourceBalance;
+        // Create new terrain block at position
+        uint256 newTerrainEntity = world.getUniqueEntityId();
+        positionComponent.set(newTerrainEntity, playerPosition);
+        entityTypeComponent.set(newTerrainEntity, uint32(entityType.Terrain));
+        resourceComponent.set(newTerrainEntity, INITIAL_RESOURCE_PER_POSITION - resourceToExtract);
+      } else {
+        // The position HAS been gathered before,
+        // there are terrainResourceBalance resources available
 
-      // Update value on terrain entity
-      resourceComponent.set(terrainAtPosition[0], terrainResourceBalance - resourceToExtract);
+        int32 terrainResourceBalance = resourceComponent.getValue(terrainAtPosition[0]);
+
+        // Require there to be resources in the position
+        require(terrainResourceBalance > 0, "no resources in position");
+
+        // Cap resource extraction at available resources
+        if (resourceToExtract > terrainResourceBalance) resourceToExtract = terrainResourceBalance;
+
+        // Update value on terrain entity
+        resourceComponent.set(terrainAtPosition[0], terrainResourceBalance - resourceToExtract);
+      }
+
+      // Update resource related values on player entity
+      resourceComponent.set(entity, currentResourceBalance + resourceToExtract);
+      updateStats(entity, resourceToExtract);
     }
 
-    // Update values on player entity
-    resourceComponent.set(entity, currentResourceBalance + resourceToExtract);
     energyComponent.set(entity, currentEnergyLevel - energyInput);
     coolDownComponent.set(entity, int32(int256(block.number)) + energyInput);
-    updateStats(entity, resourceToExtract);
 
     // Check if dead
     if (currentEnergyLevel - energyInput <= 0) {
