@@ -53,7 +53,6 @@
     box-sizing: border-box;
     align-items: stretch;
     gap: var(--row-gap);
-    animation: backgroundFlicker 20s infinite;
   }
 
   .ui-container-inner {
