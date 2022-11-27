@@ -8,3 +8,5 @@ export { createCreatorSystem } from "./createCreatorSystem";
 export { createStatsSystem } from "./createStatsSystem";
 export { createBirthSystem } from "./createBirthSystem";
 export { createCannibalSystem } from "./createCannibalSystem";
+export { createLoadingStateSystem } from "./createLoadingStateSystem";
+export { createPlayingSystem } from "./createPlayingSystem";

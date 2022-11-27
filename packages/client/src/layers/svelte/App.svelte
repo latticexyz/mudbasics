@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import { bootGame } from "./boot";
   import UIContainer from "./lib/ui/UIContainer.svelte";
-  import UIMenu from "./lib/ui/UIMenu.svelte"
+  import UIMenu from "./lib/ui/UIMenu.svelte";
   import {
     createPositionSystem,
     createEnergySystem,
@@ -14,6 +14,8 @@
     createStatsSystem,
     createBirthSystem,
     createCannibalSystem,
+    createLoadingStateSystem,
+    createPlayingSystem,
   } from "./systems";
   import { network as networkStore, blockNumber } from "./stores/network";
 
@@ -31,6 +33,8 @@
     createStatsSystem(layers.network);
     createBirthSystem(layers.network);
     createCannibalSystem(layers.network);
+    createLoadingStateSystem(layers.network);
+    createPlayingSystem(layers.network);
 
     networkStore.set(layers.network);
 
@@ -39,7 +43,6 @@
     });
   });
 </script>
-
 
 <UIMenu />
 

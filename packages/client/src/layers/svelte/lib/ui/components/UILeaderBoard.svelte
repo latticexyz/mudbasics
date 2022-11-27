@@ -171,7 +171,6 @@
   }
 
   .ui-stat-player {
-    width: 9ch;
     overflow: hidden;
     display: inline-block;
     white-space: nowrap;

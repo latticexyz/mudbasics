@@ -1,37 +1,34 @@
 <script lang="ts">
   import { uiState } from "../../stores/ui";
   import { entities } from "../../stores/entities";
+  import { ready } from "../../stores/network";
   import { playerAddress } from "../../stores/player";
   import UITaskBar from "./UITaskBar.svelte";
   import UIComponent from "./UIComponent.svelte";
   import UISpawn from "./components/UISpawn.svelte";
-
-  const makeDelay = () => { 200 + Math.floor(Math.random() * 2000) }
+  import UILoading from "./components/UILoading.svelte";
 </script>
 
 <div class="ui-container">
   {#if !$entities[$playerAddress]}
-    <span></span>
+    <span />
   {:else}
     <UITaskBar />
   {/if}
   <div class="ui-container-inner">
-    {#if !$entities[$playerAddress]}
-      <UIComponent
-        active={true}
-        centered={true}
-        fluid={true}
-        bare={true}
-      >
+    {#if !$ready}
+      <UIComponent active={true} centered={true} fluid={true} bare={true}>
+        <UILoading />
+      </UIComponent>
+    {:else if !$entities[$playerAddress]}
+      <UIComponent active={true} centered={true} fluid={true} bare={true}>
         <!-- ***** SPAWN -->
         <UISpawn />
       </UIComponent>
     {:else}
       {#each Object.values($uiState) as attrs (attrs.id)}
         {#if attrs.active}
-          <UIComponent
-            {...attrs}
-          >
+          <UIComponent {...attrs}>
             <svelte:component this={attrs.component} />
           </UIComponent>
         {/if}
@@ -67,15 +64,15 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     grid-template-rows: repeat(9, minmax(0, 1fr));
     grid-template-areas:
-    "tl tm tr"
-    "tl tm tr"
-    "tl tm tr"
-    "ml mm mr"
-    "ml mm mr"
-    "ml mm mr"
-    "bl bm br"
-    "bl bm br"
-    "bl bm br";
+      "tl tm tr"
+      "tl tm tr"
+      "tl tm tr"
+      "ml mm mr"
+      "ml mm mr"
+      "ml mm mr"
+      "bl bm br"
+      "bl bm br"
+      "bl bm br";
     align-items: start;
     column-gap: var(--col-gap);
     row-gap: var(--row-gap);

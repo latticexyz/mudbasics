@@ -8,6 +8,7 @@ export function defineStatsComponent(world: World) {
       gathered: Type.Number,
       burnt: Type.Number,
       eaten: Type.Number,
+      played: Type.Number,
     },
     {
       id: "Stats",

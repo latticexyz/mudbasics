@@ -2,18 +2,18 @@ import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { entities, indexToID, Entity } from "../stores/entities";
 
-export function createCoolDownSystem(network: NetworkLayer) {
+export function createPlayingSystem(network: NetworkLayer) {
   const {
     world,
-    components: { CoolDown },
+    components: { Playing },
   } = network;
 
-  defineComponentSystem(world, CoolDown, (update) => {
-    console.log("==> CoolDown system: ", update);
-    const coolDownBlock = update.value[0]?.value;
+  defineComponentSystem(world, Playing, (update) => {
+    console.log("==> Playing: ", update);
+    const playing = update.value[0]?.value;
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};
-      value[indexToID(update.entity)].coolDownBlock = coolDownBlock;
+      value[indexToID(update.entity)].playing = playing;
       return value;
     });
   });

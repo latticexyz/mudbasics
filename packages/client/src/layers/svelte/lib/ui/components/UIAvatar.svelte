@@ -14,9 +14,9 @@
     let duration = ([$playerAddress].coolDownBlock - $blockNumber) * 1000;
     duration = duration > 0 ? duration : 1000;
 
-    console.log("$entities[$playerAddress].coolDownBlock", $entities[$playerAddress].coolDownBlock);
-    console.log("$blockNumber", $blockNumber);
-    console.log("duration", duration);
+    // console.log("$entities[$playerAddress].coolDownBlock", $entities[$playerAddress].coolDownBlock);
+    // console.log("$blockNumber", $blockNumber);
+    // console.log("duration", duration);
 
     let newEnergy = $entities[$playerAddress].energy;
     if (newEnergy !== $energy) {

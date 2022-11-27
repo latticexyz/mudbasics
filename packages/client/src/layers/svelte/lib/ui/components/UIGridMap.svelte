@@ -37,8 +37,8 @@
 
   function updateGrid(centerPosition: Coord) {
     for (let i = 0; i < grid.length; i++) {
-      grid[i].coordinates.x = centerPosition.x + grid[i].transformation.x;
-      grid[i].coordinates.y = centerPosition.y + grid[i].transformation.y;
+      grid[i].coordinates.x = centerPosition?.x || 0 + grid[i].transformation.x;
+      grid[i].coordinates.y = centerPosition?.y || 0 + grid[i].transformation.y;
       grid[i].perlinFactor = perlin(grid[i].coordinates.x, grid[i].coordinates.y, 0, 20);
       let fireEntity = Object.values($entities).find(
         (e) =>
