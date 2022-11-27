@@ -2,33 +2,31 @@
   import { values } from "mobx";
   import { entities } from "../../stores/entities";
   import { playerAddress } from "../../stores/player";
-  import { menuVisible, uiState } from "../../stores/ui"
-  import { fade } from "svelte/transition"
-  import { speed, fragSpeed } from "../../stores/ui"
+  import { menuVisible, uiState } from "../../stores/ui";
+  import { fade } from "svelte/transition";
+  import { speed, fragSpeed } from "../../stores/ui";
 
   const toggle = () => {
-    $menuVisible = !$menuVisible
-  }
+    $menuVisible = !$menuVisible;
+  };
 </script>
 
 {#if $entities[$playerAddress]}
   <div class="ui-menu-container" class:open={$menuVisible}>
-    <button
-      class="ui-button"
-      on:click={toggle}
-    >
-      Menu
-    </button>
+    <button class="ui-button" on:click={toggle}> Menu </button>
 
     {#if $menuVisible}
       <ul class="ui-menu">
         {#each Object.values($uiState) as item, i (item.id)}
           {#if !item.persistent}
             <li
-              in:fade={{duration: $speed + $fragSpeed * i}}
+              in:fade={{ duration: $speed + $fragSpeed * i }}
               class="ui-menu-item"
-              on:click={() => {uiState.toggle(item.id, 'active')}}>
-              [{item.active ? 'x' : '/'}] {item.title}
+              on:click={() => {
+                uiState.toggle(item.id, "active");
+              }}
+            >
+              [{item.active ? "x" : "/"}] {item.title}
             </li>
           {/if}
         {/each}
@@ -36,7 +34,6 @@
     {/if}
   </div>
 {/if}
-
 
 <style>
   .ui-menu-container {
@@ -50,7 +47,7 @@
     width: 56px;
     /* background-color: rgba(var(--background-rgb), var(--muted-opacity)); */
     backdrop-filter: var(--backdrop);
-    user-select: none
+    user-select: none;
   }
   .ui-menu-container.open {
     width: 256px;

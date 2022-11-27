@@ -21,6 +21,7 @@ export interface Entity {
   stats?: StatsType;
   birth?: number;
   cannibal: string[];
+  playing?: number;
 }
 
 export interface Entities {

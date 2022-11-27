@@ -1,37 +1,36 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte"
-  import { fade } from "svelte/transition"
-  import { uiState } from "../../stores/ui"
+  import { createEventDispatcher, onMount } from "svelte";
+  import { fade } from "svelte/transition";
+  import { uiState } from "../../stores/ui";
 
-  const dispatch = createEventDispatcher()
+  const dispatch = createEventDispatcher();
 
-  export let id:string
-  export let active:boolean = false
-  export let title:string = "";
+  export let id: string;
+  export let active: boolean = false;
+  export let title: string = "";
 
-  export let area:string = ""
-  export let rowStart:number = 1
-  export let rowEnd:number = 9
-  export let colStart:number = 1
-  export let colEnd:number = 2
+  export let area: string = "";
+  export let rowStart: number = 1;
+  export let rowEnd: number = 9;
+  export let colStart: number = 1;
+  export let colEnd: number = 2;
 
-  export let persistent:boolean = false // no option to close
-  export let centered:boolean = false;
-  export let fluid:boolean = false
-  export let bare:boolean = false
-  export let layer:number = 1
-  export let muted:any = undefined
-  export let delay:number = 0
+  export let persistent: boolean = false; // no option to close
+  export let centered: boolean = false;
+  export let fluid: boolean = false;
+  export let bare: boolean = false;
+  export let layer: number = 1;
+  export let muted: any = undefined;
+  export let delay: number = 0;
 
-  let rippleEnabled = bare
+  let rippleEnabled = bare;
 </script>
-
 
 {#if active}
   <div
     in:fade={{ duration: 200, delay }}
     out:fade={{ duration: 200 }}
-    on:introend={() => uiState.alter(id, 'delay', 0)}
+    on:introend={() => uiState.alter(id, "delay", 0)}
     class="ui-component {area || `col-${colStart}-${colEnd} row-${rowStart}-${rowEnd}`}"
     style:z-index={layer}
     class:centered
@@ -48,22 +47,19 @@
         {/if}
 
         <div>
-          <button class="close" on:click={() => uiState.toggle(id, 'muted')}>
+          <button class="close" on:click={() => uiState.toggle(id, "muted")}>
             {#if muted !== undefined}
-              {!muted ? '[mut]' : '[unm]'}
+              {!muted ? "[mut]" : "[unm]"}
             {/if}
           </button>
-  
+
           {#if !persistent}
-            <button class="close" on:click={uiState.close(id)}>
-              [×]
-            </button>
+            <button class="close" on:click={uiState.close(id)}> [×] </button>
           {/if}
         </div>
       </div>
     {/if}
-    <div
-      class="ui-component-inner">
+    <div class="ui-component-inner" class:no-padding={layer === 0}>
       <slot />
     </div>
   </div>
@@ -75,8 +71,8 @@
     grid-row: auto / span 3;
     user-select: none;
     overflow-y: scroll;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
     position: relative;
   }
 
@@ -86,7 +82,7 @@
   }
 
   .ui-component.backed {
-    background-color: rgba(0,0,0,var(--muted-opacity));
+    background-color: rgba(0, 0, 0, var(--muted-opacity));
   }
 
   .ui-component.box {
@@ -95,6 +91,10 @@
 
   .ui-component-inner {
     padding: 10px;
+  }
+
+  .ui-component-inner.no-padding {
+    padding: 0;
   }
 
   .titlebar {
@@ -341,7 +341,7 @@
     grid-area: mm;
     align-self: stretch;
   }
-  
+
   .fluid {
     align-self: stretch;
   }
@@ -351,8 +351,8 @@
     height: 100%;
   }
 
- /* Hide scrollbar for Chrome, Safari and Opera */
- .ui-component-inner::-webkit-scrollbar {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .ui-component-inner::-webkit-scrollbar {
     display: none;
   }
 </style>

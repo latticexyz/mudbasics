@@ -7,27 +7,29 @@
 </script>
 
 <div class="ui-spawn">
-  <button class="rectangles" on:click={spawn}>
-    Spawn<br>
-    ***
-  </button>
+  <button on:click={spawn}>Spawn</button>
 </div>
 
 <style>
   .ui-spawn {
     width: 100%;
     height: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
+
   button {
     display: block;
-    width: 100%;
-    height: 100%;
     cursor: pointer;
     color: var(--foreground);
     font-family: var(--font-family);
-    font-size: 2rem;
     text-transform: uppercase;
     font-weight: bold;
     position: relative;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid white;
   }
 </style>

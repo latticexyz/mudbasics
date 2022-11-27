@@ -10,7 +10,7 @@ export function createResourceSystem(network: NetworkLayer) {
   } = network;
 
   defineComponentSystem(world, Resource, (update) => {
-    // console.log("==> Resource system: ", update);
+    console.log("==> Resource system: ", update);
     const oldResource = update.value[1]?.value || 0;
     const resource = update.value[0]?.value || 0;
     entities.update((value) => {
