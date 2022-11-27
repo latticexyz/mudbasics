@@ -23,7 +23,7 @@ export interface Entity {
   cannibal: string[];
 }
 
-interface Entities {
+export interface Entities {
   [index: string]: Entity;
 }
 

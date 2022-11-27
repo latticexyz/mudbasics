@@ -67,5 +67,6 @@ contract SpawnSystemTest is MudTest {
     assertEq(initialStats.gathered, 0);
     assertEq(initialStats.burnt, 0);
     assertEq(initialStats.eaten, 0);
+    assertEq(initialStats.played, 0);
   }
 }

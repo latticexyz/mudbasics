@@ -5,9 +5,9 @@
   import { operations, Operation } from "../../../operations/";
   import { tweened } from "svelte/motion";
   import { playSound } from "../../../../howler";
-  import { uiState } from "../../../stores/ui"
+  import { uiState } from "../../../stores/ui";
 
-  let id = 'visual-operations-editor'
+  let id = "visual-operations-editor";
 
   const progress = tweened(0);
 
@@ -200,6 +200,10 @@
 
   .burn {
     background: orangered;
+  }
+
+  .play {
+    background: #ebff7c;
   }
 
   .special {
