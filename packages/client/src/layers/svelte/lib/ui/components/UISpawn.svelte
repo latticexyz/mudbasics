@@ -1,13 +1,20 @@
 <script lang="ts">
   import { network } from "../../../stores/network";
 
+  let spawning = false;
+
   function spawn() {
+    spawning = true;
     $network.api?.spawn();
   }
 </script>
 
 <div class="ui-spawn">
-  <button on:click={spawn}>Spawn</button>
+  {#if spawning}
+    <div>Spawning...</div>
+  {:else}
+    <button on:click={spawn}>Spawn</button>
+  {/if}
 </div>
 
 <style>
