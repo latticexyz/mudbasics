@@ -37,6 +37,7 @@ export async function createNetworkLayer(config: GameConfig) {
     Stats: defineStatsComponent(world),
     Birth: defineNumberComponent(world, { id: "Birth", metadata: { contractId: "component.Birth" } }),
     Cannibal: defineNumberComponent(world, { id: "Cannibal", metadata: { contractId: "component.Cannibal" } }),
+    Playing: defineNumberComponent(world, { id: "Playing", metadata: { contractId: "component.Playing" } }),
   };
 
   // --- SETUP ----------------------------------------------------------------------
@@ -69,6 +70,10 @@ export async function createNetworkLayer(config: GameConfig) {
     systems["system.Fire"].executeTyped(BigNumber.from(network.connectedAddress.get()), resourceInput);
   }
 
+  function play(energyInput: number) {
+    systems["system.Play"].executeTyped(BigNumber.from(network.connectedAddress.get()), energyInput);
+  }
+
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
@@ -79,7 +84,7 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: { spawn, move, gather, consume, burn },
+    api: { spawn, move, gather, consume, burn, play },
     dev: setupDevSystems(world, encoders, systems),
   };
 

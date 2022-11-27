@@ -9,6 +9,7 @@ struct Stats {
   int32 gathered;
   int32 burnt;
   int32 eaten;
+  int32 played;
 }
 
 contract StatsComponent is Component {
@@ -29,6 +30,9 @@ contract StatsComponent is Component {
 
     keys[3] = "eaten";
     values[3] = LibTypes.SchemaValue.INT32;
+
+    keys[4] = "played";
+    values[4] = LibTypes.SchemaValue.INT32;
   }
 
   function set(uint256 entity, Stats memory stats) public {

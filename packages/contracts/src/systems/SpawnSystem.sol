@@ -61,6 +61,7 @@ contract SpawnSystem is System {
     initialStats.gathered = 0;
     initialStats.burnt = 0;
     initialStats.eaten = 0;
+    initialStats.played = 0;
     statsComponent.set(entity, initialStats);
 
     // --- Cannibal list

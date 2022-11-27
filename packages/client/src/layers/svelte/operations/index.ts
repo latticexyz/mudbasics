@@ -2,6 +2,7 @@ import { crawl, walk, run, east, west, north, south, southEast, southWest, north
 import { gather, hoard, stockpile } from "./gather";
 import { nibble, eat, feast } from "./consume";
 import { fire } from "./burn";
+import { play } from "./play";
 import { suicide } from "./special";
 
 export interface Operation {
@@ -32,6 +33,8 @@ export const operations: Operation[] = [
   { name: "stockpile", category: "gather", f: stockpile },
   // --- BURN
   { name: "fire", category: "burn", f: fire },
+  // --- PLAY
+  { name: "play", category: "play", f: play },
   // --- SPECIAL
   { name: "suicide", category: "special", f: suicide },
 ];
