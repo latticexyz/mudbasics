@@ -85,7 +85,7 @@
   }
 
   .name {
-    font-size: var(--font-size-large);
+    /* font-size: var(--font-size-large); */
     text-align: center;
     grid-column: 1 / 3;
     /* font-weight: bold; */

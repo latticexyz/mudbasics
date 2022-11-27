@@ -156,6 +156,10 @@
 </div>
 
 <style>
+  .ui-operations-editor {
+    color: black;
+  }
+
   button {
     display: block;
     margin-right: 5px;
@@ -169,10 +173,10 @@
   .slot-container {
     display: flex;
   }
-
+  /* 
   .operation-name {
     color: var(--foreground);
-  }
+  } */
 
   .indicator {
     height: 10px;

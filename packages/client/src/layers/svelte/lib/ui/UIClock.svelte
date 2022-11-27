@@ -1,11 +1,5 @@
 <script lang="ts">
-  import { entities } from "../../stores/entities";
-  import { playerAddress } from "../../stores/player";
-  import { seedToName } from "../../utils/name";
-  import { EntityType } from "../../utils/space";
-  import { shortenAddress } from "../../utils/ui";
   import { blockNumber } from "../../stores/network";
-  import { uniq } from "lodash";
 
   const SECONDS_IN_DAY = 86400;
 
@@ -22,12 +16,13 @@
   }
 </script>
 
-<div class="ui-debug-log">
-  <div class="clock-time">World time: {formatTime(clockTime)}</div>
+<div class="ui-clock">
+  <div class="clock-time">{formatTime(clockTime)}</div>
 </div>
 
 <style>
-  .player {
-    color: var(--blue);
+  .ui-clock {
+    border: 1px solid white;
+    padding: 5px;
   }
 </style>

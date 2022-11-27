@@ -7,7 +7,7 @@
 </script>
 
 <div class="ui-spawn">
-  <button on:click={spawn}> Spawn </button>
+  <button on:click={spawn}>Spawn</button>
 </div>
 
 <style>
@@ -15,6 +15,9 @@
     width: 100%;
     height: 100%;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   button {
@@ -26,5 +29,7 @@
     font-weight: bold;
     position: relative;
     padding: 10px;
+    background: transparent;
+    border: 1px solid white;
   }
 </style>

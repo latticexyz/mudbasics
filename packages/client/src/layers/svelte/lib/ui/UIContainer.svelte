@@ -17,12 +17,11 @@
   {/if}
   <div class="ui-container-inner">
     {#if !$ready}
-      <UIComponent active={true} centered={true} fluid={true} bare={true}>
+      <UIComponent id="ui-loading" active={true} centered={true} fluid={true} bare={true}>
         <UILoading />
       </UIComponent>
     {:else if !$entities[$playerAddress]}
-      <UIComponent active={true} centered={true} fluid={true} bare={true}>
-        <!-- ***** SPAWN -->
+      <UIComponent id="ui-spawn" active={true} centered={true} fluid={true} bare={true}>
         <UISpawn />
       </UIComponent>
     {:else}
@@ -46,7 +45,7 @@
     height: 100vh;
     background: var(--background);
     color: var(--foreground);
-    padding: var(--row-gap) var(--col-gap) var(--col-gap);
+    padding: 24px;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: min-content 93%;
