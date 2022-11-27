@@ -11,7 +11,7 @@
   const y = tweened($entities[$playerAddress].position?.y);
 
   entities.subscribe((value) => {
-    let duration = ( [$playerAddress].coolDownBlock - $blockNumber) * 1000;
+    let duration = ([$playerAddress].coolDownBlock - $blockNumber) * 1000;
     duration = duration > 0 ? duration : 1000;
 
     console.log("$entities[$playerAddress].coolDownBlock", $entities[$playerAddress].coolDownBlock);
@@ -45,18 +45,18 @@
 
   <div class="ui-avatar-header">
     <div class="name">{seedToName($entities[$playerAddress].seed)}</div>
-  
+
     <div class="resources">
       <div class="large-indicator">
         <div class="label">Energy</div>
-        <div class="value">{$energy.toFixed(2)}</div>
+        <div class="value">{$energy ? $energy.toFixed(2) : 0}</div>
       </div>
       <div class="large-indicator">
         <div class="label">Resource</div>
-        <div class="value">{$resource.toFixed(2)}</div>
+        <div class="value">{$resource ? $resource.toFixed(2) : 0}</div>
       </div>
     </div>
-    </div>
+  </div>
 </div>
 
 <style>
@@ -124,8 +124,6 @@
     display: flex;
     gap: var(--col-gap);
   }
-
-
 
   .value {
     width: 100%;
