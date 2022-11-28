@@ -1,11 +1,9 @@
 <script lang="ts">
   import { fires } from "../../../stores/entities";
   import { player, playerAddress } from "../../../stores/player";
-  import { seedToName } from "../../../utils/name";
   import { EntityType } from "../../../utils/space";
   import { shortenAddress } from "../../../utils/ui";
   import { blockNumber } from "../../../stores/network";
-  import { uniq } from "lodash";
   import { speed, fragSpeed } from "../../../stores/ui"
   import { fade } from "svelte/transition"
 
@@ -19,7 +17,7 @@
   <div>Blocknumber: <strong>{$blockNumber}</strong></div>
   <div>Cooldown block: {$player.coolDownBlock}</div>
   <hr />
-  {#each Object.entries($fires) as [address, value], i}
+  {#each Object.entries($fires) as [address, value], i (address)}
     <div transition:fade={{ duration: $speed + $fragSpeed * i }} class:player={address === $playerAddress}>
       {#if value.entityType == EntityType.Fire}
         <strong>🔥 {shortenAddress(address)}</strong>
@@ -35,8 +33,8 @@
       {#if value.resource}
         / r: {value.resource}
       {/if}
-      {#if value.entityType == EntityType.Fire}
-        / => {playerList(value.creator)}
+      {#if value.creator}
+        / c: {shortenAddress(value.creator[0])}
       {/if}
     </div>
   {/each}
