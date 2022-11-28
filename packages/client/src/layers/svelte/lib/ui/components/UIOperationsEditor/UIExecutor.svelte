@@ -13,8 +13,7 @@
     stopSequencer,
     clearSequencer,
   } from "../../../../stores/sequence";
-
-  const ID = "ui-executor";
+  export const ID = "ui-executor";
 
   function start() {
     startSequencer();

@@ -1,9 +1,6 @@
 import { initialState } from "./config";
 import { writable } from "svelte/store";
 
-// Utilities
-const makeDelay = () => 500 + Math.floor(Math.random() * 2000);
-
 // UI
 export const menuVisible = writable(false);
 

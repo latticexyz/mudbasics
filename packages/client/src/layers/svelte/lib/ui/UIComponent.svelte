@@ -1,62 +1,50 @@
 <script lang="ts">
+  import { UIComponentPlacement, UIComponentOptions } from "../../stores/config"
   import { createEventDispatcher, onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { uiState } from "../../stores/ui";
 
   const dispatch = createEventDispatcher();
-
+  
   export let id: string;
-  export let active: boolean = false;
+  export let active: boolean = true;
   export let title: string = "";
+  
+  export let grid: UIComponentPlacement = {}
+  export let options: UIComponentOptions
+  export let area: string = ""
 
-  export let area: string = "";
-  export let rowStart: number = 1;
-  export let rowEnd: number = 9;
-  export let colStart: number = 1;
-  export let colEnd: number = 2;
-
-  export let persistent: boolean = false; // no option to close
-  export let centered: boolean = false;
-  export let fluid: boolean = false;
-  export let bare: boolean = false;
-  export let layer: number = 1;
-  export let muted: any = undefined;
-  export let delay: number = 0;
-
-  let rippleEnabled = bare;
+  console.log('initialising component', id)
 </script>
 
 {#if active}
   <div
-    in:fade={{ duration: 200, delay }}
+    in:fade={{ duration: 200, delay: options?.delay }}
     on:introend={() => uiState.alter(id, "delay", 0)}
     out:fade={{ duration: 200 }}
-    class="ui-component {area || `col-${colStart}-${colEnd} row-${rowStart}-${rowEnd}`}"
-    style:z-index={layer}
-    class:centered
-    class:fluid
-    class:box={!bare}
-    class:rectangles={!bare}
-    class:backed={!bare}
-    class:blend={layer === 0}
+    class="ui-component col-{grid?.col?.[0]}-{grid?.col?.[1]} row-{grid?.row?.[0]}-{grid?.row?.[1]} {area}"
+    style:z-index={options?.layer}
+    class:fluid={options?.fluid}
+    class:box={!options?.bare}
+    class:rectangles={!options?.bare}
+    class:backed={!options?.bare}
+    class:blend={options?.layer === 0}
   >
-    {#if !bare}
-      <div class="titlebar" class:border={!bare}>
-        {#if title}
-          {title}
-        {/if}
+    {#if !options?.bare}
+      <div class="titlebar border">
+        {title}
 
         <div>
           <button
             class="close" 
             on:click={() => uiState.toggle(id, "muted")}
           >
-            {#if muted !== undefined}
-              {!muted ? "[mut]" : "[unm]"}
+            {#if options?.muted}
+              {!options.muted ? "[mut]" : "[unm]"}
             {/if}
           </button>
 
-          {#if !persistent}
+          {#if !options?.persistent}
             <button
               class="close"
               on:click={uiState.close(id)}
@@ -65,7 +53,7 @@
         </div>
       </div>
     {/if}
-    <div class="ui-component-inner" class:no-padding={layer === 0}>
+    <div class="ui-component-inner" class:no-padding={options?.layer === 0}>
       <slot />
     </div>
   </div>
@@ -89,6 +77,7 @@
 
   .ui-component.backed {
     background-color: rgba(0, 0, 0, var(--muted-opacity));
+    backdrop-filter: var(--backdrop);
   }
 
   .ui-component.box {

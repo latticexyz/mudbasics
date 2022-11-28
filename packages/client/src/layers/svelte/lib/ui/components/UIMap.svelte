@@ -5,8 +5,6 @@
   import { createPerlin, Perlin } from "@latticexyz/noise";
   import { EntityType } from "../../../utils/space";
 
-  $: console.log($entities);
-
   let canvasEl: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
   let perlin: Perlin;
@@ -25,7 +23,7 @@
     perlin = await createPerlin();
 
     for (let y = 0; y <= 100; y++) {
-      for (let x = 0; x <= 100; x++) {
+      for (let x = 0; x <= 100; x++) {s
         paintPixel(x, y, perlin(x, y, 0, 20));
       }
     }

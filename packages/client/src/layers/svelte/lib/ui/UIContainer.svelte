@@ -6,6 +6,7 @@
   import UIComponent from "./UIComponent.svelte";
   import UISpawn from "./components/UISpawn.svelte";
   import UILoading from "./components/UILoading.svelte";
+
 </script>
 
 <div class="ui-container">
@@ -16,20 +17,18 @@
   {/if}
   <div class="ui-container-inner">
     {#if !$ready}
-      <UIComponent id="ui-loading" active={true} centered={true} fluid={true} bare={true}>
+      <UIComponent id="ui-loading" options={{ fluid: true, bare: true }} area="mm">
         <UILoading />
       </UIComponent>
     {:else if !$player}
-      <UIComponent id="ui-spawn" active={true} centered={true} fluid={true} bare={true}>
+      <UIComponent id="ui-spawn" options={{ fluid: true, bare: true }} area="mm">
         <UISpawn />
       </UIComponent>
     {:else}
-      {#each Object.values($uiState) as attrs (attrs.id)}
-        {#if attrs.active}
-          <UIComponent {...attrs}>
-            <svelte:component this={attrs.component} />
-          </UIComponent>
-        {/if}
+      {#each Object.values($uiState) as { id, active, title, options, grid, component } (id)}
+        <UIComponent {id} {active} {title} {options} {grid}>
+          <svelte:component this={component} />
+        </UIComponent>
       {/each}
     {/if}
   </div>
