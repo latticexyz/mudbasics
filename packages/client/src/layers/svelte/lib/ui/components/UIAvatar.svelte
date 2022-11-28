@@ -1,39 +1,39 @@
 <script lang="ts">
   import { tweened } from "svelte/motion";
-  import { playerAddress } from "../../../stores/player";
+  import { player, playerAddress } from "../../../stores/player";
   import { entities } from "../../../stores/entities";
   import { seedToName } from "../../../utils/name";
   import { blockNumber } from "../../../stores/network";
 
-  const energy = tweened($entities[$playerAddress].energy);
-  const resource = tweened($entities[$playerAddress].resource);
-  const x = tweened($entities[$playerAddress].position?.x);
-  const y = tweened($entities[$playerAddress].position?.y);
+  const energy = tweened($player.energy);
+  const resource = tweened($player.resource);
+  const x = tweened($player.position?.x);
+  const y = tweened($player.position?.y);
 
   entities.subscribe((value) => {
     let duration = ([$playerAddress].coolDownBlock - $blockNumber) * 1000;
     duration = duration > 0 ? duration : 1000;
 
-    // console.log("$entities[$playerAddress].coolDownBlock", $entities[$playerAddress].coolDownBlock);
+    // console.log("$player.coolDownBlock", $player.coolDownBlock);
     // console.log("$blockNumber", $blockNumber);
     // console.log("duration", duration);
 
-    let newEnergy = $entities[$playerAddress].energy;
+    let newEnergy = $player.energy;
     if (newEnergy !== $energy) {
       energy.set(newEnergy, { duration: duration });
     }
 
-    let newResource = $entities[$playerAddress].resource;
+    let newResource = $player.resource;
     if (newResource !== $resource) {
       resource.set(newResource, { duration: duration });
     }
 
-    let newX = $entities[$playerAddress].position?.x;
+    let newX = $player.position?.x;
     if (newX !== $x) {
       x.set(newX, { duration: duration });
     }
 
-    let newY = $entities[$playerAddress].position?.y;
+    let newY = $player.position?.y;
     if (newY !== $y) {
       y.set(newY, { duration: duration });
     }
@@ -44,7 +44,7 @@
   <img src="/images/avatar-placeholder.png" alt="Avatar" class="ui-avatar-background" />
 
   <div class="ui-avatar-header">
-    <div class="name">{seedToName($entities[$playerAddress].seed)}</div>
+    <div class="name">{seedToName($player.seed)}</div>
 
     <div class="resources">
       <div class="large-indicator">

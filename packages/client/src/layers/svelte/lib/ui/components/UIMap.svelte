@@ -55,10 +55,10 @@
     <div class="info">
       resource factor:
       <strong>
-        {perlin($entities[$playerAddress].position?.x, $entities[$playerAddress].position?.y, 0, 20)}
+        {perlin($player.position?.x, $player.position?.y, 0, 20)}
       </strong>
       (50 energy ≈ {Math.floor(
-        perlin($entities[$playerAddress].position?.x, $entities[$playerAddress].position?.y, 0, 20) * 50
+        perlin($player.position?.x, $player.position?.y, 0, 20) * 50
       )} resources)
     </div>
   {/if}

@@ -1,8 +1,7 @@
 <script lang="ts">
   import { uiState } from "../../stores/ui";
-  import { entities } from "../../stores/entities";
   import { ready } from "../../stores/network";
-  import { playerAddress } from "../../stores/player";
+  import { player } from "../../stores/player";
   import UITaskBar from "./UITaskBar.svelte";
   import UIComponent from "./UIComponent.svelte";
   import UISpawn from "./components/UISpawn.svelte";
@@ -10,7 +9,7 @@
 </script>
 
 <div class="ui-container">
-  {#if !$entities[$playerAddress]}
+  {#if !$player}
     <span />
   {:else}
     <UITaskBar />
@@ -20,7 +19,7 @@
       <UIComponent id="ui-loading" active={true} centered={true} fluid={true} bare={true}>
         <UILoading />
       </UIComponent>
-    {:else if !$entities[$playerAddress]}
+    {:else if !$player}
       <UIComponent id="ui-spawn" active={true} centered={true} fluid={true} bare={true}>
         <UISpawn />
       </UIComponent>

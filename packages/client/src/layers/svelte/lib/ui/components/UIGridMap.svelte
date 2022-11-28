@@ -2,7 +2,7 @@
   import { Coord } from "@latticexyz/recs";
   import { onMount } from "svelte";
   import { entities } from "../../../stores/entities";
-  import { playerAddress } from "../../../stores/player";
+  import { player, playerAddress } from "../../../stores/player";
   import { createPerlin, Perlin } from "@latticexyz/noise";
   import { EntityType } from "../../../utils/space";
 
@@ -54,12 +54,12 @@
     if (perlin) {
       updateGrid(value[$playerAddress].position);
     }
-  });
+  })
 
   onMount(async () => {
     perlin = await createPerlin();
     initGrid();
-    updateGrid($entities[$playerAddress].position);
+    updateGrid($player.position);
   });
 </script>
 

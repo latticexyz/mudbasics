@@ -1,7 +1,6 @@
 <script lang="ts">
   import { blockNumber } from "../../../stores/network";
-  import { entities } from "../../../stores/entities";
-  import { playerAddress } from "../../../stores/player";
+  import { player } from "../../../stores/player";
   import { operations, Operation } from "../../../operations/";
   import { tweened } from "svelte/motion";
   import { playSound } from "../../../../howler";
@@ -67,21 +66,21 @@
   }
 
   blockNumber.subscribe((newBlock) => {
-    if ($entities[$playerAddress].coolDownBlock !== oldCoolDownBlock) {
-      operationDuration = $entities[$playerAddress].coolDownBlock - newBlock + 1;
+    if ($player.coolDownBlock !== oldCoolDownBlock) {
+      operationDuration = $player.coolDownBlock - newBlock + 1;
       // Tween value down from operationDuration to 0 over operationDuration seconds
       progress.set(operationDuration, { duration: 0 });
       progress.set(0, { duration: operationDuration * 1000 });
 
-      oldCoolDownBlock = $entities[$playerAddress].coolDownBlock;
+      oldCoolDownBlock = $player.coolDownBlock;
     }
 
     // Execute the next operation if
     // – Sequencer is activated
     // - Cooldown period is over
     // – The blocknumber is odd (HACK)
-    if (sequencerActive && newBlock + 1 > $entities[$playerAddress].coolDownBlock && newBlock % 2) {
-      console.log("!!!!!!", newBlock, $entities[$playerAddress]?.coolDownBlock);
+    if (sequencerActive && newBlock + 1 > $player.coolDownBlock && newBlock % 2) {
+      console.log("!!!!!!", newBlock, $player?.coolDownBlock);
       activeOperationIndex = turnCounter % filteredSequence.length;
       sequenceSuccess[activeOperationIndex] = executeOperation(filteredSequence[activeOperationIndex]);
       turnCounter++;
@@ -90,9 +89,9 @@
 </script>
 
 <div class="ui-operations-editor">
-  {#if !sequencerActive && $entities[$playerAddress].coolDownBlock > $blockNumber}
+  {#if !sequencerActive && $player.coolDownBlock > $blockNumber}
     <div class="cooldown-overlay">
-      <div>In cooldown for <strong>{$entities[$playerAddress].coolDownBlock - $blockNumber}</strong> seconds</div>
+      <div>In cooldown for <strong>{$player.coolDownBlock - $blockNumber}</strong> seconds</div>
     </div>
   {/if}
   <div class="operation-grid">
@@ -111,13 +110,13 @@
 
           {#if activeOperationIndex == index && operation.category !== "empty"}
             <div class="operation-progress">
-              {#if $entities[$playerAddress].coolDownBlock - $blockNumber > 0 && $progress > 0}
+              {#if $player.coolDownBlock - $blockNumber > 0 && $progress > 0}
                 <div>
                   <progress value={$progress} max={operationDuration} />
                 </div>
                 <div>
                   <strong>
-                    {$entities[$playerAddress].coolDownBlock - $blockNumber} seconds
+                    {$player.coolDownBlock - $blockNumber} seconds
                   </strong>
                 </div>
               {/if}
