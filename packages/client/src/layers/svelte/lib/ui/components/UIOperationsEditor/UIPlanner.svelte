@@ -42,15 +42,6 @@
 </script>
 
 <div class="ui-operations-editor">
-  <!-- Shown if player is in cooldown -->
-  {#if !$sequencerActive && ($player.coolDownBlock || 0) > $blockNumber}
-    <div class="cooldown-overlay">
-      <div>
-        In cooldown for <strong>{($player.coolDownBlock || 0) - $blockNumber}</strong> seconds
-      </div>
-    </div>
-  {/if}
-
   <!-- GRID -->
   <div class="operation-grid">
     {#each localSequence as sequenceElement}
@@ -81,7 +72,10 @@
   </div>
 
   <!-- INVENTORY -->
-  <div class="inventory" class:disabled={localSequence.length >= SEQUENCER_LENGTH}>
+  <div
+    class="inventory"
+    class:disabled={localSequence.filter((item) => item.operation.name !== "+").length >= SEQUENCER_LENGTH}
+  >
     {#each operations as operation}
       <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
@@ -110,27 +104,6 @@
     margin-right: 5px;
     user-select: none;
   }
-
-  .running {
-    background: #ff7e7e;
-  }
-
-  .slot-container {
-    display: flex;
-  }
-
-  .indicator {
-    height: 10px;
-    width: 10px;
-    border-radius: 50%;
-    background: grey;
-    margin-right: 10px;
-  }
-
-  .active {
-    background: #92ff7c;
-  }
-
   .move {
     background: #92ff7c;
   }
@@ -153,6 +126,10 @@
 
   .special {
     background: #ff7ce7;
+  }
+
+  .gate {
+    background: #4336ff;
   }
 
   .empty {
@@ -202,10 +179,6 @@
     position: relative;
   }
 
-  .hidden {
-    opacity: 0;
-  }
-
   .operation-grid {
     margin-top: 10px;
     background: grey;
@@ -218,30 +191,6 @@
     align-items: center;
     justify-content: flex-end;
     height: 40px;
-  }
-
-  .failure {
-    background: red;
-  }
-
-  .active {
-    border: 2px solid darkgray;
-  }
-
-  .cooldown-overlay {
-    position: absolute;
-    width: 100%;
-    background: rgba(127, 127, 127, 0.8);
-    backdrop-filter: gray(1);
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    font-size: 32px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
   }
 
   .ui-operations-editor {

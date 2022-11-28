@@ -2,7 +2,6 @@
   import { blockNumber } from "../../../../stores/network";
   import { player } from "../../../../stores/player";
   import {
-    SEQUENCER_LENGTH,
     progress,
     sequencerActive,
     activeOperationIndex,
@@ -48,23 +47,20 @@
       <div
         class="slot {sequenceElement.operation.category}"
         class:active={$sequencerActive && $activeOperationIndex === index}
+        class:failure={!$sequence[index].success}
       >
-        <div class="operation-info">
-          <div class="operation-name">
-            {sequenceElement.operation.name}
-          </div>
+        <div class="operation-name">
+          {sequenceElement.operation.name}
         </div>
 
         {#if $activeOperationIndex === index && sequenceElement.operation.category !== "empty"}
           <div class="operation-progress">
             {#if ($player.coolDownBlock || 0) - $blockNumber > 0 && $progress > 0}
-              <div>
+              <div class="progress-bar">
                 <progress value={$progress} max={$operationDuration} />
               </div>
-              <div>
-                <strong>
-                  {($player.coolDownBlock || 0) - $blockNumber} seconds
-                </strong>
+              <div class="progress-number">
+                ({($player.coolDownBlock || 0) - $blockNumber})
               </div>
             {/if}
           </div>
@@ -99,28 +95,8 @@
     user-select: none;
   }
 
-  .running {
-    background: #ff7e7e;
-  }
-
   .slot-container {
     display: flex;
-  }
-  /* 
-    .operation-name {
-      color: var(--foreground);
-    } */
-
-  .indicator {
-    height: 10px;
-    width: 10px;
-    border-radius: 50%;
-    background: grey;
-    margin-right: 10px;
-  }
-
-  .active {
-    background: #92ff7c;
   }
 
   .move {
@@ -147,6 +123,10 @@
     background: #ff7ce7;
   }
 
+  .gate {
+    background: #4336ff;
+  }
+
   .empty {
     background: lightgrey;
   }
@@ -165,6 +145,8 @@
     font-size: 12px;
     border: 2px solid transparent;
     position: relative;
+    justify-content: space-between;
+    padding: 5px 10px;
   }
 
   .hidden {
@@ -192,7 +174,7 @@
   }
 
   .active {
-    border: 2px solid darkgray;
+    border: 2px solid blue;
   }
 
   .cooldown-overlay {
@@ -215,18 +197,20 @@
     position: relative;
   }
 
-  .operation-info {
-    text-align: center;
-  }
-
   .operation-progress {
     font-size: 9px;
     text-align: center;
+    display: flex;
+  }
+
+  .progress-number {
+    font-weight: bold;
+    margin-left: 5px;
   }
 
   progress {
     width: 80px;
-    height: 5px;
+    height: 100%;
     border-radius: 0;
     margin-bottom: 5px;
   }

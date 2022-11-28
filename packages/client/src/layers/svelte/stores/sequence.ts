@@ -42,6 +42,12 @@ export function startSequencer() {
 
 export function stopSequencer() {
   sequencerActive.set(false);
+  sequence.update((s) => {
+    for (let i = 0; i < s.length; i++) {
+      s[i].success = true;
+    }
+    return s;
+  });
 }
 
 export function clearSequencer() {
@@ -54,6 +60,7 @@ function executeOperation(sequenceElement: SequenceElement) {
     return sequenceElement.operation.f();
   } else {
     stopSequencer();
+    return false;
   }
 }
 
@@ -72,13 +79,29 @@ blockNumber.subscribe((newBlock) => {
     }
 
     // Execute the next operation if
-    // – Sequencer is activated
+    // – Sequencer is active
     // - Cooldown period is over
     // – The blocknumber is odd (HACK)
     if (get(sequencerActive) && newBlock + 1 > (get(player).coolDownBlock || 0) && newBlock % 2) {
       activeOperationIndex.set(turnCounter % get(sequence).length);
-      executeOperation(get(sequence)[get(activeOperationIndex)]);
-      turnCounter++;
+
+      const outcome = executeOperation(get(sequence)[get(activeOperationIndex)]);
+
+      if (get(sequence)[get(activeOperationIndex)].operation.category === "gate") {
+        // If current operation is a gate
+        // – proceed if returning true
+        // – start from beginning if return false
+        turnCounter = outcome ? turnCounter + 1 : 0;
+      } else {
+        turnCounter++;
+      }
+
+      sequence.update((s) => {
+        if (s[get(activeOperationIndex)].operation.category !== "gate") {
+          s[get(activeOperationIndex)].success = outcome;
+        }
+        return s;
+      });
     }
   }
 });

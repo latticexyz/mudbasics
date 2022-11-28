@@ -4,6 +4,7 @@ import { nibble, eat, feast } from "./consume";
 import { fire } from "./burn";
 import { play } from "./play";
 import { suicide } from "./special";
+import { hungry } from "./gates";
 
 export interface Operation {
   name: string;
@@ -38,4 +39,6 @@ export const operations: Operation[] = [
   { name: "play", category: "play", description: "", f: play },
   // --- SPECIAL
   { name: "suicide", category: "special", description: "", f: suicide },
+  // --- GATES
+  { name: "hungry?", category: "gate", description: "", f: hungry },
 ];
