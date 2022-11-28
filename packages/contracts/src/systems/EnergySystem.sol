@@ -3,11 +3,13 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
+import { entityType } from "../constants.sol";
 
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
+import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Energy"));
 int32 constant COOLDOWN_PER_RESOURCE = 3;
@@ -29,9 +31,13 @@ contract EnergySystem is System {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
 
     // Require entity to be caller
     // require(entity == addressToEntity(msg.sender), "player does not own entity");
+
+    // Require entity to be player
+    require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can eat.");
 
     // Require cooldown period to be over
     require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");

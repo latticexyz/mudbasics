@@ -37,7 +37,7 @@ contract MoveSystem is System {
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
 
     // Require entity to be player
-    require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only player can move.");
+    require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can move.");
 
     // Require cooldown period to be over
     require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");

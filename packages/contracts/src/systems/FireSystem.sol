@@ -38,7 +38,7 @@ contract FireSystem is System {
     CreatorComponent creatorComponent = CreatorComponent(getAddressById(components, CreatorComponentID));
 
     // Require entity to be player
-    require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only player can burn.");
+    require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can burn.");
 
     // Require cooldown period to be over
     require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
