@@ -2,14 +2,10 @@
   import { flip } from "svelte/animate";
   import { derived } from "svelte/store"
   import { cubicInOut as easing } from "svelte/easing";
-
-  import { players, terrains } from "../../../stores/entities";
+  import { players } from "../../../stores/entities";
   import { category } from "../../../stores/ui"
-  import { player } from "../../../stores/player";
 
   import { seedToName } from "../../../utils/name";
-
-  let interval;
 
   const mappings = {
     gluttony: "eaten",

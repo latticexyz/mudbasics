@@ -10,6 +10,7 @@ import UIGridMap from "../lib/ui/components/UIGridMap.svelte";
 import UIView from "../lib/ui/components/UIView.svelte";
 import UIDebugLog from "../lib/ui/components/UIDebugLog.svelte";
 import UILeaderBoard from "../lib/ui/components/UILeaderBoard.svelte";
+import UIFires from "../lib/ui/components/UIFires.svelte";
 
 export const initialState = () => ({
   avatar: {
@@ -32,6 +33,19 @@ export const initialState = () => ({
     muted: true,
     title: "Visual Operations Editor",
     component: UIVisualOperationsEditor,
+    active: false,
+    delay: makeDelay(),
+    colStart: 1,
+    colEnd: 3,
+    rowStart: 6,
+    rowEnd: 10,
+    fluid: true,
+  },
+  fires: {
+    id: "fires",
+    muted: true,
+    title: "Active Fires",
+    component: UIFires,
     active: true,
     delay: makeDelay(),
     colStart: 1,
@@ -39,7 +53,6 @@ export const initialState = () => ({
     rowStart: 6,
     rowEnd: 10,
     fluid: true,
-    // large: true,
   },
   "text-log": {
     id: "text-log",
