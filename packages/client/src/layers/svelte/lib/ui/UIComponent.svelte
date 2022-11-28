@@ -29,8 +29,8 @@
 {#if active}
   <div
     in:fade={{ duration: 200, delay }}
-    out:fade={{ duration: 200 }}
     on:introend={() => uiState.alter(id, "delay", 0)}
+    out:fade={{ duration: 200 }}
     class="ui-component {area || `col-${colStart}-${colEnd} row-${rowStart}-${rowEnd}`}"
     style:z-index={layer}
     class:centered
@@ -47,14 +47,20 @@
         {/if}
 
         <div>
-          <button class="close" on:click={() => uiState.toggle(id, "muted")}>
+          <button
+            class="close" 
+            on:click={() => uiState.toggle(id, "muted")}
+          >
             {#if muted !== undefined}
               {!muted ? "[mut]" : "[unm]"}
             {/if}
           </button>
 
           {#if !persistent}
-            <button class="close" on:click={uiState.close(id)}> [×] </button>
+            <button
+              class="close"
+              on:click={uiState.close(id)}
+            > [×] </button>
           {/if}
         </div>
       </div>
