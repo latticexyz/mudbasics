@@ -1,17 +1,15 @@
 <script lang="ts">
   import { tweened } from "svelte/motion";
-  import { player, playerAddress } from "../../../stores/player";
+  import { player } from "../../../stores/player";
   import { entities } from "../../../stores/entities";
   import { seedToName } from "../../../utils/name";
   import { blockNumber } from "../../../stores/network";
 
   const energy = tweened($player.energy);
   const resource = tweened($player.resource);
-  const x = tweened($player.position?.x);
-  const y = tweened($player.position?.y);
 
   entities.subscribe((value) => {
-    let duration = ([$playerAddress].coolDownBlock - $blockNumber) * 1000;
+    let duration = ($player.coolDownBlock - $blockNumber) * 1000;
     duration = duration > 0 ? duration : 1000;
 
     // console.log("$player.coolDownBlock", $player.coolDownBlock);
@@ -27,16 +25,6 @@
     if (newResource !== $resource) {
       resource.set(newResource, { duration: duration });
     }
-
-    let newX = $player.position?.x;
-    if (newX !== $x) {
-      x.set(newX, { duration: duration });
-    }
-
-    let newY = $player.position?.y;
-    if (newY !== $y) {
-      y.set(newY, { duration: duration });
-    }
   });
 </script>
 
@@ -45,15 +33,14 @@
 
   <div class="ui-avatar-header">
     <div class="name">{seedToName($player.seed)}</div>
-
     <div class="resources">
       <div class="large-indicator">
         <div class="label">Energy</div>
-        <div class="value">{$energy ? $energy.toFixed(2) : 0}</div>
+        <div class="value">{$energy.toFixed(2)}</div>
       </div>
       <div class="large-indicator">
         <div class="label">Resource</div>
-        <div class="value">{$resource ? $resource.toFixed(2) : 0}</div>
+        <div class="value">{$resource.toFixed(2)}</div>
       </div>
     </div>
   </div>
