@@ -1,9 +1,10 @@
 <script lang="ts">
   import { tweened } from "svelte/motion";
   import { player } from "../../../stores/player";
-  import { entities } from "../../../stores/entities";
+  import { entities, En } from "../../../stores/entities";
   import { seedToName } from "../../../utils/name";
   import { blockNumber } from "../../../stores/network";
+  import { EntityType } from "../../../utils/space";
 
   const energy = tweened($player.energy);
   const resource = tweened($player.resource);
@@ -29,21 +30,25 @@
 </script>
 
 <div class="ui-avatar">
-  <img src="/images/avatar-placeholder.png" alt="Avatar" class="ui-avatar-background" />
-
   <div class="ui-avatar-header">
-    <div class="name">{seedToName($player.seed)}</div>
+    <div class="name">
+      {#if $player.entityType == EntityType.Corpse}💀 {/if}{seedToName($player.seed)}
+    </div>
     <div class="resources">
-      <div class="large-indicator">
-        <div class="label">Energy</div>
-        <div class="value">{$energy.toFixed(2)}</div>
-      </div>
+      {#if $player.entityType == EntityType.Player}
+        <div class="large-indicator">
+          <div class="label">Energy</div>
+          <div class="value">{$energy.toFixed(2)}</div>
+        </div>
+      {/if}
       <div class="large-indicator">
         <div class="label">Resource</div>
         <div class="value">{$resource.toFixed(2)}</div>
       </div>
     </div>
   </div>
+  <video src="/video/test.mp4" autoplay muted loop />
+  <!-- <img src="/images/avatar-placeholder.png" alt="Avatar" class="ui-avatar-background" /> -->
 </div>
 
 <style>
@@ -51,6 +56,7 @@
     position: relative;
     height: 100%;
   }
+
   .ui-avatar-background {
     position: absolute;
     z-index: -1;
@@ -61,6 +67,14 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+
+  video {
+    /* height: 100%;
+    width: 100%;
+    object-fit: cover; */
+    max-width: 100%;
+    max-height: 100%;
   }
 
   .ui-avatar-header {
