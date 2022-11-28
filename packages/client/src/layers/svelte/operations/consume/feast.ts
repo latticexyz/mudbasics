@@ -1,10 +1,9 @@
 import { get } from "svelte/store";
 import { network, blockNumber } from "../../stores/network";
-import { entities } from "../../stores/entities";
-import { playerAddress } from "../../stores/player";
+import { player } from "../../stores/player";
 
 export function feast() {
-  if (get(entities)[get(playerAddress)].resource >= 20) {
+  if ((get(player).resource || 0) >= 20) {
     get(network).api?.consume(20);
     return true;
   } else {

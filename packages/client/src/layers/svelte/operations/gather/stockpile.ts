@@ -1,10 +1,9 @@
 import { get } from "svelte/store";
 import { network, blockNumber } from "../../stores/network";
-import { entities } from "../../stores/entities";
-import { playerAddress } from "../../stores/player";
+import { player } from "../../stores/player";
 
 export function stockpile() {
-  if (get(entities)[get(playerAddress)].energy >= 200) {
+  if ((get(player).energy || 0) >= 200) {
     get(network).api?.gather(200);
     return true;
   } else {

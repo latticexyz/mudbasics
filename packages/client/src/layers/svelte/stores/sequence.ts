@@ -2,8 +2,7 @@ import { writable, get } from "svelte/store";
 import { tweened } from "svelte/motion";
 import { Operation } from "../operations/";
 import { blockNumber } from "./network";
-import { entities } from "./entities";
-import { playerAddress } from "./player";
+import { player } from "./player";
 
 export interface SequenceElement {
   operation: Operation;
@@ -43,6 +42,12 @@ export function startSequencer() {
 
 export function stopSequencer() {
   sequencerActive.set(false);
+  sequence.update((s) => {
+    for (let i = 0; i < s.length; i++) {
+      s[i].success = true;
+    }
+    return s;
+  });
 }
 
 export function clearSequencer() {
@@ -55,31 +60,48 @@ function executeOperation(sequenceElement: SequenceElement) {
     return sequenceElement.operation.f();
   } else {
     stopSequencer();
+    return false;
   }
 }
 
 blockNumber.subscribe((newBlock) => {
-  if (get(entities)[get(playerAddress)]) {
+  if (get(player)) {
     // If cooldown block changed
-    if (get(entities)[get(playerAddress)].coolDownBlock !== oldCoolDownBlock) {
+    if (get(player).coolDownBlock !== oldCoolDownBlock) {
       // Block to cooldown is (current block + 1) - cooldown block
-      operationDuration.set((get(entities)[get(playerAddress)].coolDownBlock || 0) - newBlock + 1);
+      operationDuration.set((get(player).coolDownBlock || 0) - newBlock + 1);
       // Tween value down from operationDuration ...
       progress.set(get(operationDuration), { duration: 0 });
       // ... to 0 over operationDuration seconds
       progress.set(0, { duration: get(operationDuration) * 1000 });
       // Store cooldown block for future reference
-      oldCoolDownBlock = get(entities)[get(playerAddress)].coolDownBlock || 0;
+      oldCoolDownBlock = get(player).coolDownBlock || 0;
     }
 
     // Execute the next operation if
-    // – Sequencer is activated
+    // – Sequencer is active
     // - Cooldown period is over
     // – The blocknumber is odd (HACK)
-    if (get(sequencerActive) && newBlock + 1 > (get(entities)[get(playerAddress)].coolDownBlock || 0) && newBlock % 2) {
+    if (get(sequencerActive) && newBlock + 1 > (get(player).coolDownBlock || 0) && newBlock % 2) {
       activeOperationIndex.set(turnCounter % get(sequence).length);
-      executeOperation(get(sequence)[get(activeOperationIndex)]);
-      turnCounter++;
+
+      const outcome = executeOperation(get(sequence)[get(activeOperationIndex)]);
+
+      if (get(sequence)[get(activeOperationIndex)].operation.category === "gate") {
+        // If current operation is a gate
+        // – proceed if returning true
+        // – start from beginning if return false
+        turnCounter = outcome ? turnCounter + 1 : 0;
+      } else {
+        turnCounter++;
+      }
+
+      sequence.update((s) => {
+        if (s[get(activeOperationIndex)].operation.category !== "gate") {
+          s[get(activeOperationIndex)].success = outcome;
+        }
+        return s;
+      });
     }
   }
 });
