@@ -17,6 +17,7 @@
       <ul class="ui-menu">
         {#each Object.values($uiState) as item, i (item.id)}
           {#if !item.options.persistent}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
             <li
               in:fade={{ duration: $speed + $fragSpeed * i }}
               class="ui-menu-item"
@@ -40,7 +41,7 @@
     left: var(--row-gap);
     border: var(--outer-border);
     z-index: 9;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease-out;
     height: var(--taskbar-height);
     width: 56px;
     /* background-color: rgba(var(--background-rgb), var(--muted-opacity)); */

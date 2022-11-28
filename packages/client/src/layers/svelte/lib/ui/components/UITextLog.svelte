@@ -3,8 +3,8 @@
   import { entities } from "../../../stores/entities";
   import { playerAddress } from "../../../stores/player";
   import { seedToName } from "../../../utils/name";
-  import { speed, fragSpeed } from "../../../stores/ui"
-  import { fade } from "svelte/transition"
+  import { speed, fragSpeed } from "../../../stores/ui";
+  import { fade } from "svelte/transition";
 </script>
 
 <div class="ui-text-log">

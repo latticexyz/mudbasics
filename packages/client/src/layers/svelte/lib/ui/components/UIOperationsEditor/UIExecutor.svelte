@@ -1,6 +1,6 @@
 <script lang="ts">
   import { blockNumber } from "../../../../stores/network";
-  import { uiState } from "../../../../stores/ui"
+  import { uiState } from "../../../../stores/ui";
   import { player } from "../../../../stores/player";
   import {
     progress,
@@ -28,12 +28,12 @@
 
   function edit() {
     // Show the planner component full screen
-    uiState.alter('operations-planner', 'active', true)
-    uiState.alter('operations-planner', 'grid', {
+    uiState.alter("operations-planner", "active", true);
+    uiState.alter("operations-planner", "grid", {
       col: [1, 4],
-      row: [1, 10]
-    })
-    uiState.setOption('operations-planner', 'layer', 10)
+      row: [1, 10],
+    });
+    uiState.setOption("operations-planner", "layer", 10);
   }
 </script>
 
@@ -48,32 +48,34 @@
   {/if}
 
   <!-- GRID -->
-  <div class="operation-grid">
-    {#each $sequence as sequenceElement, index}
-      <div
-        class="slot {sequenceElement.operation.category}"
-        class:active={$sequencerActive && $activeOperationIndex === index}
-        class:failure={!$sequence[index].success}
-      >
-        <div class="operation-name">
-          {sequenceElement.operation.name}
-        </div>
-
-        {#if $activeOperationIndex === index && sequenceElement.operation.category !== "empty"}
-          <div class="operation-progress">
-            {#if ($player.coolDownBlock || 0) - $blockNumber > 0 && $progress > 0}
-              <div class="progress-bar">
-                <progress value={$progress} max={$operationDuration} />
-              </div>
-              <div class="progress-number">
-                ({($player.coolDownBlock || 0) - $blockNumber})
-              </div>
-            {/if}
+  {#if $sequence.length > 0}
+    <div class="operation-grid">
+      {#each $sequence as sequenceElement, index}
+        <div
+          class="slot {sequenceElement.operation.category}"
+          class:active={$sequencerActive && $activeOperationIndex === index}
+          class:failure={!$sequence[index].success}
+        >
+          <div class="operation-name">
+            {sequenceElement.operation.name}
           </div>
-        {/if}
-      </div>
-    {/each}
-  </div>
+
+          {#if $activeOperationIndex === index && sequenceElement.operation.category !== "empty"}
+            <div class="operation-progress">
+              {#if ($player.coolDownBlock || 0) - $blockNumber > 0 && $progress > 0}
+                <div class="progress-bar">
+                  <progress value={$progress} max={$operationDuration} />
+                </div>
+                <div class="progress-number">
+                  ({($player.coolDownBlock || 0) - $blockNumber})
+                </div>
+              {/if}
+            </div>
+          {/if}
+        </div>
+      {/each}
+    </div>
+  {/if}
 
   <!-- CONTROLS -->
   <div class="sequencer-controls">

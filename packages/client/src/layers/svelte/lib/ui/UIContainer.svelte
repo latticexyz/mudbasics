@@ -6,7 +6,6 @@
   import UIComponent from "./UIComponent.svelte";
   import UISpawn from "./components/UISpawn.svelte";
   import UILoading from "./components/UILoading.svelte";
-
 </script>
 
 <div class="ui-container">

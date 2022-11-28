@@ -19,7 +19,7 @@ export const emptySequenceElement: SequenceElement = {
   success: true,
 };
 
-export const SEQUENCER_LENGTH = 5;
+export const SEQUENCER_LENGTH = 7;
 
 export const sequence = writable([] as SequenceElement[]);
 

@@ -38,6 +38,10 @@
 
     networkStore.set(layers.network);
 
+    layers.network.txReduced$.subscribe((x) => {
+      console.log("TX", x);
+    });
+
     layers.network.network.blockNumber$.subscribe((x) => {
       blockNumber.set(x);
     });

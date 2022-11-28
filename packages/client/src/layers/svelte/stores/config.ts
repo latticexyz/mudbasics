@@ -12,7 +12,8 @@ import UIPlanner from "../lib/ui/components/UIOperationsEditor/UIPlanner.svelte"
 import UIExecutor from "../lib/ui/components/UIOperationsEditor/UIExecutor.svelte";
 
 // Utilities
-const makeDelay = () => 500 + Math.floor(Math.random() * 2000);
+// const makeDelay = () => 500 + Math.floor(Math.random() * 2000);
+const makeDelay = () => 300;
 
 export interface UIComponentOptions {
   delay?: number;
@@ -82,7 +83,7 @@ export const initialState = () => ({
     id: "fires",
     title: "Fires",
     component: UIFires,
-    active: true,
+    active: false,
     options: {
       fluid: true,
     },
@@ -151,14 +152,14 @@ export const initialState = () => ({
     id: "leaderboard",
     title: "Leaderboard",
     component: UILeaderBoard,
-    active: false,
+    active: true,
     options: {
       fluid: true,
       delay: makeDelay(),
     },
     grid: {
-      col: [3, 4],
-      row: [1, 5],
+      col: [1, 2],
+      row: [7, 10],
     },
   }),
   //
