@@ -30,6 +30,7 @@ export const operationDuration = writable(0);
 
 let oldCoolDownBlock = 0;
 let turnCounter = 0;
+let blockDelay = 0;
 
 export function submitSequence(newSequence: SequenceElement[]) {
   sequence.set(newSequence);
@@ -81,8 +82,8 @@ blockNumber.subscribe((newBlock) => {
     // Execute the next operation if
     // – Sequencer is active
     // - Cooldown period is over
-    // – The blocknumber is odd (HACK)
-    if (get(sequencerActive) && newBlock + 1 > (get(player).coolDownBlock || 0) && newBlock % 2) {
+    // - Arbitrary block delay
+    if (get(sequencerActive) && newBlock > (get(player).coolDownBlock || 0) && blockDelay % 4 == 0) {
       activeOperationIndex.set(turnCounter % get(sequence).length);
 
       const outcome = executeOperation(get(sequence)[get(activeOperationIndex)]);
@@ -103,5 +104,7 @@ blockNumber.subscribe((newBlock) => {
         return s;
       });
     }
+
+    blockDelay++;
   }
 });
