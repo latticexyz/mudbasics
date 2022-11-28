@@ -1,40 +1,15 @@
 <script lang="ts">
-  import { onMount, onDestroy } from "svelte";
   import { flip } from "svelte/animate";
+  import { derived } from "svelte/store"
   import { cubicInOut as easing } from "svelte/easing";
-  import { entities } from "../../../stores/entities";
-  import { playerAddress } from "../../../stores/player";
+
+  import { players, terrains } from "../../../stores/entities";
+  import { category } from "../../../stores/ui"
+  import { player } from "../../../stores/player";
+
   import { seedToName } from "../../../utils/name";
 
   let interval;
-  let picked = "gluttony";
-
-  class Minion {
-    constructor(n) {
-      this.name = n;
-      this.traveled = 0;
-      this.gathered = 0;
-      this.burnt = 0;
-      this.eaten = 0;
-    }
-  }
-
-  function butcher() {
-    const copy = [...minions.map((m) => ({ ...m }))];
-    const randy = (direction) => direction * Math.floor(Math.random() * 100);
-
-    minions = minions.map((player) => {
-      player.traveled += randy(Math.floor(Math.random() * 3) - 1);
-      player.gathered += randy(Math.floor(Math.random() * 3) - 1);
-      player.burnt += randy(Math.floor(Math.random() * 3) - 1);
-      player.eaten += randy(Math.floor(Math.random() * 3) - 1);
-
-      return player;
-    });
-
-    minions = [...rank(minions, picked)];
-    history = copy;
-  }
 
   const mappings = {
     gluttony: "eaten",
@@ -43,95 +18,40 @@
     hoarding: "gathered",
   };
 
-  // $: {console.log($entities.map($entity => $entity.stats))}
-  // $: console.log($entities[$playerAddress].stats)
+  const rankedPlayers = derived([players, category], ([$players, $category]) => [...$players].sort((a, b) => a[$category] - b[$category]))
 
-  const dummy = (name: string) => new Minion(name);
-
-  let minions = [
-    // {...dummy('One')},
-    // {...dummy('Flew')},
-    // {...dummy('Over')},
-    // {...dummy('The Cuckoo Has A Long Name')},
-    // {...dummy('sNest')},
-    // {...dummy('All')},
-    // {...dummy('Work')},
-    // {...dummy('AndNo')},
-    // {...dummy('Play')},
-    // {...dummy('Make')},
-    // {...dummy('Timmy')},
-    // {...dummy('AHappy')},
-    // {...dummy('Camper')},
-    // {...dummy('121The Cuckoo Has A Long Name')},
-    // {...dummy('sN232est')},
-    // {...dummy('Al4l')},
-    // {...dummy('Wo5rk')},
-    // {...dummy('An6dNo')},
-    // {...dummy('Pl7ay')},
-    // {...dummy('Ma8ke')},
-    // {...dummy('Ti9mmy')},
-    // {...dummy('AH0appy')},
-    // {...dummy('Cam000per')}
-  ];
-  let history = [...minions];
-
-  function pick(cat) {
-    picked = cat;
-    butcher();
+  function pick(cat: string) {
+    $category = cat;
   }
-
-  function getDevelopment(i) {
-    const player = minions[i];
-    return player[mappings[picked]] - history.find((m) => m.name === player.name)[mappings[picked]];
-  }
-
-  const rank = (arr, category) => {
-    const key = mappings[category];
-    const result = [...arr].sort((a, b) => {
-      return b[key] - a[key];
-    });
-    return result;
-  };
-
-  // onMount(() => {
-  //   interval = setInterval(butcher, 2500);
-  // });
-
-  // onDestroy(() => clearInterval(interval));
 </script>
 
 <div class="ui-categories">
-  {#each Object.keys(mappings) as category}
-    <span on:click={() => pick(category)} class="ui-category" class:active={category === picked}>
-      {category}
+  {#each Object.keys(mappings) as cat}
+    <span on:click={() => pick(cat)} class="ui-category" class:active={cat === $category}>
+      {cat}
     </span>
   {/each}
 </div>
 
-<!-- {#each Object.entries($entities) as [address, entity], i (seedToName(address))}
-  {address}
-  {entity}
-{/each} -->
-
 <div class="ui-stats">
   <div class="ranks">
-    {#each Object.entries($entities) as [address, entity], i (address)}
+    {#each $rankedPlayers as player, i (player.seed + i)}
       <div class="ui-stat-row">
         <span class="ui-stat-rank">{++i}</span>
       </div>
     {/each}
   </div>
   <div class="players">
-    {#each Object.entries($entities) as [address, entity], i (address)}
+    {#each $rankedPlayers as player, i (player.seed + i)}
       <div animate:flip={{ duration: 400, easing }} class="ui-stat-row">
-        <span class="ui-stat-player">{seedToName(entity.seed)}</span>
+        <span class="ui-stat-player">{seedToName(player.seed)}</span>
       </div>
     {/each}
   </div>
   <div class="scores">
-    {#each Object.entries($entities) as [address, entity], i (address)}
+    {#each $rankedPlayers as player, i (player.seed + i)}
       <div class="ui-stat-row">
-        <span>{entity.stats ? entity.stats[mappings[picked]] : ""}</span>
+        <span>{player.stats ? player.stats[mappings[$category]] : ""}</span>
       </div>
     {/each}
   </div>

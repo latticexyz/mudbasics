@@ -1,7 +1,5 @@
 <script>
-  import { values } from "mobx";
-  import { entities } from "../../stores/entities";
-  import { playerAddress } from "../../stores/player";
+  import { player } from "../../stores/player";
   import { menuVisible, uiState } from "../../stores/ui";
   import { fade } from "svelte/transition";
   import { speed, fragSpeed } from "../../stores/ui";
@@ -11,7 +9,7 @@
   };
 </script>
 
-{#if $entities[$playerAddress]}
+{#if $player}
   <div class="ui-menu-container" class:open={$menuVisible}>
     <button class="ui-button" on:click={toggle}> Menu </button>
 

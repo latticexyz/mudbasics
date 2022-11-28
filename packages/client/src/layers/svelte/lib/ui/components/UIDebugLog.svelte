@@ -1,6 +1,6 @@
 <script lang="ts">
   import { entities } from "../../../stores/entities";
-  import { playerAddress } from "../../../stores/player";
+  import { player, playerAddress } from "../../../stores/player";
   import { seedToName } from "../../../utils/name";
   import { EntityType } from "../../../utils/space";
   import { shortenAddress } from "../../../utils/ui";
@@ -25,7 +25,6 @@
 
   function playerList(players: string[]) {
     let playerNames = players.map((p) => ($entities[p] ? seedToName($entities[p].seed) : "not-found"));
-    console.log("playerNames", playerNames);
     // HACK: should make sure that the creator array on contract level is unique instead...
     return uniq(playerNames).join(", ");
   }
@@ -34,7 +33,7 @@
 <div class="ui-debug-log">
   <div>Blocknumber: <strong>{$blockNumber}</strong></div>
   <div class="clock-time">World time: {formatTime(clockTime)}</div>
-  <div>Cooldown block: {$entities[$playerAddress].coolDownBlock}</div>
+  <div>Cooldown block: {$player.coolDownBlock}</div>
   <hr />
   {#each Object.entries($entities) as [address, value], i}
     <div transition:fade={{ duration: $speed + $fragSpeed * i }} class:player={address === $playerAddress}>
