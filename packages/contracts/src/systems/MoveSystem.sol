@@ -131,7 +131,7 @@ contract MoveSystem is System {
       }
     }
 
-    // Update values of
+    // Update values of player
     positionComponent.set(entity, newPosition);
     coolDownComponent.set(entity, int32(int256(block.number)) + 20);
     energyComponent.set(entity, currentEnergyLevel - energyInput);
