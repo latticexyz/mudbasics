@@ -28,7 +28,9 @@
     clearSequencer();
   }
 
-  $: console.log("$sequencerActive", $sequencerActive);
+  function edit() {
+    // Show the planner component full screen
+  }
 </script>
 
 <div class="ui-executor">
@@ -41,42 +43,48 @@
     </div>
   {/if}
 
+  <!-- GRID -->
   <div class="operation-grid">
     {#each $sequence as sequenceElement, index}
-      <div class="slot-container" class:hidden={$sequencerActive && sequenceElement.operation.category == "empty"}>
-        <div
-          class="slot {sequenceElement.operation.category}"
-          class:active={$sequencerActive && $activeOperationIndex === index}
-        >
-          <div class="operation-info">
-            <div class="operation-name">
-              {sequenceElement.operation.name}
-            </div>
+      <div
+        class="slot {sequenceElement.operation.category}"
+        class:active={$sequencerActive && $activeOperationIndex === index}
+      >
+        <div class="operation-info">
+          <div class="operation-name">
+            {sequenceElement.operation.name}
           </div>
-
-          {#if $activeOperationIndex === index && sequenceElement.operation.category !== "empty"}
-            <div class="operation-progress">
-              {#if ($entities[$playerAddress].coolDownBlock || 0) - $blockNumber > 0 && $progress > 0}
-                <div>
-                  <progress value={$progress} max={$operationDuration} />
-                </div>
-                <div>
-                  <strong>
-                    {($entities[$playerAddress].coolDownBlock || 0) - $blockNumber} seconds
-                  </strong>
-                </div>
-              {/if}
-            </div>
-          {/if}
         </div>
+
+        {#if $activeOperationIndex === index && sequenceElement.operation.category !== "empty"}
+          <div class="operation-progress">
+            {#if ($entities[$playerAddress].coolDownBlock || 0) - $blockNumber > 0 && $progress > 0}
+              <div>
+                <progress value={$progress} max={$operationDuration} />
+              </div>
+              <div>
+                <strong>
+                  {($entities[$playerAddress].coolDownBlock || 0) - $blockNumber} seconds
+                </strong>
+              </div>
+            {/if}
+          </div>
+        {/if}
       </div>
     {/each}
   </div>
+
+  <!-- CONTROLS -->
   <div class="sequencer-controls">
     {#if $sequencerActive}
       <button on:click={stop}>Stop</button>
-    {:else}
-      <button on:click={start}>Start</button>
+    {/if}
+    {#if !$sequencerActive}
+      <button on:click={edit}>Edit</button>
+      {#if $sequence.length > 0}
+        <button on:click={clear}>Clear</button>
+        <button on:click={start}>Start</button>
+      {/if}
     {/if}
   </div>
 </div>
@@ -177,12 +185,10 @@
   }
 
   .slot {
-    width: 100px;
-    height: 100px;
+    width: 100%;
+    height: auto;
     display: flex;
-    font-size: 18px;
-    justify-content: center;
-    align-items: center;
+    font-size: 12px;
     border: 2px solid transparent;
     position: relative;
   }
@@ -196,6 +202,8 @@
     background: grey;
     padding: 10px;
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
   }
 
   .sequencer-controls {
@@ -222,7 +230,7 @@
     top: 0;
     left: 0;
     z-index: 1000;
-    font-size: 32px;
+    font-size: 12px;
     display: flex;
     justify-content: center;
     align-items: center;

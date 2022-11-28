@@ -46,8 +46,7 @@ export function stopSequencer() {
 }
 
 export function clearSequencer() {
-  console.log("TODO: clear");
-  sequencerActive.set(false);
+  sequence.set([]);
 }
 
 function executeOperation(sequenceElement: SequenceElement) {
@@ -60,7 +59,6 @@ function executeOperation(sequenceElement: SequenceElement) {
 }
 
 blockNumber.subscribe((newBlock) => {
-  console.log("___ EXECUTOR", newBlock);
   if (get(entities)[get(playerAddress)]) {
     // If cooldown block changed
     if (get(entities)[get(playerAddress)].coolDownBlock !== oldCoolDownBlock) {
@@ -78,7 +76,7 @@ blockNumber.subscribe((newBlock) => {
     // – Sequencer is activated
     // - Cooldown period is over
     // – The blocknumber is odd (HACK)
-    if (sequencerActive && newBlock + 1 > (get(entities)[get(playerAddress)].coolDownBlock || 0) && newBlock % 2) {
+    if (get(sequencerActive) && newBlock + 1 > (get(entities)[get(playerAddress)].coolDownBlock || 0) && newBlock % 2) {
       activeOperationIndex.set(turnCounter % get(sequence).length);
       executeOperation(get(sequence)[get(activeOperationIndex)]);
       turnCounter++;

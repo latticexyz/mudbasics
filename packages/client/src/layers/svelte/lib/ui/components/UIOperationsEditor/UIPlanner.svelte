@@ -8,10 +8,8 @@
     emptySequenceElement,
     SEQUENCER_LENGTH,
     submitSequence,
-    progress,
+    stopSequencer,
     sequencerActive,
-    activeOperationIndex,
-    operationDuration,
   } from "../../../../stores/sequence";
 
   const ID = "ui-planner";
@@ -20,17 +18,22 @@
   localSequence.fill(emptySequenceElement);
 
   function clear() {
-    console.log("clear");
     localSequence = Array(SEQUENCER_LENGTH);
     localSequence.fill(emptySequenceElement);
   }
 
   function submit() {
+    // Remove empty sequence elements before submitting
     submitSequence(localSequence.filter((item) => item.operation.name !== "+"));
+  }
+
+  function stop() {
+    stopSequencer();
   }
 
   function add(operation: Operation) {
     for (let i = 0; i < SEQUENCER_LENGTH; i++) {
+      // Add operation to first free slot
       if (localSequence[i].operation.name == "+") {
         localSequence[i] = { operation: operation, success: true };
         break;
@@ -49,49 +52,37 @@
     </div>
   {/if}
 
+  <!-- GRID -->
   <div class="operation-grid">
-    {#each localSequence as sequenceElement, index}
-      <div class="slot-container" class:hidden={$sequencerActive && sequenceElement.operation.category == "empty"}>
-        <div
-          class="slot {sequenceElement.operation.category}"
-          class:active={$sequencerActive && $activeOperationIndex === index}
-        >
+    {#each localSequence as sequenceElement}
+      <div class="slot-container">
+        <div class="slot {sequenceElement.operation.category}">
           <div class="operation-info">
             <div class="operation-name">
               {sequenceElement.operation.name}
             </div>
           </div>
-
-          {#if $activeOperationIndex === index && sequenceElement.operation.category !== "empty"}
-            <div class="operation-progress">
-              {#if ($entities[$playerAddress].coolDownBlock || 0) - $blockNumber > 0 && $progress > 0}
-                <div>
-                  <progress value={$progress} max={$operationDuration} />
-                </div>
-                <div>
-                  <strong>
-                    {($entities[$playerAddress].coolDownBlock || 0) - $blockNumber} seconds
-                  </strong>
-                </div>
-              {/if}
-            </div>
-          {/if}
         </div>
       </div>
     {/each}
   </div>
+
+  <!-- CONTROLS -->
   <div class="sequencer-controls">
-    {#if !$sequencerActive}
-      {#if localSequence.filter((item) => item.operation.name !== "+").length == 0}
-        <div>Click <strong>operations</strong> below to add to sequencer.</div>
-      {:else}
-        <button on:click={clear}>Clear sequence</button>
+    {#if localSequence.filter((item) => item.operation.name !== "+").length == 0}
+      <div>Click <strong>operations</strong> below to add to sequencer.</div>
+    {:else}
+      <button on:click={clear}>Clear sequence</button>
+      {#if !$sequencerActive}
         <button on:click={submit}>Submit sequence</button>
+      {:else}
+        <button on:click={stop}>Stop current sequence</button>
       {/if}
     {/if}
   </div>
 
-  <div class="inventory" class:disabled={$sequencerActive}>
+  <!-- INVENTORY -->
+  <div class="inventory">
     {#each operations as operation}
       <div
         class="operation {operation.category}"
@@ -123,10 +114,6 @@
   .slot-container {
     display: flex;
   }
-  /* 
-  .operation-name {
-    color: var(--foreground);
-  } */
 
   .indicator {
     height: 10px;
@@ -204,7 +191,7 @@
     width: 100px;
     height: 100px;
     display: flex;
-    font-size: 18px;
+    font-size: 12px;
     justify-content: center;
     align-items: center;
     border: 2px solid transparent;
@@ -259,31 +246,5 @@
 
   .operation-info {
     text-align: center;
-  }
-
-  .operation-progress {
-    position: absolute;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 9px;
-    text-align: center;
-  }
-
-  progress {
-    width: 80px;
-    height: 5px;
-    border-radius: 0;
-    margin-bottom: 5px;
-  }
-
-  progress::-webkit-progress-bar {
-    background: lightgray;
-    border-radius: 0;
-  }
-
-  progress::-webkit-progress-value {
-    background: grey;
-    border-radius: 0;
   }
 </style>
