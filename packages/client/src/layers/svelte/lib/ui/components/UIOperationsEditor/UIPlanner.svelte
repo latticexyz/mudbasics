@@ -3,6 +3,7 @@
   import { entities } from "../../../../stores/entities";
   import { playerAddress } from "../../../../stores/player";
   import { operations, Operation } from "../../../../operations/";
+  import { uiState } from "../../../../stores/ui"
   import {
     SequenceElement,
     emptySequenceElement,
@@ -11,8 +12,6 @@
     stopSequencer,
     sequencerActive,
   } from "../../../../stores/sequence";
-
-  const ID = "ui-planner";
 
   let localSequence: SequenceElement[] = Array(SEQUENCER_LENGTH);
   localSequence.fill(emptySequenceElement);
@@ -25,6 +24,7 @@
   function submit() {
     // Remove empty sequence elements before submitting
     submitSequence(localSequence.filter((item) => item.operation.name !== "+"));
+    uiState.alter('operations-planner', 'active', false)
   }
 
   function stop() {

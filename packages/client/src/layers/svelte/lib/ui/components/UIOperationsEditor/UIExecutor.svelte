@@ -2,6 +2,7 @@
   import { blockNumber } from "../../../../stores/network";
   import { entities } from "../../../../stores/entities";
   import { playerAddress } from "../../../../stores/player";
+  import { uiState } from "../../../../stores/ui"
   import {
     SEQUENCER_LENGTH,
     progress,
@@ -29,6 +30,12 @@
 
   function edit() {
     // Show the planner component full screen
+    uiState.alter('operations-planner', 'active', true)
+    uiState.alter('operations-planner', 'grid', {
+      col: [1, 4],
+      row: [1, 10]
+    })
+    uiState.setOption('operations-planner', 'layer', 10)
   }
 </script>
 

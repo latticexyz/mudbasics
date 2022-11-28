@@ -16,9 +16,18 @@ function createComponentState() {
   // Update function
   const alter = (id, key, value) =>
     update((obj) => {
-      const exists = !!obj?.[id];
-      if (exists) {
-        obj[id][key] = value;
+      const o = obj?.[id];
+      if (o) {
+        o[key] = value;
+      }
+      return obj;
+    });
+
+  const setOption = (id, key, value) =>
+    update((obj) => {
+      const o = obj?.[id];
+      if (o) {
+        o.options[key] = value;
       }
       return obj;
     });
@@ -26,9 +35,9 @@ function createComponentState() {
   // Update function
   const toggle = (id, key) =>
     update((obj) => {
-      const exists = !!obj?.[id];
-      if (exists) {
-        obj[id][key] = !obj[id][key];
+      const o = obj?.[id];
+      if (o) {
+        o[key] = !o[key];
       }
       return obj;
     });
@@ -36,6 +45,7 @@ function createComponentState() {
   return {
     subscribe,
     set,
+    setOption,
     // Store function
     alter,
     toggle,

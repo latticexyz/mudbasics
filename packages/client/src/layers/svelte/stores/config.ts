@@ -69,11 +69,11 @@ export const initialState = () => ({
     component: UIPlanner,
     active: false,
     options: {
-      delay: makeDelay(),
       fluid: true,
+      layer: 10,
     },
     grid: {
-      col: [1, 3],
+      col: [1, 4],
       row: [6, 10],
     },
   }),
@@ -103,6 +103,7 @@ export const initialState = () => ({
     },
     grid: {
       row: [1, 6],
+      col: [1, 2],
     },
   }),
   // MAP
@@ -167,6 +168,7 @@ export const initialState = () => ({
     component: UIExecutor,
     active: true,
     options: {
+      muted: false,
       persistent: true,
       fluid: true,
       delay: makeDelay(),
