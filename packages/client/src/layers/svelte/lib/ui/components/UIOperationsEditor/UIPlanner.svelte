@@ -1,7 +1,6 @@
 <script lang="ts">
   import { blockNumber } from "../../../../stores/network";
-  import { entities } from "../../../../stores/entities";
-  import { playerAddress } from "../../../../stores/player";
+  import { player } from "../../../../stores/player";
   import { operations, Operation } from "../../../../operations/";
   import {
     SequenceElement,
@@ -44,10 +43,10 @@
 
 <div class="ui-operations-editor">
   <!-- Shown if player is in cooldown -->
-  {#if !$sequencerActive && ($entities[$playerAddress].coolDownBlock || 0) > $blockNumber}
+  {#if !$sequencerActive && ($player.coolDownBlock || 0) > $blockNumber}
     <div class="cooldown-overlay">
       <div>
-        In cooldown for <strong>{($entities[$playerAddress].coolDownBlock || 0) - $blockNumber}</strong> seconds
+        In cooldown for <strong>{($player.coolDownBlock || 0) - $blockNumber}</strong> seconds
       </div>
     </div>
   {/if}
@@ -70,7 +69,7 @@
   <!-- CONTROLS -->
   <div class="sequencer-controls">
     {#if localSequence.filter((item) => item.operation.name !== "+").length == 0}
-      <div>Click <strong>operations</strong> below to add to sequencer.</div>
+      <div class="information">Click <strong>operations</strong> below to add to sequencer.</div>
     {:else}
       <button on:click={clear}>Clear sequence</button>
       {#if !$sequencerActive}
@@ -82,8 +81,9 @@
   </div>
 
   <!-- INVENTORY -->
-  <div class="inventory">
+  <div class="inventory" class:disabled={localSequence.length >= SEQUENCER_LENGTH}>
     {#each operations as operation}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
       <div
         class="operation {operation.category}"
         on:click={() => {
@@ -99,6 +99,10 @@
 <style>
   .ui-operations-editor {
     color: black;
+  }
+
+  .information {
+    color: white;
   }
 
   button {

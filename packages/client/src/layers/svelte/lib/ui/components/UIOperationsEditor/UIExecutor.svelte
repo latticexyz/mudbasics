@@ -1,7 +1,6 @@
 <script lang="ts">
   import { blockNumber } from "../../../../stores/network";
-  import { entities } from "../../../../stores/entities";
-  import { playerAddress } from "../../../../stores/player";
+  import { player } from "../../../../stores/player";
   import {
     SEQUENCER_LENGTH,
     progress,
@@ -35,10 +34,10 @@
 
 <div class="ui-executor">
   <!-- Shown if player is in cooldown -->
-  {#if !$sequencerActive && ($entities[$playerAddress].coolDownBlock || 0) > $blockNumber}
+  {#if !$sequencerActive && ($player.coolDownBlock || 0) > $blockNumber}
     <div class="cooldown-overlay">
       <div>
-        In cooldown for <strong>{($entities[$playerAddress].coolDownBlock || 0) - $blockNumber}</strong> seconds
+        In cooldown for <strong>{($player.coolDownBlock || 0) - $blockNumber}</strong> seconds
       </div>
     </div>
   {/if}
@@ -58,13 +57,13 @@
 
         {#if $activeOperationIndex === index && sequenceElement.operation.category !== "empty"}
           <div class="operation-progress">
-            {#if ($entities[$playerAddress].coolDownBlock || 0) - $blockNumber > 0 && $progress > 0}
+            {#if ($player.coolDownBlock || 0) - $blockNumber > 0 && $progress > 0}
               <div>
                 <progress value={$progress} max={$operationDuration} />
               </div>
               <div>
                 <strong>
-                  {($entities[$playerAddress].coolDownBlock || 0) - $blockNumber} seconds
+                  {($player.coolDownBlock || 0) - $blockNumber} seconds
                 </strong>
               </div>
             {/if}
@@ -152,31 +151,6 @@
     background: lightgrey;
   }
 
-  .inventory {
-    padding: 10px 0px;
-    margin-top: 10px;
-    border-top: 1px solid black;
-  }
-
-  .inventory.disabled {
-    pointer-events: none;
-    opacity: 0.4;
-    filter: grayscale(1);
-  }
-
-  .operation {
-    padding: 10px 15px;
-    display: inline-block;
-    margin: 5px;
-    cursor: pointer;
-    user-select: none;
-    opacity: var(--muted-opacity);
-  }
-
-  .operation:hover {
-    opacity: 1;
-  }
-
   .slot-container {
     display: inline-block;
     width: 100px;
@@ -246,10 +220,6 @@
   }
 
   .operation-progress {
-    position: absolute;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
     font-size: 9px;
     text-align: center;
   }
