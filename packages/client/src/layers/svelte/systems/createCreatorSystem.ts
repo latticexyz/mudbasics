@@ -19,6 +19,7 @@ export function createCreatorSystem(network: NetworkLayer) {
     });
 
     const logEntry = {
+      id: self.crypto.randomUUID(),
       address: creator,
       message: "is making a fire.",
     };

@@ -22,6 +22,7 @@ export function createPositionSystem(network: NetworkLayer) {
 
     if (previousPosition) {
       const logEntry: LogEntry = {
+        id: self.crypto.randomUUID(),
         address: indexToID(update.entity),
         message: "is moving " + getDirection(previousPosition, currentPosition),
       };

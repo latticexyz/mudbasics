@@ -23,6 +23,7 @@ export function createEntityTypeSystem(network: NetworkLayer) {
 
     if (entityType == E.Player) {
       const logEntry: LogEntry = {
+        id: self.crypto.randomUUID(),
         address: indexToID(update.entity),
         message: "spawned",
       };
@@ -33,6 +34,7 @@ export function createEntityTypeSystem(network: NetworkLayer) {
 
     if (entityType == E.Corpse) {
       const logEntry: LogEntry = {
+        id: self.crypto.randomUUID(),
         address: indexToID(update.entity),
         message: "died.",
       };

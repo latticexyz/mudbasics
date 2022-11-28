@@ -9,7 +9,7 @@
 
 <div class="ui-text-log">
   <div class="inner-log">
-    {#each $narrative as logEntry, i}
+    {#each $narrative as logEntry, i (logEntry.id)}
       {#if seedToName($entities[logEntry.address]?.seed)}
         <div transition:fade={{ duration: $speed + $fragSpeed * i }} class:player={logEntry.address == $playerAddress}>
           <strong>{seedToName($entities[logEntry.address]?.seed)}</strong>
@@ -30,7 +30,6 @@
   }
 
   .inner-log {
-    height: 155px;
     overflow-y: auto;
   }
 </style>

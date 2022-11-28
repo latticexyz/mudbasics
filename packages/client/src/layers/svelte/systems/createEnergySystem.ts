@@ -21,6 +21,7 @@ export function createEnergySystem(network: NetworkLayer) {
 
     if (energy > oldEnergy) {
       const logEntry = {
+        id: self.crypto.randomUUID(),
         address: indexToID(update.entity),
         message: "is eating.",
       };
