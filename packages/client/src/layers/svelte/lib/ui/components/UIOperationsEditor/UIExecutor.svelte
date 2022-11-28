@@ -1,5 +1,6 @@
 <script lang="ts">
   import { blockNumber } from "../../../../stores/network";
+  import { uiState } from "../../../../stores/ui"
   import { player } from "../../../../stores/player";
   import {
     progress,
@@ -11,8 +12,7 @@
     stopSequencer,
     clearSequencer,
   } from "../../../../stores/sequence";
-
-  const ID = "ui-executor";
+  export const ID = "ui-executor";
 
   function start() {
     startSequencer();
@@ -28,6 +28,12 @@
 
   function edit() {
     // Show the planner component full screen
+    uiState.alter('operations-planner', 'active', true)
+    uiState.alter('operations-planner', 'grid', {
+      col: [1, 4],
+      row: [1, 10]
+    })
+    uiState.setOption('operations-planner', 'layer', 10)
   }
 </script>
 

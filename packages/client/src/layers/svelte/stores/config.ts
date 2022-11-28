@@ -1,6 +1,3 @@
-// Utilities
-const makeDelay = () => 500 + Math.floor(Math.random() * 2000);
-
 // Components
 import UITextLog from "../lib/ui/components/UITextLog.svelte";
 import UIAvatar from "../lib/ui/components/UIAvatar.svelte";
@@ -9,135 +6,191 @@ import UIGridMap from "../lib/ui/components/UIGridMap.svelte";
 import UIView from "../lib/ui/components/UIView.svelte";
 import UIDebugLog from "../lib/ui/components/UIDebugLog.svelte";
 import UILeaderBoard from "../lib/ui/components/UILeaderBoard.svelte";
+import UIFires from "../lib/ui/components/UIFires.svelte";
 // --- Operations Editors
 import UIPlanner from "../lib/ui/components/UIOperationsEditor/UIPlanner.svelte";
 import UIExecutor from "../lib/ui/components/UIOperationsEditor/UIExecutor.svelte";
-import UIFires from "../lib/ui/components/UIFires.svelte";
+
+// Utilities
+const makeDelay = () => 500 + Math.floor(Math.random() * 2000);
+
+export interface UIComponentOptions {
+  delay?: number;
+  fluid?: boolean;
+  bare?: boolean;
+  persistent?: boolean;
+  muted?: boolean;
+  layer?: number;
+}
+
+export interface UIComponentPlacement {
+  row?: [number, number]; // row start
+  col?: [number, number]; // row end
+}
+
+export interface UIComponentDefinition {
+  active: boolean;
+  id: string;
+  title: string;
+  component: any;
+  options?: UIComponentOptions;
+  grid?: UIComponentPlacement;
+}
+
+// Start
+export const initialise = (def: UIComponentDefinition) => {
+  return {
+    id: def.id,
+    active: def.active,
+    title: def.title,
+    component: def.component,
+    options: def?.options,
+    grid: def?.grid,
+  };
+};
 
 export const initialState = () => ({
-  avatar: {
+  // AVATAR
+  avatar: initialise({
     id: "avatar",
     title: "Avatar",
     component: UIAvatar,
+    grid: {
+      col: [2, 3],
+      row: [1, 10],
+    },
+    options: { bare: true, persistent: true, layer: 0, fluid: true },
     active: true,
-    delay: 0,
-    fluid: true,
-    bare: true,
-    persistent: true,
-    colStart: 2,
-    colEnd: 3,
-    rowStart: 1,
-    rowEnd: 10,
-    layer: 0,
-  },
-  "operations-planner": {
+  }),
+  // OPS PLANNER
+  "operations-planner": initialise({
     id: "operations-planner",
-    muted: true,
     title: "Operations Planner",
     component: UIPlanner,
     active: false,
-    delay: makeDelay(),
-    colStart: 1,
-    colEnd: 3,
-    rowStart: 6,
-    rowEnd: 10,
-    fluid: true,
-  },
-  fires: {
+    options: {
+      fluid: true,
+      layer: 10,
+    },
+    grid: {
+      col: [1, 4],
+      row: [6, 10],
+    },
+  }),
+  // FIRES
+  fires: initialise({
     id: "fires",
-    muted: true,
     title: "Fires",
     component: UIFires,
     active: true,
-    delay: makeDelay(),
-    colStart: 1,
-    colEnd: 3,
-    rowStart: 6,
-    rowEnd: 10,
-    fluid: true,
-  },
-  "text-log": {
+    options: {
+      fluid: true,
+    },
+    grid: {
+      col: [1, 3],
+      row: [6, 10],
+    },
+  }),
+  // TEXT LOG
+  "text-log": initialise({
     id: "text-log",
-    active: true,
-    delay: makeDelay(),
-    muted: false,
     title: "Text Log",
     component: UITextLog,
-    fluid: true,
-    rowStart: 1,
-    rowEnd: 6,
-  },
-  map: {
+    active: true,
+    options: {
+      delay: makeDelay(),
+      muted: false,
+    },
+    grid: {
+      row: [1, 6],
+      col: [1, 2],
+    },
+  }),
+  // MAP
+  map: initialise({
     id: "map",
     title: "Map",
     component: UIMap,
     active: false,
-    delay: 0,
-  },
-  "grid-map": {
+    options: {
+      delay: 0,
+    },
+  }),
+  //
+  "grid-map": initialise({
     id: "grid-map",
     title: "Grid Map",
     component: UIGridMap,
     active: false,
-    fluid: true,
-    colStart: 3,
-    colEnd: 4,
-    rowStart: 5,
-    rowEnd: 10,
-    delay: makeDelay(),
-  },
-  "debug-log": {
+    options: {
+      fluid: true,
+      delay: makeDelay(),
+    },
+    grid: {
+      col: [3, 4],
+      row: [5, 10],
+    },
+  }),
+  "debug-log": initialise({
     id: "debug-log",
     title: "Debug Log",
     component: UIDebugLog,
     active: true,
-    colStart: 3,
-    colEnd: 4,
-    rowStart: 5,
-    rowEnd: 10,
-    // colStart: 3,
-    // colEnd: 4,
-    // rowStart: 1,
-    // rowEnd: 4,
-    fluid: true,
-    layer: 2,
-    delay: 0,
-  },
-  leaderboard: {
+    options: {
+      fluid: true,
+      layer: 2,
+      delay: 0,
+    },
+    grid: {
+      col: [3, 4],
+      row: [5, 10],
+    },
+  }),
+  //
+  leaderboard: initialise({
     id: "leaderboard",
     title: "Leaderboard",
     component: UILeaderBoard,
     active: false,
-    fluid: true,
-    colStart: 3,
-    colEnd: 4,
-    rowStart: 1,
-    rowEnd: 5,
-    delay: makeDelay(),
-  },
-  "operations-executor": {
+    options: {
+      fluid: true,
+      delay: makeDelay(),
+    },
+    grid: {
+      col: [3, 4],
+      row: [1, 5],
+    },
+  }),
+  //
+  "operations-executor": initialise({
     id: "operations-executor",
     title: "Operations Executor",
     component: UIExecutor,
     active: true,
-    persistent: true,
-    fluid: true,
-    colStart: 3,
-    colEnd: 4,
-    rowStart: 1,
-    rowEnd: 5,
-    delay: makeDelay(),
-  },
-  view: {
+    options: {
+      muted: false,
+      persistent: true,
+      fluid: true,
+      delay: makeDelay(),
+    },
+    grid: {
+      col: [3, 4],
+      row: [1, 5],
+    },
+  }),
+  //
+  view: initialise({
     id: "view",
     title: "View",
     component: UIView,
     active: false,
-    fluid: true,
-    colStart: 3,
-    colEnd: 4,
-    rowStart: 1,
-    rowEnd: 5,
-    delay: makeDelay(),
-  },
+    options: {
+      fluid: true,
+      delay: makeDelay(),
+    },
+    grid: {
+      col: [3, 4],
+      row: [1, 5],
+    },
+  }),
 });

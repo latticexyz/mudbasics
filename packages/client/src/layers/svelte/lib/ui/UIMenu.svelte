@@ -16,7 +16,7 @@
     {#if $menuVisible}
       <ul class="ui-menu">
         {#each Object.values($uiState) as item, i (item.id)}
-          {#if !item.persistent}
+          {#if !item.options.persistent}
             <li
               in:fade={{ duration: $speed + $fragSpeed * i }}
               class="ui-menu-item"
