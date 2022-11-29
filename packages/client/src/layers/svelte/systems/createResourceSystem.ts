@@ -1,3 +1,5 @@
+import { blockNumber } from "../stores/network";
+import { get } from "svelte/store";
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { entities, indexToID } from "../stores/entities";
@@ -22,6 +24,7 @@ export function createResourceSystem(network: NetworkLayer) {
     if (resource > oldResource) {
       const logEntry = {
         id: self.crypto.randomUUID(),
+        blockNumber: get(blockNumber),
         address: indexToID(update.entity),
         message: "is gathering.",
       };

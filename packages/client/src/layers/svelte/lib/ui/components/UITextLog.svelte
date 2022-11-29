@@ -12,6 +12,7 @@
     {#each $narrative as logEntry, i (logEntry.id)}
       {#if seedToName($entities[logEntry.address]?.seed)}
         <div transition:fade={{ duration: $speed + $fragSpeed * i }} class:player={logEntry.address == $playerAddress}>
+          <span class="block-number">({logEntry.blockNumber})</span>
           <strong>{seedToName($entities[logEntry.address]?.seed)}</strong>
           {logEntry.message}
         </div>
@@ -21,6 +22,10 @@
 </div>
 
 <style>
+  .block-number {
+    font-size: 9px;
+  }
+
   .ui-text-log {
     height: 340px;
   }

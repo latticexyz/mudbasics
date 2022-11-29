@@ -1,6 +1,6 @@
 <script lang="ts">
   import { tweened } from "svelte/motion";
-  import { activityToVerb, player, playerActivity } from "../../../stores/player";
+  import { Activities, activityToVerb, player, playerActivity } from "../../../stores/player";
   import { entities } from "../../../stores/entities";
   import { seedToName } from "../../../utils/name";
   import { blockNumber } from "../../../stores/network";
@@ -46,8 +46,17 @@
       </div>
     </div>
   </div>
-  <video class="ui-avatar-background" src="/video/test.mp4" autoplay muted loop />
-  <!-- <img src="/images/avatar-placeholder.png" alt="Avatar" class="ui-avatar-background" /> -->
+
+  <!-- CHARACTER -->
+  {#if $playerActivity === Activities.Moving}
+    <video src="/video/walk.mp4" autoplay muted loop />
+  {:else if $playerActivity === Activities.Gathering}
+    <video src="/video/gather.mp4" autoplay muted loop />
+  {:else if $playerActivity === Activities.Burning}
+    <video src="/video/gather.mp4" autoplay muted loop />
+  {:else}
+    <video src="/video/idle.mp4" autoplay muted loop />
+  {/if}
 </div>
 
 <style>

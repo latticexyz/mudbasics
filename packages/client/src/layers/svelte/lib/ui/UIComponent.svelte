@@ -1,21 +1,21 @@
 <script lang="ts">
   import UIComponentTitleBar from "./UIComponentTitleBar"
   import { UIComponentPlacement, UIComponentOptions } from "../../stores/config"
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
   import { uiState } from "../../stores/ui";
 
   const dispatch = createEventDispatcher();
-  
+
   export let id: string;
   export let active: boolean = true;
   export let title: string = "";
-  
-  export let grid: UIComponentPlacement = {}
-  export let options: UIComponentOptions
-  export let area: string = ""
 
-  console.log('initialising component', id)
+  export let grid: UIComponentPlacement = {};
+  export let options: UIComponentOptions;
+  export let area: string = "";
+
+  console.log("initialising component", id);
 </script>
 
 {#if active}

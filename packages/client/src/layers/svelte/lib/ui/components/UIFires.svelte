@@ -19,7 +19,6 @@
 
   <!-- <div>Blocknumber: <strong>{$blockNumber}</strong></div> -->
   <!-- <div>Cooldown block: {$player.coolDownBlock}</div> -->
-  <hr />
   {#each Object.entries($fires) as [address, value], i (address)}
     <div transition:fade={{ duration: $speed + $fragSpeed * i }} class:player={address === $playerAddress}>
       <!-- {#if value.entityType == EntityType.Fire}
