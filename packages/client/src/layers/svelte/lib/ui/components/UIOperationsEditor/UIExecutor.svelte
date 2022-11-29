@@ -82,8 +82,8 @@
     {#if $sequencerActive}
       <button on:click={stop}>Stop</button>
     {/if}
+    <button on:click={edit}>Edit</button>
     {#if !$sequencerActive}
-      <button on:click={edit}>Edit</button>
       {#if $sequence.length > 0}
         <button on:click={clear}>Clear</button>
         <button on:click={start}>Start</button>
