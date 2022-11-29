@@ -13,10 +13,6 @@
     let duration = ($player.coolDownBlock - $blockNumber) * 1000;
     duration = duration > 0 ? duration : 1000;
 
-    // console.log("$player.coolDownBlock", $player.coolDownBlock);
-    // console.log("$blockNumber", $blockNumber);
-    // console.log("duration", duration);
-
     let newEnergy = $player.energy;
     if (newEnergy !== $energy) {
       energy.set(newEnergy, { duration: duration });

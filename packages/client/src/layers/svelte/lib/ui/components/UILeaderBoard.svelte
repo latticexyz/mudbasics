@@ -14,7 +14,13 @@
     hoarding: "gathered",
   };
 
-  const rankedPlayers = derived([players, category], ([$players, $category]) => [...$players].sort((a, b) => a[$category] - b[$category]))
+  const rankedPlayers = derived([players, category], ([$players, $category]) => {
+    const arr = [...$players]
+    arr.sort((a, b) => b.stats[mappings[$category]] - a.stats[mappings[$category]])
+    return arr
+  })
+
+  $: console.log($rankedPlayers)
 
   function pick(cat: string) {
     $category = cat;
