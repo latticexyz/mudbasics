@@ -3,6 +3,7 @@
   import { player, playerAddress } from "../../../stores/player";
   import { EntityType } from "../../../utils/space";
   import { shortenAddress } from "../../../utils/ui";
+  import { seedToName } from "../../../utils/name";
   import { blockNumber } from "../../../stores/network";
   import { speed, fragSpeed } from "../../../stores/ui"
   import { fade } from "svelte/transition"
@@ -14,27 +15,31 @@
 </script>
 
 <div class="ui-debug-log">
-  <div>Blocknumber: <strong>{$blockNumber}</strong></div>
-  <div>Cooldown block: {$player.coolDownBlock}</div>
+  <!-- The fire cooldown time minus current block number -->
+
+  <!-- <div>Blocknumber: <strong>{$blockNumber}</strong></div> -->
+  <!-- <div>Cooldown block: {$player.coolDownBlock}</div> -->
   <hr />
   {#each Object.entries($fires) as [address, value], i (address)}
     <div transition:fade={{ duration: $speed + $fragSpeed * i }} class:player={address === $playerAddress}>
-      {#if value.entityType == EntityType.Fire}
+      <!-- {#if value.entityType == EntityType.Fire}
         <strong>🔥 {shortenAddress(address)}</strong>
-      {/if}
-      / x:{value.position?.x}
+      {/if} -->
+      <!-- / x:{value.position?.x}
       / y: {value.position?.y}
       {#if value.entityType == EntityType.Player}
         / e: {value.energy}
-      {/if}
+      {/if} -->
+      🔥
       {#if value.coolDownBlock}
-        / cdb: {value.coolDownBlock}
+        / cdb: {value.coolDownBlock - $blockNumber}
       {/if}
       {#if value.resource}
         / r: {value.resource}
       {/if}
       {#if value.creator}
-        / c: {shortenAddress(value.creator[0])}
+        <!-- {value.creator} -->
+        / c: {seedToName(value.creator[0])}
       {/if}
     </div>
   {/each}

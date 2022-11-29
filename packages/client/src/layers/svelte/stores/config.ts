@@ -83,7 +83,7 @@ export const initialState = () => ({
     id: "fires",
     title: "Fires",
     component: UIFires,
-    active: false,
+    active: true,
     options: {
       fluid: true,
     },
@@ -156,6 +156,7 @@ export const initialState = () => ({
     options: {
       fluid: true,
       delay: makeDelay(),
+      layer: 2,
     },
     grid: {
       col: [1, 2],

@@ -20,8 +20,6 @@
     return arr
   })
 
-  $: console.log($rankedPlayers)
-
   function pick(cat: string) {
     $category = cat;
   }

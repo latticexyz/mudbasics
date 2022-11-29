@@ -21,8 +21,16 @@ function toTitleCase(str: string) {
 export function seedToName(seed: number) {
   if (!seed) return false;
   const seedAsString: string = Math.abs(seed).toString();
-  const firstName: string = firstNameList[Number(seedAsString[0])];
-  const lastName: string = lastNameList[Number(seedAsString[1])];
+  const firstNameIndex: number = Number(seedAsString[0]) || 0;
+  const lastNameIndex: number = Number(seedAsString[1]) || 0;
+  const firstName: string = firstNameList[firstNameIndex];
+  const lastName: string = lastNameList[lastNameIndex];
   const fullName = firstName + " " + lastName;
+
+  console.log(lastName, seedAsString, Number(seedAsString[1]));
+
+  console.log(fullName);
+  console.log(fullName);
+  console.log(fullName);
   return toTitleCase(fullName);
 }
