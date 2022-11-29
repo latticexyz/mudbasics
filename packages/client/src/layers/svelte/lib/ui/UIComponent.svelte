@@ -1,20 +1,20 @@
 <script lang="ts">
-  import { UIComponentPlacement, UIComponentOptions } from "../../stores/config"
+  import { UIComponentPlacement, UIComponentOptions } from "../../stores/config";
   import { createEventDispatcher, onMount } from "svelte";
   import { fade } from "svelte/transition";
   import { uiState } from "../../stores/ui";
 
   const dispatch = createEventDispatcher();
-  
+
   export let id: string;
   export let active: boolean = true;
   export let title: string = "";
-  
-  export let grid: UIComponentPlacement = {}
-  export let options: UIComponentOptions
-  export let area: string = ""
 
-  console.log('initialising component', id)
+  export let grid: UIComponentPlacement = {};
+  export let options: UIComponentOptions;
+  export let area: string = "";
+
+  console.log("initialising component", id);
 </script>
 
 {#if active}
@@ -35,20 +35,14 @@
         {title}
 
         <div>
-          <button
-            class="close" 
-            on:click={() => uiState.toggle(id, "muted")}
-          >
+          <button class="close" on:click={() => uiState.toggle(id, "muted")}>
             {#if options?.muted}
               {!options.muted ? "[mut]" : "[unm]"}
             {/if}
           </button>
 
           {#if !options?.persistent}
-            <button
-              class="close"
-              on:click={uiState.close(id)}
-            > [×] </button>
+            <button class="close" on:click={uiState.close(id)}> [×] </button>
           {/if}
         </div>
       </div>
