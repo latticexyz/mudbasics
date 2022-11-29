@@ -1,10 +1,10 @@
 import { crawl, walk, run, east, west, north, south, southEast, southWest, northEast, northWest } from "./move";
 import { gather, hoard, stockpile } from "./gather";
 import { nibble, eat, feast } from "./consume";
-import { fire } from "./burn";
+import { fire, bonfire } from "./burn";
 import { play } from "./play";
 import { suicide } from "./special";
-import { hungry } from "./gates";
+import { hungry, rich } from "./gates";
 
 export interface Operation {
   name: string;
@@ -35,10 +35,12 @@ export const operations: Operation[] = [
   { name: "stockpile", category: "gather", description: "", f: stockpile },
   // --- BURN
   { name: "fire", category: "burn", description: "", f: fire },
+  { name: "bonfire", category: "burn", description: "", f: bonfire },
   // --- PLAY
   { name: "play", category: "play", description: "", f: play },
   // --- SPECIAL
   { name: "suicide", category: "special", description: "", f: suicide },
   // --- GATES
   { name: "hungry?", category: "gate", description: "", f: hungry },
+  { name: "rich?", category: "gate", description: "", f: rich },
 ];
