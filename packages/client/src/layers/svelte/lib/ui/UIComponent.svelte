@@ -1,4 +1,5 @@
 <script lang="ts">
+  import UIComponentTitleBar from "./UIComponentTitleBar"
   import { UIComponentPlacement, UIComponentOptions } from "../../stores/config"
   import { createEventDispatcher, onMount } from "svelte";
   import { fade } from "svelte/transition";
@@ -30,29 +31,10 @@
     class:backed={!options?.bare}
     class:blend={options?.layer === 0}
   >
-    {#if !options?.bare}
-      <div class="titlebar border">
-        {title}
+    <!-- Title Bar -->
+    <UIComponentTitleBar {id} {title} {options} />
 
-        <div>
-          <button
-            class="close" 
-            on:click={() => uiState.toggle(id, "muted")}
-          >
-            {#if options?.muted}
-              {!options.muted ? "[mut]" : "[unm]"}
-            {/if}
-          </button>
-
-          {#if !options?.persistent}
-            <button
-              class="close"
-              on:click={uiState.close(id)}
-            > [×] </button>
-          {/if}
-        </div>
-      </div>
-    {/if}
+    <!-- Body -->
     <div class="ui-component-inner" class:no-padding={options?.layer === 0}>
       <slot />
     </div>
@@ -68,6 +50,7 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     position: relative;
+    padding-top: var(--titlebar-height);
   }
 
   .ui-component.blend {
@@ -90,28 +73,6 @@
 
   .ui-component-inner.no-padding {
     padding: 0;
-  }
-
-  .titlebar {
-    width: 100%;
-    padding: var(--padding-button);
-    font-size: var(--font-size);
-    /* background: var(--foreground); */
-    color: var(--foreground);
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .titlebar.border {
-    border-bottom: 1px solid var(--foreground);
-  }
-
-  .close {
-    all: unset;
-    color: var(--foreground);
-    background: var(--background);
-    cursor: pointer;
   }
 
   .taskbar {

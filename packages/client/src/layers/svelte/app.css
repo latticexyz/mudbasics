@@ -15,6 +15,7 @@
   --col-gap: 4rem;
   --row-gap: 2rem;
   --taskbar-height: 28px;
+  --titlebar-height: 28px;
 
   /* Fonts */
   --font-family: Jetbrains, Courier, monospaced;
