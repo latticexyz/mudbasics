@@ -150,7 +150,7 @@
     justify-content: center;
     align-items: center;
     border: 1px solid black;
-    color: black;
+    color: rgba(255, 255, 255, 0.5);
     font-size: 9px;
     text-align: center;
     position: relative;
@@ -158,14 +158,20 @@
 
   .dust {
     background: rgb(205, 209, 176);
+    background-image: url("../../../../../public/images/dust.png");
+    background-size: cover;
   }
 
   .debris {
     background: rgb(167, 120, 111);
+    background-image: url("../../../../../public/images/debris.png");
+    background-size: cover;
   }
 
   .ruins {
     background: rgb(184, 87, 54);
+    background-image: url("../../../../../public/images/ruins.png");
+    background-size: cover;
   }
 
   .icon {
