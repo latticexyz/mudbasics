@@ -40,6 +40,7 @@ export const players = derived(
   entities,
   ($entities) => Object.values($entities).filter((e) => e.entityType == EntityType.Player) as ArrayLike<Entity>
 );
+
 export const fires = derived(
   entities,
   ($entities) =>
@@ -47,10 +48,12 @@ export const fires = derived(
       return e.entityType == EntityType.Fire;
     }) as ArrayLike<Entity>
 );
+
 export const terrains = derived(
   entities,
   ($entities) => Object.values($entities).filter((e) => e.entityType == EntityType.Terrain) as ArrayLike<Entity>
 );
+
 export const corpses = derived(
   entities,
   ($entities) => Object.values($entities).filter((e) => e.entityType == EntityType.Corpse) as ArrayLike<Entity>

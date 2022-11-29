@@ -19,7 +19,7 @@ function toTitleCase(str: string) {
 }
 
 export function seedToName(seed: number) {
-  if (!seed) return false;
+  if (!seed) return "";
   const seedAsString: string = Math.abs(seed).toString();
   const firstNameIndex: number = Number(seedAsString[0]) || 0;
   const lastNameIndex: number = Number(seedAsString[1]) || 0;

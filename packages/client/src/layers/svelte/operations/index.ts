@@ -3,7 +3,7 @@ import { gather, hoard, stockpile } from "./gather";
 import { nibble, eat, feast } from "./consume";
 import { fire, bonfire } from "./burn";
 import { play } from "./play";
-import { suicide } from "./special";
+import { goTowardsFire, suicide } from "./special";
 import { hungry, rich } from "./gates";
 
 export interface Operation {
@@ -40,6 +40,7 @@ export const operations: Operation[] = [
   { name: "play", category: "play", description: "", f: play },
   // --- SPECIAL
   { name: "suicide", category: "special", description: "", f: suicide },
+  { name: "go-to-fire", category: "special", description: "", f: goTowardsFire },
   // --- GATES
   { name: "hungry?", category: "gate", description: "", f: hungry },
   { name: "rich?", category: "gate", description: "", f: rich },
