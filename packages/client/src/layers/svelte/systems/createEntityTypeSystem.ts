@@ -1,3 +1,5 @@
+import { blockNumber } from "../stores/network";
+import { get } from "svelte/store";
 import { narrative, LogEntry } from "../stores/narrative";
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
@@ -24,6 +26,7 @@ export function createEntityTypeSystem(network: NetworkLayer) {
     if (entityType == E.Player) {
       const logEntry: LogEntry = {
         id: self.crypto.randomUUID(),
+        blockNumber: get(blockNumber),
         address: indexToID(update.entity),
         message: "spawned",
       };
@@ -35,6 +38,7 @@ export function createEntityTypeSystem(network: NetworkLayer) {
     if (entityType == E.Corpse) {
       const logEntry: LogEntry = {
         id: self.crypto.randomUUID(),
+        blockNumber: get(blockNumber),
         address: indexToID(update.entity),
         message: "died.",
       };

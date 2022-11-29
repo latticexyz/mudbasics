@@ -1,3 +1,5 @@
+import { blockNumber } from "../stores/network";
+import { get } from "svelte/store";
 import { narrative } from "../stores/narrative";
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
@@ -22,6 +24,7 @@ export function createEnergySystem(network: NetworkLayer) {
     if (energy > oldEnergy) {
       const logEntry = {
         id: self.crypto.randomUUID(),
+        blockNumber: get(blockNumber),
         address: indexToID(update.entity),
         message: "is eating.",
       };

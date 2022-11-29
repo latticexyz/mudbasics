@@ -1,3 +1,5 @@
+import { blockNumber } from "../stores/network";
+import { get } from "svelte/store";
 import { narrative, LogEntry } from "../stores/narrative";
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
@@ -23,6 +25,7 @@ export function createPositionSystem(network: NetworkLayer) {
     if (previousPosition) {
       const logEntry: LogEntry = {
         id: self.crypto.randomUUID(),
+        blockNumber: get(blockNumber),
         address: indexToID(update.entity),
         message: "is moving " + getDirection(previousPosition, currentPosition),
       };
