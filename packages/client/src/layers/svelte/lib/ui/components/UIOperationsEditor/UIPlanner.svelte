@@ -140,6 +140,8 @@
     padding: 10px 0px;
     margin-top: 10px;
     border-top: 1px solid black;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .inventory.disabled {

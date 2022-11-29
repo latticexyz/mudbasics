@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fires } from "../../../stores/entities";
-  import { playerAddress } from "../../../stores/player";
+  import { player, playerList } from "../../../stores/player";
   import { uiState } from "../../../stores/ui"
   import { seedToName } from "../../../utils/name";
   import { blockNumber } from "../../../stores/network";
@@ -31,7 +31,7 @@
   <!-- <div>Blocknumber: <strong>{$blockNumber}</strong></div> -->
   <!-- <div>Cooldown block: {$player.coolDownBlock}</div> -->
   {#each Object.entries($fires) as [address, value], i (address)}
-    <div transition:fade={{ duration: $speed + $fragSpeed * i }} class:player={address === $playerAddress}>
+    <div transition:fade={{ duration: $speed + $fragSpeed * i }}>
       <!-- {#if value.entityType == EntityType.Fire}
         <strong>🔥 {shortenAddress(address)}</strong>
       {/if} -->
@@ -52,8 +52,7 @@
         / r: {value.resource}
       {/if}
       {#if value.creator}
-        <!-- {value.creator} -->
-        / c: {seedToName(value.creator[0])}
+        / c: {playerList(value.creator)}
       {/if}
     </div>
   {/each}
