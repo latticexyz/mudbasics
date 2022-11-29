@@ -11,7 +11,11 @@
       {#if $player.entityType == EntityType.Corpse}💀 {/if}{seedToName($player.seed)}
     </div>
     <div class="activity">
-      ({activityToVerb($playerActivity)})
+      {#if $player.entityType == EntityType.Corpse}
+        (dead)
+      {:else}
+        ({activityToVerb($playerActivity)})
+      {/if}
     </div>
     <div class="resources">
       <UIMetric label="Energy" key="energy" />
