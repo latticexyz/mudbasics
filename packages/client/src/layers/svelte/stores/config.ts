@@ -12,8 +12,8 @@ import UIPlanner from "../lib/ui/components/UIOperationsEditor/UIPlanner.svelte"
 import UIExecutor from "../lib/ui/components/UIOperationsEditor/UIExecutor.svelte";
 
 // Utilities
-// const makeDelay = () => 500 + Math.floor(Math.random() * 2000);
-const makeDelay = () => 300;
+const makeDelay = () => Math.floor(Math.random() * 200);
+// const makeDelay = () => 300;
 
 export interface UIComponentOptions {
   delay?: number;

@@ -4,8 +4,11 @@
   import { cubicInOut as easing } from "svelte/easing";
   import { players } from "../../../stores/entities";
   import { category } from "../../../stores/ui"
-
   import { seedToName } from "../../../utils/name";
+
+  export let autoplay = 2500
+  let interval
+  let i = 0
 
   const mappings = {
     gluttony: "eaten",
@@ -16,11 +19,36 @@
 
   const rankedPlayers = derived([players, category], ([$players, $category]) => {
     const arr = [...$players]
-    arr.sort((a, b) => b.stats[mappings[$category]] - a.stats[mappings[$category]])
+    if (arr.every(p => p?.stats)) {
+      arr.sort((a, b) => b.stats[mappings[$category]] - a.stats[mappings[$category]])
+    }
     return arr
   })
 
-  function pick(cat: string) {
+  if (autoplay) {
+    play()
+  }
+
+  function play () {
+    interval = setInterval(next, 3000)
+  }
+
+  function pause () {
+    if (autoplay) {
+      clearInterval(interval)
+      setTimeout(play, 5000)
+    }
+  }
+
+  function next () {
+    const entries = Object.entries(mappings)
+    const index = i++ % entries.length
+    $category = entries[index][0]
+  }
+
+  function pick (cat: string) {
+    pause()
+    i = Object.keys(mappings).indexOf(cat)
     $category = cat;
   }
 </script>
