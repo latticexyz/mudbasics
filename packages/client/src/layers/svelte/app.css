@@ -117,3 +117,13 @@ span.ripple {
     opacity: 0;
   }
 }
+
+.link {
+  cursor: pointer;
+  opacity: var(--muted-opacity);
+}
+
+.link.active,
+.link:hover {
+  opacity: 1;
+}

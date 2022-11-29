@@ -55,7 +55,7 @@
 
 <div class="ui-categories">
   {#each Object.keys(mappings) as cat}
-    <span on:click={() => pick(cat)} class="ui-category" class:active={cat === $category}>
+    <span on:click={() => pick(cat)} class="link" class:active={cat === $category}>
       {cat}
     </span>
   {/each}
@@ -108,9 +108,6 @@
   }
   .ui-stat-row {
     height: var(--font-size-large);
-  }
-  .ui-category.active {
-    opacity: 1;
   }
 
   .ui-stat-rank {

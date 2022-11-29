@@ -31,11 +31,10 @@
 
 <style>
   .titlebar {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: var(--titlebar-height);
     padding: var(--padding-button);
     font-size: var(--font-size);
     color: var(--foreground);
