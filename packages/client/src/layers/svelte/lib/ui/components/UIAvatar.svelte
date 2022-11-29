@@ -13,10 +13,6 @@
     let duration = ($player.coolDownBlock - $blockNumber) * 1000;
     duration = duration > 0 ? duration : 1000;
 
-    // console.log("$player.coolDownBlock", $player.coolDownBlock);
-    // console.log("$blockNumber", $blockNumber);
-    // console.log("duration", duration);
-
     let newEnergy = $player.energy;
     if (newEnergy !== $energy) {
       energy.set(newEnergy, { duration: duration });
@@ -50,7 +46,7 @@
       </div>
     </div>
   </div>
-  <video src="/video/test.mp4" autoplay muted loop />
+  <video class="ui-avatar-background" src="/video/test.mp4" autoplay muted loop />
   <!-- <img src="/images/avatar-placeholder.png" alt="Avatar" class="ui-avatar-background" /> -->
 </div>
 
