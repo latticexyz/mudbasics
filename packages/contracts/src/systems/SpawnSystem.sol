@@ -20,6 +20,12 @@ uint256 constant ID = uint256(keccak256("system.Spawn"));
 contract SpawnSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
+  function makeSeedValue() public view returns (int32) {
+    int32 seed = int32(int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender)))));
+    if (seed < 0) seed *= -1;
+    return seed;
+  }
+
   function execute(bytes memory arguments) public returns (bytes memory) {
     uint256 entity = abi.decode(arguments, (uint256));
 
@@ -38,7 +44,7 @@ contract SpawnSystem is System {
     require(!birthComponent.has(entity), "already spawned");
 
     // --- Seed (Number used for naming the character etc...)
-    seedComponent.set(entity, int32(int256(uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))))));
+    seedComponent.set(entity, makeSeedValue());
 
     // --- Energy
     energyComponent.set(entity, 1000);
