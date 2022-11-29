@@ -83,7 +83,7 @@ export const initialState = () => ({
     id: "fires",
     title: "Fires",
     component: UIFires,
-    active: true,
+    active: false,
     options: {
       fluid: true,
     },
@@ -116,13 +116,17 @@ export const initialState = () => ({
     options: {
       delay: 0,
     },
+    grid: {
+      col: [1, 2],
+      row: [7, 10],
+    },
   }),
   //
   "grid-map": initialise({
     id: "grid-map",
     title: "Grid Map",
     component: UIGridMap,
-    active: false,
+    active: true,
     options: {
       fluid: true,
       delay: makeDelay(),
@@ -136,7 +140,7 @@ export const initialState = () => ({
     id: "debug-log",
     title: "Debug Log",
     component: UIDebugLog,
-    active: true,
+    active: false,
     options: {
       fluid: true,
       layer: 2,

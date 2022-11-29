@@ -110,7 +110,9 @@ blockNumber.subscribe((newBlock) => {
       });
 
       // Set player activity
-      playerActivity.set(categoryToActivity(currentSequenceElement.operation.category));
+      if (outcome) {
+        playerActivity.set(categoryToActivity(currentSequenceElement.operation.category));
+      }
     }
 
     blockDelay++;

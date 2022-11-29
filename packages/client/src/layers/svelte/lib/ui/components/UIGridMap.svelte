@@ -1,20 +1,45 @@
 <script lang="ts">
   import { Coord } from "@latticexyz/recs";
   import { onMount } from "svelte";
-  import { entities } from "../../../stores/entities";
+  import { entities, Entity } from "../../../stores/entities";
   import { player, playerAddress } from "../../../stores/player";
   import { createPerlin, Perlin } from "@latticexyz/noise";
   import { EntityType } from "../../../utils/space";
 
   let perlin: Perlin;
 
+  function checkForType(gridPosition: Coord, type: EntityType) {
+    let entity = Object.values($entities).find(
+      (e) =>
+        e.seed !== $player.seed &&
+        (e.position?.x || 0) == gridPosition.x &&
+        (e.position?.y || 0) == gridPosition.y &&
+        e.entityType == type
+    );
+    return entity;
+  }
+
+  enum TerrainType {
+    Dust,
+    Debris,
+    Ruins,
+  }
+
+  function perlinToTerrainType(p: number) {
+    if (p < 0.4) return TerrainType.Dust;
+    if (p < 0.6) return TerrainType.Debris;
+    return TerrainType.Ruins;
+  }
+
   interface GridItem {
-    name: string;
     direction: string;
     transformation: Coord;
     coordinates: Coord;
     perlinFactor: number;
-    fire: boolean;
+    terrain: TerrainType;
+    fire?: Entity | undefined;
+    other?: Entity | undefined;
+    corpse?: Entity | undefined;
   }
 
   let grid: GridItem[] = [];
@@ -23,12 +48,11 @@
     for (let y = -2; y <= 2; y++) {
       for (let x = -2; x <= 2; x++) {
         let newGridItem: GridItem = {
-          name: "-",
           direction: ".",
           transformation: { x: x, y: y },
           coordinates: { x: 0, y: 0 },
           perlinFactor: 0,
-          fire: false,
+          terrain: TerrainType.Dust,
         };
         grid = [...grid, newGridItem];
       }
@@ -37,16 +61,13 @@
 
   function updateGrid(centerPosition: Coord) {
     for (let i = 0; i < grid.length; i++) {
-      grid[i].coordinates.x = centerPosition?.x || 0 + grid[i].transformation.x;
-      grid[i].coordinates.y = centerPosition?.y || 0 + grid[i].transformation.y;
+      grid[i].coordinates.x = (centerPosition?.x || 0) + grid[i].transformation.x;
+      grid[i].coordinates.y = (centerPosition?.y || 0) + grid[i].transformation.y;
       grid[i].perlinFactor = perlin(grid[i].coordinates.x, grid[i].coordinates.y, 0, 20);
-      let fireEntity = Object.values($entities).find(
-        (e) =>
-          e.position.x == grid[i].coordinates.x &&
-          e.position.y == grid[i].coordinates.y &&
-          e.entityType == EntityType.Fire
-      );
-      grid[i].fire = fireEntity;
+      grid[i].terrain = perlinToTerrainType(grid[i].perlinFactor);
+      grid[i].fire = checkForType(grid[i].coordinates, EntityType.Fire);
+      grid[i].other = checkForType(grid[i].coordinates, EntityType.Player);
+      grid[i].corpse = checkForType(grid[i].coordinates, EntityType.Corpse);
     }
   }
 
@@ -54,7 +75,7 @@
     if (perlin) {
       updateGrid(value[$playerAddress].position);
     }
-  })
+  });
 
   onMount(async () => {
     perlin = await createPerlin();
@@ -68,14 +89,41 @@
     {#each grid as item}
       <div
         class="grid-item {item.direction}"
-        class:fire={item.fire}
-        style={"background-color: rgba(0,0,0," + item.perlinFactor + ");"}
+        class:dust={item.terrain === TerrainType.Dust}
+        class:debris={item.terrain === TerrainType.Debris}
+        class:ruins={item.terrain === TerrainType.Ruins}
       >
         <div>
-          <strong>{item.name}</strong> <br />
           [{item.coordinates.x}:{item.coordinates.y}] <br />
           {item.perlinFactor.toFixed(2)}
         </div>
+
+        <!-- SELF -->
+        {#if item.transformation.x == 0 && item.transformation.y == 0}
+          <div class="icon self">
+            {#if $player.entityType == EntityType.Player}
+              👺
+            {/if}
+            {#if $player.entityType == EntityType.Corpse}
+              💀
+            {/if}
+          </div>
+        {/if}
+
+        <!-- FIRE -->
+        {#if item.fire !== undefined}
+          <div class="icon fire">🔥</div>
+        {/if}
+
+        <!-- OTHER -->
+        {#if item.other !== undefined}
+          <div class="icon other">😈</div>
+        {/if}
+
+        <!-- CORPSE -->
+        {#if item.corpse !== undefined}
+          <div class="icon corpse">💀</div>
+        {/if}
       </div>
     {/each}
   </div>
@@ -84,6 +132,8 @@
 <style>
   .ui-grid-map {
     height: 320px;
+    display: flex;
+    justify-content: center;
   }
 
   .grid-container {
@@ -99,13 +149,35 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid var(--foreground);
-    color: white;
+    border: 1px solid black;
+    color: black;
     font-size: 9px;
     text-align: center;
+    position: relative;
   }
 
-  .fire {
-    background-color: orangered !important;
+  .dust {
+    background: rgb(205, 209, 176);
+  }
+
+  .debris {
+    background: rgb(167, 120, 111);
+  }
+
+  .ruins {
+    background: rgb(184, 87, 54);
+  }
+
+  .icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    font-size: 40px;
+    z-index: 100;
+  }
+
+  .self {
+    z-index: 100;
   }
 </style>
