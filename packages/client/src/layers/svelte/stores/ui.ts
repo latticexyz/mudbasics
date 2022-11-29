@@ -6,7 +6,7 @@ export const menuVisible = writable(false);
 
 // Transition speeds
 export const speed = writable(100);
-export const fragSpeed = writable(50);
+export const fragSpeed = writable(0);
 export const category = writable("gluttony");
 
 // Create custom store with simpler update methods

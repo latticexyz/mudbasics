@@ -1,6 +1,11 @@
 import { get } from "svelte/store";
-import { network, blockNumber } from "../../stores/network";
+import { network } from "../../stores/network";
 import { player } from "../../stores/player";
+
+export const cost = {
+  ids: ["energy"],
+  values: [10],
+};
 
 export function crawl() {
   if ((get(player).energy || 0) >= 10) {

@@ -2,6 +2,11 @@ import { get } from "svelte/store";
 import { network, blockNumber } from "../../stores/network";
 import { player } from "../../stores/player";
 
+export const cost = {
+  ids: ["resource"],
+  values: [20],
+};
+
 export function feast() {
   if ((get(player).resource || 0) >= 20) {
     get(network).api?.consume(20);
