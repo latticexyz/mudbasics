@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { tooltip } from "../UIToolTip/index.ts"
   import { blockNumber } from "../../../../stores/network";
   import { uiState } from "../../../../stores/ui";
   import { player } from "../../../../stores/player";
@@ -52,6 +53,9 @@
     <div class="operation-grid">
       {#each $sequence as sequenceElement, index}
         <div
+          use:tooltip
+          title={sequenceElement.operation?.c || false}
+          data-description={sequenceElement.operation.description}
           class="slot {sequenceElement.operation.category}"
           class:active={$sequencerActive && $activeOperationIndex === index}
           class:failure={!$sequence[index].success}

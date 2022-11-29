@@ -1,11 +1,10 @@
 <script lang="ts">
   import { entities } from "../../../stores/entities";
-  import { player, playerAddress } from "../../../stores/player";
+  import { player, playerAddress, playerList } from "../../../stores/player";
   import { seedToName } from "../../../utils/name";
   import { EntityType } from "../../../utils/space";
   import { shortenAddress } from "../../../utils/ui";
   import { blockNumber } from "../../../stores/network";
-  import { uniq } from "lodash";
   import { speed, fragSpeed } from "../../../stores/ui"
   import { fade } from "svelte/transition"
 
@@ -21,12 +20,6 @@
   function formatTime(seconds: number) {
     let currentTime = new Date(seconds * 1000);
     return (isNight(currentTime) ? "🌙 " : "🌞 ") + currentTime.toISOString().substr(11, 8);
-  }
-
-  function playerList(players: string[]) {
-    let playerNames = players.map((p) => ($entities[p] ? seedToName($entities[p].seed) : "not-found"));
-    // HACK: should make sure that the creator array on contract level is unique instead...
-    return uniq(playerNames).join(", ");
   }
 </script>
 

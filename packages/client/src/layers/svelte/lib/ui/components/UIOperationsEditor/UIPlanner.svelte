@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { blockNumber } from "../../../../stores/network";
-  import { player } from "../../../../stores/player";
+  import { tooltip } from "../UIToolTip/index"
   import { operations, Operation } from "../../../../operations/";
   import { uiState } from "../../../../stores/ui"
   import {
@@ -11,6 +10,8 @@
     stopSequencer,
     sequencerActive,
   } from "../../../../stores/sequence";
+
+  const categories = [...new Set(operations.map(op => op.category))]
 
   let localSequence: SequenceElement[] = Array(SEQUENCER_LENGTH);
   localSequence.fill(emptySequenceElement);
@@ -76,15 +77,25 @@
     class="inventory"
     class:disabled={localSequence.filter((item) => item.operation.name !== "+").length >= SEQUENCER_LENGTH}
   >
-    {#each operations as operation}
-      <!-- svelte-ignore a11y-click-events-have-key-events -->
-      <div
-        class="operation {operation.category}"
-        on:click={() => {
-          add(operation);
-        }}
-      >
-        {operation.name}
+    {#each categories as category}
+      <div class="category">
+        <span class="operation blank">
+          {category}
+        </span>
+        {#each operations.filter(o => o.category === category) as operation}
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
+          <div
+            title={operation?.c || 'false'}
+            data-description={operation.description}
+            use:tooltip
+            class="operation {operation.category}"
+            on:click={() => {
+              add(operation);
+            }}
+          >
+            {operation.name}
+          </div>
+        {/each}
       </div>
     {/each}
   </div>
@@ -103,6 +114,14 @@
     display: block;
     margin-right: 5px;
     user-select: none;
+  }
+
+  .blank {
+    color: var(--foreground);
+    opacity: 1 !important;
+    text-align: center;
+    width: 80px;
+    border: var(--outer-border);
   }
   .move {
     background: #92ff7c;
@@ -199,5 +218,9 @@
 
   .operation-info {
     text-align: center;
+  }
+
+  .category {
+    display: inline;
   }
 </style>

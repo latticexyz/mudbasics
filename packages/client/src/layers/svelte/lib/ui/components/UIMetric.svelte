@@ -17,7 +17,6 @@
     duration = duration > 0 ? duration : 1000;
     
     let newValue = $player[key]
-    console.log(v, newValue, $value)
     direction = Math.sign(newValue - $value)
 
     if (newValue !== $value) {

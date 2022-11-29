@@ -1,1 +1,1 @@
-export { play } from "./play";
+export { play, cost as playCost } from "./play";
