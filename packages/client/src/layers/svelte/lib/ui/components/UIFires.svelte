@@ -29,9 +29,13 @@
       {#if value.entityType == EntityType.Player}
         / e: {value.energy}
       {/if} -->
-      🔥
+      {#if Math.max(value.coolDownBlock - $blockNumber, 0) > 0}
+        🔥
+      {:else}
+        🕳
+      {/if}
       {#if value.coolDownBlock}
-        / cdb: {value.coolDownBlock - $blockNumber}
+        / cdb: {Math.max(value.coolDownBlock - $blockNumber, 0)}
       {/if}
       {#if value.resource}
         / r: {value.resource}

@@ -1,11 +1,8 @@
 <script lang="ts">
   import UIComponentTitleBar from "./UIComponentTitleBar"
   import { UIComponentPlacement, UIComponentOptions } from "../../stores/config"
-  import { createEventDispatcher } from "svelte";
   import { fade } from "svelte/transition";
-  import { uiState } from "../../stores/ui";
-
-  const dispatch = createEventDispatcher();
+  import { uiState, speed } from "../../stores/ui";
 
   export let id: string;
   export let active: boolean = true;
@@ -13,16 +10,14 @@
 
   export let grid: UIComponentPlacement = {};
   export let options: UIComponentOptions;
-  export let area: string = "";
-
-  console.log("initialising component", id);
+  export let area: string = ""
 </script>
 
 {#if active}
   <div
-    in:fade={{ duration: 200, delay: options?.delay }}
+    in:fade={{ duration: $speed, delay: options?.delay }}
+    out:fade={{ duration: $speed }}
     on:introend={() => uiState.alter(id, "delay", 0)}
-    out:fade={{ duration: 200 }}
     class="ui-component col-{grid?.col?.[0]}-{grid?.col?.[1]} row-{grid?.row?.[0]}-{grid?.row?.[1]} {area}"
     style:z-index={options?.layer}
     class:fluid={options?.fluid}
@@ -50,7 +45,6 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     position: relative;
-    padding-top: var(--titlebar-height);
   }
 
   .ui-component.blend {
@@ -64,6 +58,7 @@
   }
 
   .ui-component.box {
+    padding-top: var(--titlebar-height);
     border: 1px solid rgba(var(--foreground-rgb), var(--muted-opacity));
   }
 

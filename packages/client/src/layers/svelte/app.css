@@ -7,8 +7,10 @@
   --background-offset: rgb(40, 40, 40);
   --foreground-rgb: 255, 255, 255;
   --foreground: rgb(var(--foreground-rgb));
+
   --blue: #0033eb;
-  --muted-opacity: 0.7;
+  --success: #bfff5e;
+  --fail: #d1656c;
 
   /* Sizing */
   --padding-button: 6px 12px;
@@ -23,6 +25,7 @@
   --font-size-large: 18px;
 
   /* Deco */
+  --muted-opacity: 0.7;
   --backdrop: blur(10px);
   --outer-border: 1px solid rgba(var(--foreground-rgb), var(--muted-opacity));
 }

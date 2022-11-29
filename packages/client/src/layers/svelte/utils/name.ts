@@ -26,11 +26,5 @@ export function seedToName(seed: number) {
   const firstName: string = firstNameList[firstNameIndex];
   const lastName: string = lastNameList[lastNameIndex];
   const fullName = firstName + " " + lastName;
-
-  console.log(lastName, seedAsString, Number(seedAsString[1]));
-
-  console.log(fullName);
-  console.log(fullName);
-  console.log(fullName);
   return toTitleCase(fullName);
 }

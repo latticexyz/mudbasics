@@ -44,8 +44,6 @@ export const fires = derived(
   entities,
   ($entities) =>
     Object.values($entities).filter((e) => {
-      console.log("/ FIRES ");
-      console.log(e);
       return e.entityType == EntityType.Fire;
     }) as ArrayLike<Entity>
 );

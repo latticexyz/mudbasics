@@ -1,28 +1,8 @@
 <script lang="ts">
-  import { tweened } from "svelte/motion";
+  import UIMetric from "./UIMetric.svelte"
   import { Activities, activityToVerb, player, playerActivity } from "../../../stores/player";
-  import { entities } from "../../../stores/entities";
   import { seedToName } from "../../../utils/name";
-  import { blockNumber } from "../../../stores/network";
   import { EntityType } from "../../../utils/space";
-
-  const energy = tweened($player.energy);
-  const resource = tweened($player.resource);
-
-  entities.subscribe((value) => {
-    let duration = ($player.coolDownBlock - $blockNumber) * 1000;
-    duration = duration > 0 ? duration : 1000;
-
-    let newEnergy = $player.energy;
-    if (newEnergy !== $energy) {
-      energy.set(newEnergy, { duration: duration });
-    }
-
-    let newResource = $player.resource;
-    if (newResource !== $resource) {
-      resource.set(newResource, { duration: duration });
-    }
-  });
 </script>
 
 <div class="ui-avatar">
@@ -34,16 +14,8 @@
       ({activityToVerb($playerActivity)})
     </div>
     <div class="resources">
-      {#if $player.entityType == EntityType.Player}
-        <div class="large-indicator">
-          <div class="label">Energy</div>
-          <div class="value">{$energy.toFixed(2)}</div>
-        </div>
-      {/if}
-      <div class="large-indicator">
-        <div class="label">Resource</div>
-        <div class="value">{$resource.toFixed(2)}</div>
-      </div>
+      <UIMetric label="Energy" key="energy" />
+      <UIMetric label="Resource" key="resource" />
     </div>
   </div>
 
@@ -109,48 +81,5 @@
   .resources {
     grid-column: 1 / 3;
     align-self: start;
-  }
-
-  .large-indicator {
-    display: flex;
-    width: 100%;
-    border-width: 1px;
-    text-align: center;
-    /* height: 60px; */
-    /* line-height: 60px; */
-    margin-bottom: 10px;
-    margin-top: 10px;
-    border: var(--outer-border);
-    overflow: hidden;
-  }
-
-  .label {
-    width: 120px;
-    flex-shrink: 0;
-    background: rgba(var(--foreground-rgb), 0.3);
-    color: var(--foreground);
-    padding: 4px 12px;
-    font-weight: bold;
-  }
-
-  .stats {
-    padding-top: 1rem;
-    align-self: start;
-    display: flex;
-    gap: var(--col-gap);
-  }
-
-  .value {
-    width: 100%;
-    align-self: center;
-    font-weight: bold;
-  }
-
-  .up {
-    background: #bfff5e;
-  }
-
-  .down {
-    background: #d1656c;
   }
 </style>
