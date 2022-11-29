@@ -1,7 +1,7 @@
 <script lang="ts">
   import { tweened } from "svelte/motion";
-  import { player } from "../../../stores/player";
-  import { entities, En } from "../../../stores/entities";
+  import { activityToVerb, player, playerActivity } from "../../../stores/player";
+  import { entities } from "../../../stores/entities";
   import { seedToName } from "../../../utils/name";
   import { blockNumber } from "../../../stores/network";
   import { EntityType } from "../../../utils/space";
@@ -34,6 +34,9 @@
     <div class="name">
       {#if $player.entityType == EntityType.Corpse}💀 {/if}{seedToName($player.seed)}
     </div>
+    <div class="activity">
+      ({activityToVerb($playerActivity)})
+    </div>
     <div class="resources">
       {#if $player.entityType == EntityType.Player}
         <div class="large-indicator">
@@ -52,6 +55,12 @@
 </div>
 
 <style>
+  .activity {
+    text-align: center;
+    width: 100%;
+    grid-column: 1 / 3;
+  }
+
   .ui-avatar {
     position: relative;
     height: 100%;

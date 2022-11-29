@@ -2,7 +2,7 @@ import { writable, get } from "svelte/store";
 import { tweened } from "svelte/motion";
 import { Operation } from "../operations/";
 import { blockNumber } from "./network";
-import { player } from "./player";
+import { player, playerActivity, Activities, categoryToActivity } from "./player";
 
 export interface SequenceElement {
   operation: Operation;
@@ -43,6 +43,10 @@ export function startSequencer() {
 
 export function stopSequencer() {
   sequencerActive.set(false);
+
+  // To be moved elsewhere....
+  playerActivity.set(Activities.Idle);
+
   sequence.update((s) => {
     for (let i = 0; i < s.length; i++) {
       s[i].success = true;
@@ -86,9 +90,10 @@ blockNumber.subscribe((newBlock) => {
     if (get(sequencerActive) && newBlock > (get(player).coolDownBlock || 0) && blockDelay % 4 == 0) {
       activeOperationIndex.set(turnCounter % get(sequence).length);
 
-      const outcome = executeOperation(get(sequence)[get(activeOperationIndex)]);
+      const currentSequenceElement = get(sequence)[get(activeOperationIndex)];
+      const outcome = executeOperation(currentSequenceElement);
 
-      if (get(sequence)[get(activeOperationIndex)].operation.category === "gate") {
+      if (currentSequenceElement.operation.category === "gate") {
         // If current operation is a gate
         // – proceed if returning true
         // – start from beginning if return false
@@ -103,6 +108,9 @@ blockNumber.subscribe((newBlock) => {
         }
         return s;
       });
+
+      // Set player activity
+      playerActivity.set(categoryToActivity(currentSequenceElement.operation.category));
     }
 
     blockDelay++;
