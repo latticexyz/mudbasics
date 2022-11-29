@@ -21,7 +21,7 @@ contract SpawnSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function makeSeedValue() public view returns (int32) {
-    int32 seed = int32(int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender)))));
+    int32 seed = int32(int256(uint256(keccak256(abi.encodePacked(msg.sender, block.timestamp, block.number)))));
     if (seed < 0) seed *= -1;
     return seed;
   }
