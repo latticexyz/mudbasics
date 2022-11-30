@@ -22,7 +22,7 @@ export interface Entity {
   seed?: number;
   stats?: StatsType;
   birth?: number;
-  cannibal: string[];
+  cannibal?: string[];
   playing?: number;
 }
 

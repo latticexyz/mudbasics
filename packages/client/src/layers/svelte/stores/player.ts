@@ -11,6 +11,7 @@ export enum Activities {
   Eating,
   Burning,
   Playing,
+  Dead,
 }
 
 export function categoryToActivity(category: string) {
@@ -25,6 +26,8 @@ export function categoryToActivity(category: string) {
       return Activities.Burning;
     case "play":
       return Activities.Playing;
+    case "dead":
+      return Activities.Dead;
     default:
       return Activities.Idle;
   }
@@ -39,9 +42,11 @@ export function activityToVerb(activity: Activities) {
     case Activities.Eating:
       return "eating";
     case Activities.Burning:
-      return "starting a fire";
+      return "making a fire";
     case Activities.Playing:
       return "playing";
+    case Activities.Dead:
+      return "dead";
     default:
       return "waiting";
   }

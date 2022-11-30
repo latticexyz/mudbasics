@@ -14,6 +14,7 @@ export const emptySequenceElement: SequenceElement = {
     name: "+",
     category: "empty",
     description: "",
+    cost: "",
     f: () => false,
   },
   success: true,
@@ -45,6 +46,7 @@ export function stopSequencer() {
   sequencerActive.set(false);
 
   // To be moved elsewhere....
+  // Activity should be set until cooldown is over
   playerActivity.set(Activities.Idle);
 
   sequence.update((s) => {
