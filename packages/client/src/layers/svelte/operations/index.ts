@@ -1,9 +1,22 @@
-import { crawl, walk, run, east, west, north, south, southEast, southWest, northEast, northWest } from "./move";
+import {
+  crawl,
+  walk,
+  run,
+  east,
+  west,
+  north,
+  south,
+  southEast,
+  southWest,
+  northEast,
+  northWest,
+  goTowardsFire,
+} from "./move";
 import { gather, hoard, stockpile } from "./gather";
 import { nibble, eat, feast } from "./consume";
 import { fire, bonfire } from "./burn";
 import { play } from "./play";
-import { suicide, goTowardsFire } from "./special";
+import { suicide } from "./special";
 import { hungry, rich } from "./gates";
 
 export interface Operation {
@@ -93,6 +106,13 @@ export const operations: Operation[] = [
     cost: "energy: 50",
     f: run,
   },
+  {
+    name: "go-to-fire",
+    category: "special",
+    description: "Walk towards closest fire",
+    cost: "energy: 10",
+    f: goTowardsFire,
+  },
   // --- CONSUME
   {
     name: "nibble",
@@ -167,7 +187,6 @@ export const operations: Operation[] = [
     cost: "energy: all of it",
     f: suicide,
   },
-  { name: "go-to-fire", category: "special", description: "Go to closest fire", cost: "energy: 10", f: goTowardsFire },
   // --- GATES
   {
     name: "hungry?",

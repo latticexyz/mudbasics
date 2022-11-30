@@ -9,3 +9,4 @@ export { southEast } from "./south-east";
 export { southWest } from "./south-west";
 export { northEast } from "./north-east";
 export { northWest } from "./north-west";
+export { goTowardsFire } from "./go-towards-fire";
