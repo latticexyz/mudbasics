@@ -69,6 +69,8 @@ contract FireSystem is System {
 
       // Cooldown = current block + resources to burn * 10
       coolDownComponent.set(newFireEntity, int32(int256(block.number)) + resourceInput * 10);
+      // Resources burnt in this fire
+      resourceComponent.set(newFireEntity, resourceInput);
 
       uint256[] memory creatorArray = new uint256[](1);
       creatorArray[0] = entity;
@@ -80,6 +82,8 @@ contract FireSystem is System {
         ? coolDownComponent.getValue(entitiesAtPosition[0])
         : int32(int256(block.number));
       coolDownComponent.set(entitiesAtPosition[0], currentCoolDownBlock + resourceInput * 10);
+      // Add to resources burnt in this fire
+      resourceComponent.set(entitiesAtPosition[0], resourceComponent.getValue(entitiesAtPosition[0]) + resourceInput);
 
       // Add player to creator list
       uint256[] memory currentCreatorArray = creatorComponent.getValue(entitiesAtPosition[0]);

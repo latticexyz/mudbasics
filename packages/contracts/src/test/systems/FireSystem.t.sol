@@ -47,6 +47,8 @@ contract FireSystemTest is MudTest {
     // Cooldown on fire component should be blocknumber + (resources added * 10):
     // 1 + 1000 = 1001
     assertEq(coolDownComponent.getValue(entitiesAtPosition[0]), 1001);
+    // 100 resources have been burnt
+    assertEq(resourceComponent.getValue(entitiesAtPosition[0]), 100);
     // Creator should be set
     assertEq(uint256(creatorComponent.getValue(entitiesAtPosition[0])[0]), entity);
     // Check stats are updated
@@ -65,6 +67,8 @@ contract FireSystemTest is MudTest {
     // Cooldown on fire component should be cooldownblock + (resources added * 10):
     // 1001 + 1000 = 2001
     assertEq(coolDownComponent.getValue(entitiesAtPosition[0]), 2001);
+    // 200 resources have been burnt
+    assertEq(resourceComponent.getValue(entitiesAtPosition[0]), 200);
     // Creator should be set
     assertEq(int256(creatorComponent.getValue(entitiesAtPosition[0]).length), 2);
     // Check stats are updated
