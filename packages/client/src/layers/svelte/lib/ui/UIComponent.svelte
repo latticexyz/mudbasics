@@ -1,6 +1,6 @@
 <script lang="ts">
-  import UIComponentTitleBar from "./UIComponentTitleBar"
-  import { UIComponentPlacement, UIComponentOptions } from "../../stores/config"
+  import UIComponentTitleBar from "./UIComponentTitleBar";
+  import { UIComponentPlacement, UIComponentOptions } from "../../stores/config";
   import { fade } from "svelte/transition";
   import { uiState, speed } from "../../stores/ui";
 
@@ -10,7 +10,7 @@
 
   export let grid: UIComponentPlacement = {};
   export let options: UIComponentOptions;
-  export let area: string = ""
+  export let area: string = "";
 </script>
 
 {#if active}

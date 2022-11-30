@@ -150,7 +150,7 @@
     justify-content: center;
     align-items: center;
     border: 1px solid black;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 1);
     font-size: 9px;
     text-align: center;
     position: relative;
