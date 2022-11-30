@@ -4,7 +4,8 @@ import { narrative, LogEntry } from "../stores/narrative";
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { entities, indexToID } from "../stores/entities";
-import { getDirection } from "../utils/space";
+import { getDirection, positionsToTransformation, transformationToDirection } from "../utils/space";
+import { playerDirection, playerAddress } from "../stores/player";
 
 export function createPositionSystem(network: NetworkLayer) {
   const {
@@ -32,6 +33,11 @@ export function createPositionSystem(network: NetworkLayer) {
       narrative.update((value) => {
         return [logEntry, ...value];
       });
+
+      // If this is the player, set current direction
+      if (indexToID(update.entity) == get(playerAddress)) {
+        playerDirection.set(transformationToDirection(positionsToTransformation(previousPosition, currentPosition)));
+      }
     }
   });
 }

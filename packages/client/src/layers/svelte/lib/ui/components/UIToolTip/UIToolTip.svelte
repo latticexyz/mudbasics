@@ -1,8 +1,8 @@
-<script>
-  export let title;
-  export let description;
-  export let x;
-  export let y;
+<script lang="ts">
+  export let title: string;
+  export let description: string;
+  export let x: number;
+  export let y: number;
 </script>
 
 <div class="ui-tooltip" style:top="{y + 5}px" style:left="{x + 5}px">

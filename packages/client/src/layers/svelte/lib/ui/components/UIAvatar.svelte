@@ -1,5 +1,5 @@
 <script lang="ts">
-  import UIMetric from "./UIMetric.svelte"
+  import UIMetric from "./UIMetric.svelte";
   import { Activities, activityToVerb, player, playerActivity } from "../../../stores/player";
   import { seedToName } from "../../../utils/name";
   import { EntityType } from "../../../utils/space";

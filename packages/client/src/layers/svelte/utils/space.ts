@@ -1,5 +1,11 @@
 import { Coord } from "@latticexyz/recs";
 
+export enum TerrainType {
+  Dust,
+  Debris,
+  Ruins,
+}
+
 export enum Directions {
   Random,
   North,
@@ -19,16 +25,7 @@ export enum EntityType {
   Corpse,
 }
 
-/**
- * @param a Coordinate A
- * @param b Coordinate B
- * @returns Manhattan distance from A to B (https://xlinux.nist.gov/dads/HTML/manhattanDistance.html)
- */
-export function manhattan(a: Coord, b: Coord) {
-  return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-}
-
-export function toTransformation(from: Coord, to: Coord) {
+export function positionsToTransformation(from: Coord, to: Coord) {
   return { x: to.x - from.x, y: to.y - from.y } as Coord;
 }
 
@@ -44,26 +41,22 @@ export function transformationToDirection(t: Coord) {
   return Directions.Random;
 }
 
-export function getDirection(previousPosition, currentPosition) {
-  if (!previousPosition || !currentPosition) {
-    return "";
-  }
+export function directionToString(direction: Directions) {
+  if (direction === Directions.Random) return "";
+  if (direction === Directions.North) return "north";
+  if (direction === Directions.NorthEast) return "north-east";
+  if (direction === Directions.East) return "east";
+  if (direction === Directions.SouthEast) return "south-east";
+  if (direction === Directions.South) return "south";
+  if (direction === Directions.SouthWest) return "south-west";
+  if (direction === Directions.West) return "west";
+  if (direction === Directions.NorthWest) return "north-west";
+  return "";
+}
 
-  if (currentPosition.x > previousPosition.x) {
-    return "east";
-  }
-
-  if (currentPosition.x < previousPosition.x) {
-    return "west";
-  }
-
-  if (currentPosition.y > previousPosition.y) {
-    return "south";
-  }
-
-  if (currentPosition.y < previousPosition.y) {
-    return "north";
-  }
+export function getDirection(from: Coord, to: Coord) {
+  if (!from || !to) return "";
+  return directionToString(transformationToDirection(positionsToTransformation(from, to)));
 }
 
 export function directionalPathfind(from: Coord, to: Coord) {
@@ -80,4 +73,13 @@ export function directionalPathfind(from: Coord, to: Coord) {
   }
 
   return path;
+}
+
+/**
+ * @param a Coordinate A
+ * @param b Coordinate B
+ * @returns Manhattan distance from A to B (https://xlinux.nist.gov/dads/HTML/manhattanDistance.html)
+ */
+export function manhattan(a: Coord, b: Coord) {
+  return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 }

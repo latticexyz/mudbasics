@@ -45,10 +45,7 @@ export function startSequencer() {
 export function stopSequencer() {
   sequencerActive.set(false);
 
-  // To be moved elsewhere....
-  // Activity should be set until cooldown is over
-  playerActivity.set(Activities.Idle);
-
+  // Reset success states
   sequence.update((s) => {
     for (let i = 0; i < s.length; i++) {
       s[i].success = true;
@@ -83,6 +80,13 @@ blockNumber.subscribe((newBlock) => {
       progress.set(0, { duration: get(operationDuration) * 1000 });
       // Store cooldown block for future reference
       oldCoolDownBlock = get(player).coolDownBlock || 0;
+    }
+
+    // Set player state to idle if:
+    // – the sequencer is not active
+    // - Cooldown period is over
+    if (!get(sequencerActive) && newBlock > (get(player).coolDownBlock || 0)) {
+      playerActivity.set(Activities.Idle);
     }
 
     // Execute the next operation if

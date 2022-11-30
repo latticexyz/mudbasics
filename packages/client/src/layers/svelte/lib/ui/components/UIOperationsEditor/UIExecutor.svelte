@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { tooltip } from "../UIToolTip/index.ts"
+  import { tooltip } from "../UIToolTip/index.ts";
   import { blockNumber } from "../../../../stores/network";
   import { uiState } from "../../../../stores/ui";
   import { player } from "../../../../stores/player";
@@ -54,8 +54,8 @@
       {#each $sequence as sequenceElement, index}
         <div
           use:tooltip
-          title={sequenceElement.operation?.c || false}
-          data-description={sequenceElement.operation.description}
+          title={sequenceElement.operation.description}
+          data-description={sequenceElement.operation?.cost}
           class="slot {sequenceElement.operation.category}"
           class:active={$sequencerActive && $activeOperationIndex === index}
           class:failure={!$sequence[index].success}
@@ -86,13 +86,13 @@
     {#if $sequencerActive}
       <button on:click={stop}>Stop</button>
     {/if}
-    <button on:click={edit}>Edit</button>
     {#if !$sequencerActive}
       {#if $sequence.length > 0}
         <button on:click={clear}>Clear</button>
         <button on:click={start}>Start</button>
       {/if}
     {/if}
+    <button on:click={edit}>Edit</button>
   </div>
 </div>
 
@@ -213,6 +213,7 @@
     font-size: 9px;
     text-align: center;
     display: flex;
+    align-items: center;
   }
 
   .progress-number {
@@ -222,9 +223,8 @@
 
   progress {
     width: 80px;
-    height: 100%;
+    height: 10px;
     border-radius: 0;
-    margin-bottom: 5px;
   }
 
   progress::-webkit-progress-bar {

@@ -3,6 +3,7 @@ import { network } from "./network";
 import { entities } from "./entities";
 import { uniq } from "lodash";
 import { seedToName } from "../utils/name";
+import { Directions } from "../utils/space";
 
 export enum Activities {
   Idle,
@@ -55,6 +56,7 @@ export function activityToVerb(activity: Activities) {
 export const playerAddress = derived(network, ($network) => $network.network?.connectedAddress.get() || "0x0");
 export const player = derived([entities, playerAddress], ([$entities, $playerAddress]) => $entities[$playerAddress]);
 export const playerActivity = writable(Activities.Idle);
+export const playerDirection = writable(Directions.Random);
 
 // Input: an array of players, outputs, player names
 export function playerList(players: string[]) {

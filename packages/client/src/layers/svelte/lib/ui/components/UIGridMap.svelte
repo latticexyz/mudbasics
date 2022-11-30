@@ -2,9 +2,11 @@
   import { Coord } from "@latticexyz/recs";
   import { onMount } from "svelte";
   import { entities, Entity } from "../../../stores/entities";
-  import { player, playerAddress } from "../../../stores/player";
+  import { Activities, player, playerActivity, playerDirection } from "../../../stores/player";
+  import { blockNumber } from "../../../stores/network";
   import { createPerlin, Perlin } from "@latticexyz/noise";
-  import { EntityType } from "../../../utils/space";
+  import { EntityType, TerrainType, directionToString } from "../../../utils/space";
+  import { seedToName } from "../../../utils/name";
 
   let perlin: Perlin;
 
@@ -18,13 +20,6 @@
     );
     return entity;
   }
-
-  enum TerrainType {
-    Dust,
-    Debris,
-    Ruins,
-  }
-
   function perlinToTerrainType(p: number) {
     if (p < 0.4) return TerrainType.Dust;
     if (p < 0.6) return TerrainType.Debris;
@@ -37,9 +32,11 @@
     coordinates: Coord;
     perlinFactor: number;
     terrain: TerrainType;
+    resource: number;
     fire?: Entity | undefined;
     other?: Entity | undefined;
     corpse?: Entity | undefined;
+    mined?: Entity | undefined;
   }
 
   let grid: GridItem[] = [];
@@ -53,6 +50,7 @@
           coordinates: { x: 0, y: 0 },
           perlinFactor: 0,
           terrain: TerrainType.Dust,
+          resource: 100,
         };
         grid = [...grid, newGridItem];
       }
@@ -68,13 +66,13 @@
       grid[i].fire = checkForType(grid[i].coordinates, EntityType.Fire);
       grid[i].other = checkForType(grid[i].coordinates, EntityType.Player);
       grid[i].corpse = checkForType(grid[i].coordinates, EntityType.Corpse);
+      grid[i].mined = checkForType(grid[i].coordinates, EntityType.Terrain);
+      grid[i].resource = grid[i].mined == undefined ? 100 : grid[i].mined.resource;
     }
   }
 
-  entities.subscribe((value) => {
-    if (perlin) {
-      updateGrid(value[$playerAddress].position);
-    }
+  blockNumber.subscribe(() => {
+    updateGrid($player.position);
   });
 
   onMount(async () => {
@@ -86,6 +84,18 @@
 
 <div class="ui-grid-map">
   <div class="grid-container">
+    <!-- Shown if player is moving -->
+    {#if $playerActivity == Activities.Moving && ($player.coolDownBlock || 0) > $blockNumber}
+      <div class="cooldown-overlay">
+        <div>
+          <strong>{seedToName($player.seed || 0)}</strong> is moving
+          <strong>{directionToString($playerDirection)}</strong>.<br />
+          Some flavour text possibly.<br />
+          Arriving in <strong>{($player.coolDownBlock || 0) - $blockNumber}</strong> seconds
+        </div>
+      </div>
+    {/if}
+
     {#each grid as item}
       <div
         class="grid-item {item.direction}"
@@ -94,8 +104,9 @@
         class:ruins={item.terrain === TerrainType.Ruins}
       >
         <div>
-          [{item.coordinates.x}:{item.coordinates.y}] <br />
-          {item.perlinFactor.toFixed(2)}
+          [{item.coordinates.x}:{item.coordinates.y}]<br />
+          {item.resource}<br />
+          {item.perlinFactor.toFixed(2)}<br />
         </div>
 
         <!-- SELF -->
@@ -124,6 +135,16 @@
         {#if item.corpse !== undefined}
           <div class="icon corpse">💀</div>
         {/if}
+
+        <!-- MINED -->
+        {#if item.resource < 100}
+          <div class="icon mined">🪨</div>
+        {/if}
+
+        <!-- EMPTY -->
+        {#if item.resource == 0}
+          <div class="icon empty">🥡</div>
+        {/if}
       </div>
     {/each}
   </div>
@@ -134,6 +155,24 @@
     height: 320px;
     display: flex;
     justify-content: center;
+    position: relative;
+  }
+
+  .cooldown-overlay {
+    position: absolute;
+    width: 100%;
+    background: rgba(127, 127, 127, 0.7);
+    backdrop-filter: blur(5px);
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
   }
 
   .grid-container {
@@ -184,6 +223,6 @@
   }
 
   .self {
-    z-index: 100;
+    z-index: 1000;
   }
 </style>

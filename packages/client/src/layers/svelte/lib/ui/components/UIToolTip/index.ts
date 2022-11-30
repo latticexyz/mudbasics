@@ -2,8 +2,8 @@ import UITooltip from "./UIToolTip.svelte";
 
 export function tooltip(node: HTMLElement, offset = { x: 10, y: -10 }) {
   let div;
-  let title;
-  let description;
+  let title: string;
+  let description: string;
   let tooltipComponent;
 
   function mouseEnter(event) {
