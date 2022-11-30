@@ -108,7 +108,7 @@ export const operations: Operation[] = [
   },
   {
     name: "go-to-fire",
-    category: "special",
+    category: "move",
     description: "Walk towards closest fire",
     cost: "energy: 10",
     f: goTowardsFire,
