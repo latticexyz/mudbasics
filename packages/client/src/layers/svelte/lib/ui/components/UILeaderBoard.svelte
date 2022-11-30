@@ -8,7 +8,7 @@
 
   export let autoplay = 2500;
   // let interval;
-  // let i = 0;
+  let i = 0;
 
   const mappings = {
     gluttony: "eaten",
