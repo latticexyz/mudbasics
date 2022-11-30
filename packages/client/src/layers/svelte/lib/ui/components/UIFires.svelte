@@ -1,18 +1,18 @@
 <script lang="ts">
   import { fires } from "../../../stores/entities";
   import { player, playerList } from "../../../stores/player";
-  import { uiState } from "../../../stores/ui"
+  import { uiState } from "../../../stores/ui";
   import { seedToName } from "../../../utils/name";
   import { blockNumber } from "../../../stores/network";
-  import { speed, fragSpeed } from "../../../stores/ui"
-  import { fade } from "svelte/transition"
+  import { speed, fragSpeed } from "../../../stores/ui";
+  import { fade } from "svelte/transition";
 
   const SECONDS_IN_DAY = 86400;
 
   let clockTime: number;
   $: clockTime = Math.floor((($blockNumber % 3600) / 3600) * SECONDS_IN_DAY);
 
-  function arson () {
+  function arson() {
     uiState.alter("operations-planner", "active", true);
     uiState.alter("operations-planner", "grid", {
       col: [1, 4],
@@ -46,13 +46,13 @@
         🕳
       {/if}
       {#if value.coolDownBlock}
-        / cdb: {Math.max(value.coolDownBlock - $blockNumber, 0)}
+        / burntime: {Math.max(value.coolDownBlock - $blockNumber, 0)}
       {/if}
       {#if value.resource}
-        / r: {value.resource}
+        / resources: {value.resource}
       {/if}
       {#if value.creator}
-        / c: {playerList(value.creator)}
+        / creators: {playerList(value.creator)}
       {/if}
     </div>
   {/each}

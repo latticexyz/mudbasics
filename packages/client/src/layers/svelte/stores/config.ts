@@ -86,9 +86,10 @@ export const initialState = () => ({
     active: false,
     options: {
       fluid: true,
+      layer: 10,
     },
     grid: {
-      col: [1, 3],
+      col: [2, 3],
       row: [6, 10],
     },
   }),
@@ -99,6 +100,7 @@ export const initialState = () => ({
     component: UITextLog,
     active: true,
     options: {
+      fluid: true,
       delay: makeDelay(),
       muted: false,
     },
@@ -164,7 +166,7 @@ export const initialState = () => ({
     },
     grid: {
       col: [1, 2],
-      row: [7, 10],
+      row: [6, 10],
     },
   }),
   //

@@ -156,6 +156,7 @@
     display: flex;
     justify-content: center;
     position: relative;
+    align-items: center;
   }
 
   .cooldown-overlay {
