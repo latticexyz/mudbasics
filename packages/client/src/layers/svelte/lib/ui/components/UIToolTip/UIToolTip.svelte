@@ -1,16 +1,13 @@
 <script>
-	export let title;
-	export let description;
-	export let x;
-	export let y;
+  export let title;
+  export let description;
+  export let x;
+  export let y;
 </script>
-<div
-  class="ui-tooltip"
-  style:top="{y + 5}px"
-  style:left="{x + 5}px"
-  >
+
+<div class="ui-tooltip" style:top="{y + 5}px" style:left="{x + 5}px">
   <div class="ui-tooltip-inner">
-    {#if title && title !== 'false'}
+    {#if title && title !== "false"}
       <div class:ui-tooltip-title={!!description}>
         {title}
       </div>
@@ -24,16 +21,16 @@
 </div>
 
 <style>
-	.ui-tooltip {
-		border: var(--outer-border);
+  .ui-tooltip {
+    border: var(--outer-border);
     backdrop-filter: var(--backdrop);
-		padding: var(--padding-button);
-		position: absolute;
+    padding: var(--padding-button);
+    position: absolute;
     max-width: 60ch;
     min-width: 30ch;
     pointer-events: none;
-	}
-  
+  }
+
   .ui-tooltip-title {
     border-bottom: var(--outer-border);
     padding: 6px 0;

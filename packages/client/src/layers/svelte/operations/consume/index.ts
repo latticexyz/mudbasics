@@ -1,3 +1,3 @@
-export { nibble, cost as nibbleCost } from "./nibble";
-export { eat, cost as eatCost } from "./eat";
-export { feast, cost as feastCost } from "./feast";
+export { nibble } from "./nibble";
+export { eat } from "./eat";
+export { feast } from "./feast";

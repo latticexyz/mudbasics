@@ -1,31 +1,8 @@
-import {
-  crawl,
-  crawlCost,
-  walk,
-  walkCost,
-  run,
-  runCost,
-  east,
-  eastCost,
-  west,
-  westCost,
-  north,
-  northCost,
-  south,
-  southCost,
-  southEast,
-  southEastCost,
-  southWest,
-  southWestCost,
-  northEast,
-  northEastCost,
-  northWest,
-  northWestCost,
-} from "./move";
-import { gather, gatherCost, hoard, hoardCost, stockpile, stockpileCost } from "./gather";
-import { nibble, nibbleCost, eat, eatCost, feast, feastCost } from "./consume";
-import { fire, fireCost, bonfire, bonfireCost } from "./burn";
-import { play, playCost } from "./play";
+import { crawl, walk, run, east, west, north, south, southEast, southWest, northEast, northWest } from "./move";
+import { gather, hoard, stockpile } from "./gather";
+import { nibble, eat, feast } from "./consume";
+import { fire, bonfire } from "./burn";
+import { play } from "./play";
 import { suicide, goTowardsFire } from "./special";
 import { hungry, rich } from "./gates";
 
@@ -33,22 +10,8 @@ export interface Operation {
   name: string;
   category: string;
   description: string;
-  c?: string;
+  cost: string;
   f: () => boolean;
-}
-export interface Cost {
-  ids: [];
-  values: [];
-}
-
-function costString(cost: Cost) {
-  console.log(cost);
-  let result = "";
-  for (let i = 0; i < cost.ids.length; i++) {
-    result += `${cost.ids[i]}: ${cost.values[i]} ${i < cost.ids.length - 1 ? ", " : ""}`;
-  }
-  console.log(result);
-  return result;
 }
 
 export const operations: Operation[] = [
@@ -57,166 +20,167 @@ export const operations: Operation[] = [
     name: "east",
     category: "move",
     description: "If you believe in God, believe in Death Row East",
+    cost: "energy: 10",
     f: east,
-    c: costString(eastCost),
   },
   {
     name: "west",
     category: "move",
     description: "If you want to go east, don't go west",
+    cost: "energy: 10",
     f: west,
-    c: costString(westCost),
   },
   {
     name: "north",
     category: "move",
     description: "Fist of the north star",
+    cost: "energy: 10",
     f: north,
-    c: costString(northCost),
   },
   {
     name: "south",
     category: "move",
     description: "The south will rise again",
+    cost: "energy: 10",
     f: south,
-    c: costString(southCost),
   },
   {
     name: "south-east",
     category: "move",
     description: "Move south-east",
+    cost: "energy: 10",
     f: southEast,
-    c: costString(southEastCost),
   },
   {
     name: "south-west",
     category: "move",
     description: "Move south-west",
+    cost: "energy: 10",
     f: southWest,
-    c: costString(southWestCost),
   },
   {
     name: "north-east",
     category: "move",
     description: "Move north-east",
+    cost: "energy: 10",
     f: northEast,
-    c: costString(northEastCost),
   },
   {
     name: "north-west",
     category: "move",
     description: "Move north-west",
+    cost: "energy: 10",
     f: northWest,
-    c: costString(northWestCost),
   },
   {
     name: "crawl",
     category: "move",
-    description: "Use your hands while you walk",
+    description: "Move 1 step in random direction",
+    cost: "energy: 10",
     f: crawl,
-    c: costString(crawlCost),
   },
   {
     name: "walk",
     category: "move",
-    description: "Pedestrial locomotion for those with two feet attached",
+    description: "Move 3 steps in random direction",
+    cost: "energy: 30",
     f: walk,
-    c: costString(walkCost),
   },
   {
     name: "run",
     category: "move",
-    description: "Go... run with the wind",
+    description: "Move 5 steps in random direction",
+    cost: "energy: 50",
     f: run,
-    c: costString(runCost),
   },
   // --- CONSUME
   {
     name: "nibble",
     category: "consume",
     description: "Have yourself a little something",
+    cost: "resource: 5",
     f: nibble,
-    c: costString(nibbleCost),
   },
   {
     name: "eat",
     category: "consume",
     description: "Time for a meal",
+    cost: "resource: 10",
     f: eat,
-    c: costString(eatCost),
   },
   {
     name: "feast",
     category: "consume",
     description: "Tonight, we feast!",
+    cost: "resource: 20",
     f: feast,
-    c: costString(feastCost),
   },
   {
     name: "gather",
     category: "gather",
     description: "All I see are shrubs, leftovers and other bits",
+    cost: "energy: 50",
     f: gather,
-    c: costString(gatherCost),
   },
   {
     name: "hoard",
     category: "gather",
     description: "I can make use of this...",
+    cost: "energy: 100",
     f: hoard,
-    c: costString(hoardCost),
   },
   {
     name: "stockpile",
     category: "gather",
     description: "Keep collecting before we run out",
+    cost: "energy: 200",
     f: stockpile,
-    c: costString(stockpileCost),
   },
   // --- BURN
   {
     name: "fire",
     category: "burn",
     description: "This will keep me warm me at night",
+    cost: "resource: 100, energy: 50",
     f: fire,
-    c: costString(fireCost),
   },
   {
     name: "bonfire",
     category: "burn",
     description: "Let ashes blow over the fields for days on end",
+    cost: "resource: 500, energy: 50",
     f: bonfire,
-    c: costString(bonfireCost),
   },
   // --- PLAY
   {
     name: "play",
     category: "play",
     description: "(╯°Д°)╯︵/(.□ . \\)",
+    cost: "energy: 100",
     f: play,
-    c: costString(playCost),
   },
   // --- SPECIAL
   {
     name: "suicide",
     category: "special",
     description: "What is the point to it all, anyways",
+    cost: "energy: all of it",
     f: suicide,
   },
-  { name: "go-to-fire", category: "special", description: "", f: goTowardsFire },
+  { name: "go-to-fire", category: "special", description: "Go to closest fire", cost: "energy: 10", f: goTowardsFire },
   // --- GATES
   {
     name: "hungry?",
     category: "gate",
     description: "I could use a little more... (!) ",
+    cost: "Continue if energy is under 900",
     f: hungry,
-    c: "Reruns sequence if energy is under 900",
   },
   {
     name: "rich?",
     category: "gate",
     description: "More... more... more...",
+    cost: "Continue if resource is over 200",
     f: rich,
-    c: "Reruns sequence if resource is over 200",
   },
 ];

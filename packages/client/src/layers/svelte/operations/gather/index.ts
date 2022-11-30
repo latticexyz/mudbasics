@@ -1,3 +1,3 @@
-export { gather, cost as gatherCost } from "./gather";
-export { hoard, cost as hoardCost } from "./hoard";
-export { stockpile, cost as stockpileCost } from "./stockpile";
+export { gather } from "./gather";
+export { hoard } from "./hoard";
+export { stockpile } from "./stockpile";

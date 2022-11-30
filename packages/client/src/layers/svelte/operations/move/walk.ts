@@ -1,11 +1,6 @@
 import { get } from "svelte/store";
-import { network, blockNumber } from "../../stores/network";
+import { network } from "../../stores/network";
 import { player } from "../../stores/player";
-
-export const cost = {
-  ids: ["energy"],
-  values: [30],
-};
 
 export function walk() {
   if ((get(player).energy || 0) >= 30) {

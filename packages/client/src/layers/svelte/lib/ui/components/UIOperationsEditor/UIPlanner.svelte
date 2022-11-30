@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { tooltip } from "../UIToolTip/index"
+  import { tooltip } from "../UIToolTip/index";
   import { operations, Operation } from "../../../../operations/";
-  import { uiState } from "../../../../stores/ui"
+  import { uiState } from "../../../../stores/ui";
   import {
     SequenceElement,
     emptySequenceElement,
@@ -11,7 +11,7 @@
     sequencerActive,
   } from "../../../../stores/sequence";
 
-  const categories = [...new Set(operations.map(op => op.category))]
+  const categories = [...new Set(operations.map((op) => op.category))];
 
   let localSequence: SequenceElement[] = Array(SEQUENCER_LENGTH);
   localSequence.fill(emptySequenceElement);
@@ -24,7 +24,7 @@
   function submit() {
     // Remove empty sequence elements before submitting
     submitSequence(localSequence.filter((item) => item.operation.name !== "+"));
-    uiState.alter('operations-planner', 'active', false)
+    uiState.alter("operations-planner", "active", false);
   }
 
   function stop() {
@@ -82,11 +82,11 @@
         <span class="operation blank">
           {category}
         </span>
-        {#each operations.filter(o => o.category === category) as operation}
+        {#each operations.filter((o) => o.category === category) as operation}
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <div
-            title={operation?.c || 'false'}
-            data-description={operation.description}
+            title={operation.description}
+            data-description={operation.cost}
             use:tooltip
             class="operation {operation.category}"
             on:click={() => {
