@@ -1,11 +1,11 @@
 <script lang="ts">
   import { Coord } from "@latticexyz/recs";
   import { onMount } from "svelte";
-  import { entities, Entity } from "../../../stores/entities";
+  import { entities, Entity, EntityType } from "../../../stores/entities";
   import { Activities, player, playerActivity, playerDirection } from "../../../stores/player";
   import { blockNumber } from "../../../stores/network";
   import { createPerlin, Perlin } from "@latticexyz/noise";
-  import { EntityType, TerrainType, directionToString } from "../../../utils/space";
+  import { TerrainType, directionToString } from "../../../utils/space";
   import { seedToName } from "../../../utils/name";
 
   let perlin: Perlin;
@@ -20,6 +20,7 @@
     );
     return entity;
   }
+
   function perlinToTerrainType(p: number) {
     if (p < 0.4) return TerrainType.Dust;
     if (p < 0.6) return TerrainType.Debris;

@@ -1,6 +1,6 @@
 export { crawl } from "./crawl";
-export { walk } from "./walk";
-export { run } from "./run";
+export { stumble } from "./stumble";
+export { gallop } from "./gallop";
 export { east } from "./east";
 export { west } from "./west";
 export { north } from "./north";

@@ -2,12 +2,12 @@ import { get } from "svelte/store";
 import { network } from "../../stores/network";
 import { player } from "../../stores/player";
 
-export function gather() {
-  if ((get(player).energy || 0) >= 50) {
-    get(network).api?.gather(50);
+export function lick() {
+  if ((get(player).resource || 0) >= 5) {
+    get(network).api?.consume(5);
     return true;
   } else {
-    console.log("Gather: not enough energy");
+    console.log("Lick: not enough resource");
     return false;
   }
 }

@@ -2,12 +2,12 @@ import { get } from "svelte/store";
 import { network } from "../../stores/network";
 import { player } from "../../stores/player";
 
-export function walk() {
-  if ((get(player).energy || 0) >= 30) {
-    get(network).api?.move(30, 0);
+export function guzzle() {
+  if ((get(player).resource || 0) >= 20) {
+    get(network).api?.consume(20);
     return true;
   } else {
-    console.log("Walk: not enough energy");
+    console.log("Guzzle: not enough resource");
     return false;
   }
 }

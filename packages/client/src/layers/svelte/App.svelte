@@ -17,7 +17,8 @@
     createLoadingStateSystem,
     createPlayingSystem,
   } from "./systems";
-  import { network as networkStore, blockNumber } from "./stores/network";
+  import { network as networkStore, blockNumber, startBlock } from "./stores/network";
+  import { directToLog } from "./stores/narrative";
 
   onMount(async () => {
     const layers = await bootGame();
@@ -44,6 +45,11 @@
 
     layers.network.network.blockNumber$.subscribe((x) => {
       blockNumber.set(x);
+      if ($startBlock == 0) {
+        startBlock.set(x);
+        directToLog("It is night.");
+        directToLog("You hear something in the darkness...");
+      }
     });
   });
 </script>

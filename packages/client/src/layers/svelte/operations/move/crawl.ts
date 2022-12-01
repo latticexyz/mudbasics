@@ -7,7 +7,7 @@ export function crawl() {
     get(network).api?.move(10, 0);
     return true;
   } else {
-    console.log("Crawl: not enough energy");
+    console.log("not enough energy");
     return false;
   }
 }

@@ -19,6 +19,7 @@ export interface UIComponentOptions {
   delay?: number;
   fluid?: boolean;
   bare?: boolean;
+  hidden?: boolean;
   persistent?: boolean;
   muted?: boolean;
   layer?: number;
@@ -66,7 +67,7 @@ export const initialState = () => ({
   // OPS PLANNER
   "operations-planner": initialise({
     id: "operations-planner",
-    title: "Operations Planner",
+    title: "Compulsions",
     component: UIPlanner,
     active: false,
     options: {
@@ -75,28 +76,13 @@ export const initialState = () => ({
     },
     grid: {
       col: [1, 4],
-      row: [6, 10],
-    },
-  }),
-  // FIRES
-  fires: initialise({
-    id: "fires",
-    title: "Fires",
-    component: UIFires,
-    active: false,
-    options: {
-      fluid: true,
-      layer: 10,
-    },
-    grid: {
-      col: [2, 3],
-      row: [6, 10],
+      row: [1, 10],
     },
   }),
   // TEXT LOG
   "text-log": initialise({
     id: "text-log",
-    title: "Text Log",
+    title: "Memory",
     component: UITextLog,
     active: true,
     options: {
@@ -109,24 +95,10 @@ export const initialState = () => ({
       col: [1, 2],
     },
   }),
-  // MAP
-  map: initialise({
-    id: "map",
-    title: "Map",
-    component: UIMap,
-    active: false,
-    options: {
-      delay: 0,
-    },
-    grid: {
-      col: [1, 2],
-      row: [7, 10],
-    },
-  }),
-  //
+  // GRID MAP
   "grid-map": initialise({
     id: "grid-map",
-    title: "Grid Map",
+    title: "Soil",
     component: UIGridMap,
     active: true,
     options: {
@@ -138,6 +110,36 @@ export const initialState = () => ({
       row: [5, 10],
     },
   }),
+  // FIRES
+  fires: initialise({
+    id: "fires",
+    title: "Fires",
+    component: UIFires,
+    active: false,
+    options: {
+      fluid: true,
+      layer: 5,
+    },
+    grid: {
+      col: [2, 3],
+      row: [6, 10],
+    },
+  }),
+  // MAP
+  map: initialise({
+    id: "map",
+    title: "Map",
+    component: UIMap,
+    active: false,
+    options: {
+      delay: 0,
+      hidden: true,
+    },
+    grid: {
+      col: [1, 2],
+      row: [7, 10],
+    },
+  }),
   "debug-log": initialise({
     id: "debug-log",
     title: "Debug Log",
@@ -147,13 +149,14 @@ export const initialState = () => ({
       fluid: true,
       layer: 2,
       delay: 0,
+      hidden: true,
     },
     grid: {
       col: [3, 4],
       row: [5, 10],
     },
   }),
-  //
+  // LEADERBOARD
   leaderboard: initialise({
     id: "leaderboard",
     title: "Leaderboard",
@@ -172,7 +175,7 @@ export const initialState = () => ({
   //
   "operations-executor": initialise({
     id: "operations-executor",
-    title: "Operations Executor",
+    title: "Compulsions",
     component: UIExecutor,
     active: true,
     options: {
@@ -195,6 +198,7 @@ export const initialState = () => ({
     options: {
       fluid: true,
       delay: makeDelay(),
+      hidden: true,
     },
     grid: {
       col: [3, 4],

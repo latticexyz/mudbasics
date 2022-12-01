@@ -1,4 +1,4 @@
-import { defineComponentSystem } from "@latticexyz/recs";
+import { defineComponentSystem, ComponentUpdate } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { entities, indexToID } from "../stores/entities";
 

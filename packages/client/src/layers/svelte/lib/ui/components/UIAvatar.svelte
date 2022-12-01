@@ -2,7 +2,7 @@
   import UIMetric from "./UIMetric.svelte";
   import { Activities, activityToVerb, player, playerActivity } from "../../../stores/player";
   import { seedToName, seedToMask } from "../../../utils/name";
-  import { EntityType } from "../../../utils/space";
+  import { EntityType } from "../../../stores/entities";
 </script>
 
 <div class="ui-avatar">
@@ -19,7 +19,7 @@
     </div>
     <div class="resources">
       <UIMetric label="Energy" key="energy" />
-      <UIMetric label="Resource" key="resource" />
+      <UIMetric label="Juice" key="resource" />
     </div>
   </div>
 

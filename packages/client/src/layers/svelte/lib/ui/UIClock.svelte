@@ -17,7 +17,7 @@
 </script>
 
 <div class="ui-clock">
-  <div class="clock-time">{formatTime(clockTime)}</div>
+  <div class="clock-time">{formatTime(clockTime)} ({$blockNumber})</div>
 </div>
 
 <style>

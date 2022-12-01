@@ -11,12 +11,12 @@
 
 {#if $player}
   <div class="ui-menu-container" class:open={$menuVisible}>
-    <button class="ui-button" on:click={toggle}> Menu </button>
+    <button class="ui-button" on:click={toggle}>Senses</button>
 
     {#if $menuVisible}
       <ul class="ui-menu">
         {#each Object.values($uiState) as item, i (item.id)}
-          {#if !item.options.persistent}
+          {#if !item.options.persistent && !item.options.hidden}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <li
               in:fade={{ duration: $speed + $fragSpeed * i }}
@@ -43,14 +43,14 @@
     z-index: 9;
     transition: all 0.2s ease-out;
     height: var(--taskbar-height);
-    width: 56px;
+    width: 70px;
     /* background-color: rgba(var(--background-rgb), var(--muted-opacity)); */
     backdrop-filter: var(--backdrop);
     user-select: none;
   }
   .ui-menu-container.open {
-    width: 256px;
-    height: 256px;
+    width: 200px;
+    height: 140px;
     /* position: fixed; */
   }
 

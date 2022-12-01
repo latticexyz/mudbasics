@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 import { player } from "../../stores/player";
 
-export function rich() {
+export function juiceRich() {
   if ((get(player).resource || 0) > 200) {
     return true;
   } else {

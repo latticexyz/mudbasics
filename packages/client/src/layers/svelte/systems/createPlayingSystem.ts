@@ -1,6 +1,7 @@
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
-import { entities, indexToID, Entity } from "../stores/entities";
+import { entities, indexToID } from "../stores/entities";
+import { addToLog, EventCategory } from "../stores/narrative";
 
 export function createPlayingSystem(network: NetworkLayer) {
   const {
@@ -16,5 +17,7 @@ export function createPlayingSystem(network: NetworkLayer) {
       value[indexToID(update.entity)].playing = playing;
       return value;
     });
+
+    addToLog(update, EventCategory.Play);
   });
 }

@@ -1,7 +1,7 @@
 import {
   crawl,
-  walk,
-  run,
+  stumble,
+  gallop,
   east,
   west,
   north,
@@ -12,12 +12,12 @@ import {
   northWest,
   goTowardsFire,
 } from "./move";
-import { gather, hoard, stockpile } from "./gather";
-import { nibble, eat, feast } from "./consume";
+import { glean, dig, drain } from "./gather";
+import { lick, drink, guzzle } from "./consume";
 import { fire, bonfire } from "./burn";
 import { play } from "./play";
 import { suicide } from "./special";
-import { hungry, rich } from "./gates";
+import { hungry, juiceRich, drained, byTheFire } from "./gates";
 
 export interface Operation {
   name: string;
@@ -93,68 +93,69 @@ export const operations: Operation[] = [
     f: crawl,
   },
   {
-    name: "walk",
+    name: "stumble",
     category: "move",
     description: "Move 3 steps in random direction",
     cost: "energy: 30",
-    f: walk,
+    f: stumble,
   },
   {
-    name: "run",
+    name: "gallop",
     category: "move",
     description: "Move 5 steps in random direction",
     cost: "energy: 50",
-    f: run,
+    f: gallop,
   },
   {
-    name: "go-to-fire",
+    name: "walk towards fire",
     category: "move",
-    description: "Walk towards closest fire",
+    description: "Go to fire",
     cost: "energy: 10",
     f: goTowardsFire,
   },
   // --- CONSUME
   {
-    name: "nibble",
+    name: "lick",
     category: "consume",
     description: "Have yourself a little something",
-    cost: "resource: 5",
-    f: nibble,
+    cost: "juice: 5",
+    f: lick,
   },
   {
-    name: "eat",
+    name: "drink",
     category: "consume",
     description: "Time for a meal",
-    cost: "resource: 10",
-    f: eat,
+    cost: "juice: 10",
+    f: drink,
   },
   {
-    name: "feast",
+    name: "guzzle",
     category: "consume",
-    description: "Tonight, we feast!",
-    cost: "resource: 20",
-    f: feast,
+    description: "The hunger needs to be stilled",
+    cost: "juice: 20",
+    f: guzzle,
   },
+  // --- GATHER
   {
-    name: "gather",
+    name: "glean",
     category: "gather",
     description: "All I see are shrubs, leftovers and other bits",
     cost: "energy: 50",
-    f: gather,
+    f: glean,
   },
   {
-    name: "hoard",
+    name: "dig",
     category: "gather",
     description: "I can make use of this...",
     cost: "energy: 100",
-    f: hoard,
+    f: dig,
   },
   {
-    name: "stockpile",
+    name: "drain",
     category: "gather",
     description: "Keep collecting before we run out",
     cost: "energy: 200",
-    f: stockpile,
+    f: drain,
   },
   // --- BURN
   {
@@ -164,18 +165,18 @@ export const operations: Operation[] = [
     cost: "resource: 100, energy: 50",
     f: fire,
   },
-  {
-    name: "bonfire",
-    category: "burn",
-    description: "Let ashes blow over the fields for days on end",
-    cost: "resource: 500, energy: 50",
-    f: bonfire,
-  },
+  // {
+  //   name: "bonfire",
+  //   category: "burn",
+  //   description: "Let ashes blow over the fields for days on end",
+  //   cost: "resource: 500, energy: 50",
+  //   f: bonfire,
+  // },
   // --- PLAY
   {
-    name: "play",
+    name: "serenade",
     category: "play",
-    description: "(╯°Д°)╯︵/(.□ . \\)",
+    description: "(╥﹏╥)",
     cost: "energy: 100",
     f: play,
   },
@@ -191,15 +192,29 @@ export const operations: Operation[] = [
   {
     name: "hungry?",
     category: "gate",
-    description: "I could use a little more... (!) ",
+    description: "Are you hungry?",
     cost: "Continue if energy is under 900",
     f: hungry,
   },
   {
-    name: "rich?",
+    name: "drained?",
     category: "gate",
-    description: "More... more... more...",
+    description: "Has someone already drained all the juice in this soil?",
+    cost: "Continue if tile has juice",
+    f: drained,
+  },
+  {
+    name: "juice rich?",
+    category: "gate",
+    description: "Are you carrying enough juice to survive for a while?",
     cost: "Continue if resource is over 200",
-    f: rich,
+    f: juiceRich,
+  },
+  {
+    name: "by the fire?",
+    category: "gate",
+    description: "Are you by the fire?",
+    cost: "Continue if you are by a fire.",
+    f: byTheFire,
   },
 ];
