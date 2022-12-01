@@ -71,6 +71,57 @@
     }
   }
 
+  // Dust
+  // 0.2
+  // 0.20 - 0.25  => 1
+  // 0.25 - 0.30  => 2
+  // 0.30 - 0.35  => 3
+  // 0.35 - 0.40  => 4
+
+  // Debris
+  // 0.4
+  // 0.40 - 0.45
+  // 0.45 - 0.50
+  // 0.50 - 0.55
+  // 0.55 - 0.60
+
+  // Ruins
+  // 0.6
+  // 0.60 - 0.65
+  // 0.65 - 0.70
+  // 0.70 - 0.75
+  // 0.75 - 0.80
+
+  // function terrainVariation(perlinFactor: number, minValue: number) {
+  //   let normalized = perlinFactor - minValue;
+  //   if (normalized < 0.05) return 1;
+  //   if (normalized < 0.1) return 2;
+  //   if (normalized < 0.15) return 3;
+  //   return 4;
+  // }
+
+  // function backgroundImageClass(tile: GridItem) {
+  //   switch (tile.terrain) {
+  //     case TerrainType.Dust:
+  //       return "dust-" + terrainVariation(tile.perlinFactor, 0.2);
+  //     case TerrainType.Debris:
+  //       return "debris-" + terrainVariation(tile.perlinFactor, 0.4);
+  //     case TerrainType.Ruins:
+  //       return "ruins-" + terrainVariation(tile.perlinFactor, 0.6);
+  //   }
+  // }
+
+  function backgroundImageClass(tile: GridItem) {
+    switch (tile.terrain) {
+      case TerrainType.Dust:
+        return "dust-" + (((tile.coordinates.x + tile.coordinates.y) % 4) + 1);
+      case TerrainType.Debris:
+        return "debris-" + (((tile.coordinates.x + tile.coordinates.y) % 4) + 1);
+      case TerrainType.Ruins:
+        return "ruins-" + (((tile.coordinates.x + tile.coordinates.y) % 4) + 1);
+    }
+  }
+
   blockNumber.subscribe(() => {
     updateGrid($player.position);
   });
@@ -97,13 +148,8 @@
     {/if}
 
     {#each grid as item}
-      <div
-        class="grid-item {item.direction}"
-        class:dust={item.terrain === TerrainType.Dust}
-        class:debris={item.terrain === TerrainType.Debris}
-        class:ruins={item.terrain === TerrainType.Ruins}
-      >
-        <div>
+      <div class="grid-item {item.direction} {backgroundImageClass(item)}">
+        <div class="text">
           [{item.coordinates.x}:{item.coordinates.y}]<br />
           {item.resource}<br />
           {item.perlinFactor.toFixed(2)}<br />
@@ -137,7 +183,7 @@
         {/if}
 
         <!-- MINED -->
-        {#if item.resource < 100}
+        {#if item.resource < 100 && item.resource > 0}
           <div class="icon mined">🪨</div>
         {/if}
 
@@ -189,29 +235,67 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid black;
     color: rgba(255, 255, 255, 1);
     font-size: 9px;
     text-align: center;
     position: relative;
-  }
-
-  .dust {
-    background: rgb(205, 209, 176);
-    background-image: url("../../../../../public/images/dust.png");
     background-size: cover;
   }
 
-  .debris {
-    background: rgb(167, 120, 111);
-    background-image: url("../../../../../public/images/debris.png");
-    background-size: cover;
+  .text {
+    opacity: 0;
   }
 
-  .ruins {
-    background: rgb(184, 87, 54);
-    background-image: url("../../../../../public/images/ruins.png");
-    background-size: cover;
+  .grid-item:hover .text {
+    opacity: 1;
+  }
+
+  .dust-1 {
+    background-image: url("../../../../../public/images/tiles/dust/1.png");
+  }
+
+  .dust-2 {
+    background-image: url("../../../../../public/images/tiles/dust/2.png");
+  }
+
+  .dust-3 {
+    background-image: url("../../../../../public/images/tiles/dust/3.png");
+  }
+
+  .dust-4 {
+    background-image: url("../../../../../public/images/tiles/dust/4.png");
+  }
+
+  .debris-1 {
+    background-image: url("../../../../../public/images/tiles/debris/1.png");
+  }
+
+  .debris-2 {
+    background-image: url("../../../../../public/images/tiles/debris/2.png");
+  }
+
+  .debris-3 {
+    background-image: url("../../../../../public/images/tiles/debris/3.png");
+  }
+
+  .debris-4 {
+    background-image: url("../../../../../public/images/tiles/debris/4.png");
+  }
+
+  .ruins-1 {
+    background-image: url("../../../../../public/images/tiles/ruins/1.png");
+  }
+
+  .ruins-2 {
+    background-image: url("../../../../../public/images/tiles/ruins/2.png");
+  }
+
+  .ruins-3 {
+    background-image: url("../../../../../public/images/tiles/ruins/3.png");
+  }
+
+  .ruins-4 {
+    background-image: url("../../../../../public/images/tiles/ruins/4.png");
   }
 
   .icon {
