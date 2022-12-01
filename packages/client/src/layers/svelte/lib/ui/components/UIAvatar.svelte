@@ -1,7 +1,7 @@
 <script lang="ts">
   import UIMetric from "./UIMetric.svelte";
   import { Activities, activityToVerb, player, playerActivity } from "../../../stores/player";
-  import { seedToName } from "../../../utils/name";
+  import { seedToName, seedToMask } from "../../../utils/name";
   import { EntityType } from "../../../utils/space";
 </script>
 
@@ -25,13 +25,19 @@
 
   <!-- CHARACTER -->
   {#if $playerActivity === Activities.Moving}
-    <video src="/video/walk.mp4" autoplay muted loop />
+    <video src={"/animations/" + seedToMask($player.seed) + "/Walk.mp4"} autoplay muted loop />
+  {:else if $playerActivity === Activities.Eating}
+    <video src={"/animations/" + seedToMask($player.seed) + "/Eat.mp4"} autoplay muted loop />
   {:else if $playerActivity === Activities.Gathering}
-    <video src="/video/gather.mp4" autoplay muted loop />
+    <video src={"/animations/" + seedToMask($player.seed) + "/Gather.mp4"} autoplay muted loop />
   {:else if $playerActivity === Activities.Burning}
-    <video src="/video/gather.mp4" autoplay muted loop />
+    <video src={"/animations/" + seedToMask($player.seed) + "/Fire.mp4"} autoplay muted loop />
+  {:else if $playerActivity === Activities.Playing}
+    <video src={"/animations/" + seedToMask($player.seed) + "/Play.mp4"} autoplay muted loop />
+  {:else if $playerActivity === Activities.Dead}
+    <video src={"/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted loop />
   {:else}
-    <video src="/video/idle.mp4" autoplay muted loop />
+    <video src={"/animations/" + seedToMask($player.seed) + "/Idle.mp4"} autoplay muted loop />
   {/if}
 </div>
 
@@ -65,6 +71,9 @@
     object-fit: cover; */
     max-width: 100%;
     max-height: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .ui-avatar-header {

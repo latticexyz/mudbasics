@@ -28,3 +28,7 @@ export function seedToName(seed: number) {
   const fullName = firstName + " " + lastName;
   return toTitleCase(fullName);
 }
+
+export function seedToMask(seed: number) {
+  return 1;
+}
