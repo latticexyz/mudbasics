@@ -1,9 +1,15 @@
 import { Coord } from "@latticexyz/utils";
 import { writable, get, derived } from "svelte/store";
-import { EntityType } from "../utils/space";
 import { network } from "./network";
 import { category } from "./ui";
 import { playerAddress } from "../stores/player";
+
+export enum EntityType {
+  Player,
+  Terrain,
+  Fire,
+  Corpse,
+}
 
 export interface StatsType {
   traveled: number;

@@ -1,3 +1,3 @@
-export { nibble } from "./nibble";
-export { eat } from "./eat";
-export { feast } from "./feast";
+export { lick } from "./lick";
+export { drink } from "./drink";
+export { guzzle } from "./guzzle";

@@ -3,7 +3,8 @@ import { get } from "svelte/store";
 import { narrative } from "../stores/narrative";
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
-import { entities, indexToID } from "../stores/entities";
+import { entities, EntityType, indexToID } from "../stores/entities";
+import { addToLog, EventCategory } from "../stores/narrative";
 
 export function createEnergySystem(network: NetworkLayer) {
   const {
@@ -22,15 +23,7 @@ export function createEnergySystem(network: NetworkLayer) {
     });
 
     if (energy > oldEnergy) {
-      const logEntry = {
-        id: self.crypto.randomUUID(),
-        blockNumber: get(blockNumber),
-        address: indexToID(update.entity),
-        message: "is eating.",
-      };
-      narrative.update((value) => {
-        return [logEntry, ...value];
-      });
+      addToLog(update, EventCategory.Eat);
     }
   });
 }

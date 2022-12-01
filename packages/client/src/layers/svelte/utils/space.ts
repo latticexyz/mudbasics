@@ -18,13 +18,6 @@ export enum Directions {
   NorthWest,
 }
 
-export enum EntityType {
-  Player,
-  Terrain,
-  Fire,
-  Corpse,
-}
-
 export function positionsToTransformation(from: Coord, to: Coord) {
   return { x: to.x - from.x, y: to.y - from.y } as Coord;
 }

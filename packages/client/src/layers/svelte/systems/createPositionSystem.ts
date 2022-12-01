@@ -1,11 +1,10 @@
-import { blockNumber } from "../stores/network";
 import { get } from "svelte/store";
-import { narrative, LogEntry } from "../stores/narrative";
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { entities, indexToID } from "../stores/entities";
-import { getDirection, positionsToTransformation, transformationToDirection } from "../utils/space";
+import { positionsToTransformation, transformationToDirection } from "../utils/space";
 import { playerDirection, playerAddress } from "../stores/player";
+import { addToLog, EventCategory } from "../stores/narrative";
 
 export function createPositionSystem(network: NetworkLayer) {
   const {
@@ -15,28 +14,19 @@ export function createPositionSystem(network: NetworkLayer) {
 
   defineComponentSystem(world, Position, (update) => {
     console.log("==> Position system: ", update);
-    const previousPosition = update.value[1];
-    const currentPosition = update.value[0];
+    const from = update.value[1];
+    const to = update.value[0];
     entities.update((value) => {
       if (!value[indexToID(update.entity)]) value[indexToID(update.entity)] = {};
-      value[indexToID(update.entity)].position = currentPosition;
+      value[indexToID(update.entity)].position = to;
       return value;
     });
 
-    if (previousPosition) {
-      const logEntry: LogEntry = {
-        id: self.crypto.randomUUID(),
-        blockNumber: get(blockNumber),
-        address: indexToID(update.entity),
-        message: "is moving " + getDirection(previousPosition, currentPosition),
-      };
-      narrative.update((value) => {
-        return [logEntry, ...value];
-      });
-
+    if (from) {
+      addToLog(update, EventCategory.Move);
       // If this is the player, set current direction
       if (indexToID(update.entity) == get(playerAddress)) {
-        playerDirection.set(transformationToDirection(positionsToTransformation(previousPosition, currentPosition)));
+        playerDirection.set(transformationToDirection(positionsToTransformation(from, to)));
       }
     }
   });

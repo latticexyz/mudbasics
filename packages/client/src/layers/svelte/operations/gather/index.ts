@@ -1,3 +1,3 @@
-export { gather } from "./gather";
-export { hoard } from "./hoard";
-export { stockpile } from "./stockpile";
+export { glean } from "./glean";
+export { dig } from "./dig";
+export { drain } from "./drain";

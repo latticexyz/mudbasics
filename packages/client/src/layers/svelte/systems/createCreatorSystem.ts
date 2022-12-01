@@ -1,9 +1,7 @@
-import { blockNumber } from "../stores/network";
-import { get } from "svelte/store";
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { entities, indexToID } from "../stores/entities";
-import { narrative } from "../stores/narrative";
+import { addToLog, EventCategory } from "../stores/narrative";
 
 export function createCreatorSystem(network: NetworkLayer) {
   const {
@@ -20,14 +18,6 @@ export function createCreatorSystem(network: NetworkLayer) {
       return value;
     });
 
-    const logEntry = {
-      id: self.crypto.randomUUID(),
-      blockNumber: get(blockNumber),
-      address: creator,
-      message: "is making a fire.",
-    };
-    narrative.update((value) => {
-      return [logEntry, ...value];
-    });
+    addToLog(update, EventCategory.Fire);
   });
 }

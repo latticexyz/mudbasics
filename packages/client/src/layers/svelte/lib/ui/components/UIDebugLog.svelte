@@ -2,11 +2,11 @@
   import { entities } from "../../../stores/entities";
   import { player, playerAddress, playerList } from "../../../stores/player";
   import { seedToName } from "../../../utils/name";
-  import { EntityType } from "../../../utils/space";
   import { shortenAddress } from "../../../utils/ui";
   import { blockNumber } from "../../../stores/network";
-  import { speed, fragSpeed } from "../../../stores/ui"
-  import { fade } from "svelte/transition"
+  import { speed, fragSpeed } from "../../../stores/ui";
+  import { EntityType } from "../../../stores/entities";
+  import { fade } from "svelte/transition";
 
   const SECONDS_IN_DAY = 86400;
 

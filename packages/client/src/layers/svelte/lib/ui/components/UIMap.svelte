@@ -1,9 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { entities } from "../../../stores/entities";
+  import { entities, EntityType } from "../../../stores/entities";
   import { player, playerAddress } from "../../../stores/player";
   import { createPerlin, Perlin } from "@latticexyz/noise";
-  import { EntityType } from "../../../utils/space";
 
   let canvasEl: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
@@ -23,7 +22,8 @@
     perlin = await createPerlin();
 
     for (let y = 0; y <= 100; y++) {
-      for (let x = 0; x <= 100; x++) {s
+      for (let x = 0; x <= 100; x++) {
+        s;
         paintPixel(x, y, perlin(x, y, 0, 20));
       }
     }
@@ -55,9 +55,7 @@
       <strong>
         {perlin($player.position?.x, $player.position?.y, 0, 20)}
       </strong>
-      (50 energy ≈ {Math.floor(
-        perlin($player.position?.x, $player.position?.y, 0, 20) * 50
-      )} resources)
+      (50 energy ≈ {Math.floor(perlin($player.position?.x, $player.position?.y, 0, 20) * 50)} resources)
     </div>
   {/if}
 </div>

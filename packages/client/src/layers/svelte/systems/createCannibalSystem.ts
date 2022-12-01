@@ -1,6 +1,7 @@
 import { defineComponentSystem } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { entities, indexToID } from "../stores/entities";
+import { addToLog, EventCategory } from "../stores/narrative";
 
 export function createCannibalSystem(network: NetworkLayer) {
   const {
@@ -16,5 +17,7 @@ export function createCannibalSystem(network: NetworkLayer) {
       value[indexToID(update.entity)].cannibal = cannibal;
       return value;
     });
+
+    addToLog(update, EventCategory.Cannibalism);
   });
 }

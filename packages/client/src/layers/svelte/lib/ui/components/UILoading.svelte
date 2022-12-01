@@ -3,7 +3,7 @@
 </script>
 
 <div class="ui-loading">
-  <div class="introduction-text">This is not earth...<br />this is another, distant world</div>
+  <div class="introduction-text">This is not earth<br />...this is another world</div>
   <div class="loading-message">{$loadingMessage}</div>
 </div>
 
