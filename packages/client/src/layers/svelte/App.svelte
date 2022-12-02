@@ -52,8 +52,6 @@
       blockNumber.set(x);
       if ($startBlock == 0) {
         startBlock.set(x);
-        directToLog("It is night.");
-        directToLog("You hear something in the darkness...");
       }
     });
   });

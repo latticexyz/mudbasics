@@ -1,8 +1,17 @@
 <script lang="ts">
-  import { narrative } from "../../../stores/narrative";
+  import { onMount } from "svelte";
+  import { narrative, logReady, directToLog } from "../../../stores/narrative";
   import { playerAddress } from "../../../stores/player";
   import { speed } from "../../../stores/ui";
   import { fade } from "svelte/transition";
+
+  onMount(async () => {
+    setTimeout(() => {
+      logReady.set(true);
+      directToLog("It is night.");
+      directToLog("You hear something in the darkness...");
+    }, 2000);
+  });
 </script>
 
 <div class="ui-memory">

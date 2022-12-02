@@ -1,9 +1,11 @@
 <script lang="ts">
+  import { playSound } from "../../../../howler";
   import { network } from "../../../stores/network";
 
   let spawning = false;
 
   function spawn() {
+    playSound("eventGood", "ui");
     spawning = true;
     $network.api?.spawn();
   }

@@ -39,6 +39,8 @@ function eventCategoryToString(eventCategory: EventCategory) {
   return "";
 }
 
+export const logReady = writable(false);
+
 export const narrative = writable([] as LogEntry[]);
 
 function write(message: string) {
@@ -63,7 +65,7 @@ export function addToLog(update: ComponentUpdate, category: EventCategory) {
   console.log("get(startBlock)", get(startBlock));
 
   // HACK: Avoid writing the first updates to the log
-  if (get(blockNumber) > get(startBlock) + 10) {
+  if (get(logReady)) {
     const isSelf = indexToID(update.entity) == get(playerAddress);
     const entityType = get(entities)[indexToID(update.entity)].entityType;
 

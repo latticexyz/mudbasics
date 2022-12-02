@@ -24,14 +24,14 @@
     if (activity === Activities.Gathering) {
       activitySound = playSound("digging", "activity", true);
     }
-    if (activity === Activities.Playing) {
-      activitySound = playSound("electricGuitar", "play", true);
-    }
     if (activity === Activities.Burning) {
       activitySound = playSound("fire", "environment", true);
     }
     if (activity === Activities.Idle) {
       activitySound = playSound("idle", "activity", true);
+    }
+    if (activity === Activities.Playing) {
+      activitySound = playSound(String(seedToMask($player.seed || 0)), "play", true);
     }
   });
 </script>

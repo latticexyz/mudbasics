@@ -18,6 +18,12 @@ export enum Directions {
   NorthWest,
 }
 
+export function terrainTypeToString(terrainType: TerrainType) {
+  if (terrainType === TerrainType.Dust) return "dust";
+  if (terrainType === TerrainType.Debris) return "debris";
+  if (terrainType === TerrainType.Ruins) return "ruins";
+}
+
 export function positionsToTransformation(from: Coord, to: Coord) {
   return { x: to.x - from.x, y: to.y - from.y } as Coord;
 }

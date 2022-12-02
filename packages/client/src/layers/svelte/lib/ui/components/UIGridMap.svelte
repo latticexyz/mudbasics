@@ -6,10 +6,10 @@
   import { Activities, player, playerActivity, playerDirection } from "../../../stores/player";
   import { blockNumber } from "../../../stores/network";
   import { createPerlin, Perlin } from "@latticexyz/noise";
-  import { TerrainType, directionToString } from "../../../utils/space";
+  import { TerrainType, terrainTypeToString, directionToString } from "../../../utils/space";
   import { seedToName, seedToMask } from "../../../utils/name";
-  import { tooltip } from "./UIToolTip/index"
-  import { fireString, fireStatusClass } from "./UIFires/index"
+  import { tooltip } from "./UIToolTip/index";
+  import { fireString, fireStatusClass } from "./UIFires/index";
 
   let perlin: Perlin;
   let w: Number;
@@ -82,7 +82,6 @@
     if (item?.fire) {
       return get(fireString(item.fire));
     }
-
     return "";
   }
 
@@ -97,8 +96,8 @@
     }
   }
 
-  function overlayClass (tile: GridItem) {
-    let str = ''
+  function overlayClass(tile: GridItem) {
+    let str = "";
     // VACANT
     if (tile.resource == 0) {
       str += "empty ";
@@ -113,16 +112,16 @@
     }
     // FIYA
     if (tile.fire !== undefined) {
-      str += `${fireStatusClass(tile.fire)} `
+      str += `${fireStatusClass(tile.fire)} `;
     }
 
     // SELF
     if (tile.transformation.x == 0 && tile.transformation.y == 0) {
       if ($player.entityType == EntityType.Player || $player.entityType == EntityType.Corpse) {
-        str += `mask mask-${seedToMask($player.seed) } `
+        str += `mask mask-${seedToMask($player.seed)} `;
       }
       if ($player.entityType == EntityType.Corpse) {
-        str += 'corpse '
+        str += "corpse ";
       }
     }
 
@@ -154,7 +153,6 @@
         <div>
           <strong>{seedToName($player.seed || 0)}</strong> is moving
           <strong>{directionToString($playerDirection)}</strong>.<br />
-          Some flavour text possibly.<br />
           Arriving in <strong>{($player.coolDownBlock || 0) - $blockNumber}</strong> seconds
         </div>
       </div>
@@ -163,8 +161,8 @@
     {#each grid as tile}
       <div
         use:tooltip={{ class: "fluid", offset: { x: 10, y: 10 } }}
-        title="x:{tile.coordinates.x} y:{tile.coordinates
-          .y}<br>resource: {tile.resource}<br>extraction speed: {tile.perlinFactor.toFixed(2)}"
+        title="{terrainTypeToString(tile.terrain)}<br>x:{tile.coordinates.x} y:{tile.coordinates
+          .y}<br>juice: {tile.resource}<br>extraction speed: {tile.perlinFactor.toFixed(2)}"
         data-description={tileEntities(tile)}
         class="grid-tile {tile.direction} {backgroundImageClass(tile)} {overlayClass(tile)}"
       >
@@ -175,7 +173,7 @@
 
         <!-- MINED -->
         {#if tile.resource < 100 && tile.resource > 0}
-          <div class="icon mined"></div>
+          <div class="icon mined" />
         {/if}
       </div>
     {/each}

@@ -5,19 +5,19 @@ export const play: SoundAssets = {
     src: "/sounds/play/electric-guitar.mp3",
     volume: 1,
   },
-  horn: {
+  0: {
     src: "/sounds/play/horn.mp3",
     volume: 1,
   },
-  jawHarp: {
+  1: {
     src: "/sounds/play/jaw-harp.mp3",
     volume: 1,
   },
-  pipes: {
+  2: {
     src: "/sounds/play/pipes.mp3",
     volume: 1,
   },
-  recorder: {
+  3: {
     src: "/sounds/play/recorder.mp3",
     volume: 1,
   },
