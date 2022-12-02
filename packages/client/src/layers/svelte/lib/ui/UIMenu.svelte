@@ -1,4 +1,5 @@
 <script>
+  import { playSound } from "../../../howler";
   import { player } from "../../stores/player";
   import { menuVisible, uiState } from "../../stores/ui";
   import { fade } from "svelte/transition";
@@ -7,6 +8,7 @@
   const ids = ['text-log', 'leaderboard', 'fires', 'grid-map']
 
   const toggle = () => {
+    playSound("cursor", "ui");
     $menuVisible = !$menuVisible;
   };
 

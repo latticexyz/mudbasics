@@ -3,6 +3,7 @@
   import { blockNumber } from "../../../../stores/network";
   import { uiState } from "../../../../stores/ui";
   import { player } from "../../../../stores/player";
+  import { playSound } from "../../../../../howler";
   import {
     progress,
     sequencerActive,
@@ -16,18 +17,22 @@
   export const ID = "ui-executor";
 
   function start() {
+    playSound("eventGood", "ui");
     startSequencer();
   }
 
   function stop() {
+    playSound("selectThree", "ui");
     stopSequencer();
   }
 
   function clear() {
+    playSound("error", "ui");
     clearSequencer();
   }
 
   function edit() {
+    playSound("selectFour", "ui");
     // Show the planner component full screen
     uiState.alter("operations-planner", "active", true);
     uiState.alter("operations-planner", "grid", {

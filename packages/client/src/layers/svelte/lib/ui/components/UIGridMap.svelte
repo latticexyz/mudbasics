@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { get } from "svelte/store"
+  import { get } from "svelte/store";
   import { Coord } from "@latticexyz/recs";
   import { onMount } from "svelte";
   import { entities, Entity, EntityType } from "../../../stores/entities";
@@ -9,12 +9,12 @@
   import { TerrainType, directionToString } from "../../../utils/space";
   import { seedToName, seedToMask } from "../../../utils/name";
   import { tooltip } from "./UIToolTip/index"
-  import { fireString, fireStatusString, fireStatusClass } from "./UIFires/index"
+  import { fireString, fireStatusClass } from "./UIFires/index"
 
   let perlin: Perlin;
-  let w: Number
-  let h: Number
-  let shortest: Number
+  let w: Number;
+  let h: Number;
+  let shortest: Number;
 
   function checkForType(gridPosition: Coord, type: EntityType) {
     let entity = Object.values($entities).find(
@@ -78,12 +78,12 @@
     }
   }
 
-  function tileEntities (item) {
+  function tileEntities(item) {
     if (item?.fire) {
-      return get(fireString(item.fire))
+      return get(fireString(item.fire));
     }
 
-    return ""
+    return "";
   }
 
   // Dust
@@ -141,15 +141,15 @@
     let str = ''
     // VACANT
     if (tile.resource == 0) {
-      str += 'empty '
+      str += "empty ";
     }
     // MINED
     if (tile.resource < 100 && tile.resource > 0) {
-      str += 'mined '
+      str += "mined ";
     }
     // DED
     if (tile.corpse !== undefined) {
-      str += 'corpse '
+      str += "corpse ";
     }
     // FIYA
     if (tile.fire !== undefined) {
@@ -166,11 +166,11 @@
       }
     }
 
-    if (str !== '') {
-      str += 'overlay'
+    if (str !== "") {
+      str += "overlay";
     }
 
-    return str
+    return str;
   }
 
   blockNumber.subscribe(() => {
@@ -183,14 +183,10 @@
     updateGrid($player.position);
   });
 
-  $: shortest = Math.min(w, h)
+  $: shortest = Math.min(w, h);
 </script>
 
-<div
-  class="ui-grid-map"
-  bind:clientWidth={w}
-  bind:clientHeight={h}
->
+<div class="ui-grid-map" bind:clientWidth={w} bind:clientHeight={h}>
   <div class="grid-container overlay map" style:max-width="{shortest}px" style:max-height="{shortest}px">
     <!-- Shown if player is moving -->
     {#if $playerActivity == Activities.Moving && ($player.coolDownBlock || 0) > $blockNumber}
@@ -206,8 +202,9 @@
 
     {#each grid as tile}
       <div
-        use:tooltip={{ class: 'fluid', offset: { x: 10, y: 10 }}}
-        title="x:{tile.coordinates.x} y:{tile.coordinates.y}<br>resource: {tile.resource}<br>extraction speed: {tile.perlinFactor.toFixed(2)}"
+        use:tooltip={{ class: "fluid", offset: { x: 10, y: 10 } }}
+        title="x:{tile.coordinates.x} y:{tile.coordinates
+          .y}<br>resource: {tile.resource}<br>extraction speed: {tile.perlinFactor.toFixed(2)}"
         data-description={tileEntities(tile)}
         class="grid-tile {tile.direction} {backgroundImageClass(tile)} {overlayClass(tile)}"
       >
@@ -226,7 +223,6 @@
 </div>
 
 <style>
-
   .ui-grid-map {
     height: 100%;
     display: flex;
@@ -349,7 +345,7 @@
   }
 
   .overlay:after {
-    content: '';
+    content: "";
     position: absolute;
     width: 100%;
     height: 100%;
@@ -361,7 +357,7 @@
   }
 
   .overlay.empty:after {
-    background-image: url('../../../../../public/images/tiles/overlays/empty.png');
+    background-image: url("../../../../../public/images/tiles/overlays/empty.png");
   }
 
   .overlay.corpse:after {
@@ -370,11 +366,11 @@
   }
 
   .overlay.mined:after {
-    background-image: url('../../../../../public/images/tiles/overlays/mined.png');
+    background-image: url("../../../../../public/images/tiles/overlays/mined.png");
   }
 
   .overlay.map:after {
-    background-image: url('../../../../../public/images/tiles/overlays/maptremi.png');
+    background-image: url("../../../../../public/images/tiles/overlays/maptremi.png");
     mix-blend-mode: multiply;
   }
   

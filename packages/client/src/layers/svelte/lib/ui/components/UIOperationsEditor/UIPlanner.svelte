@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { playSound } from "../../../../../howler";
   import { tooltip } from "../UIToolTip/index";
   import { operations, Operation } from "../../../../operations/";
   import { uiState } from "../../../../stores/ui";
@@ -17,11 +18,13 @@
   localSequence.fill(emptySequenceElement);
 
   function clear() {
+    playSound("error", "ui");
     localSequence = Array(SEQUENCER_LENGTH);
     localSequence.fill(emptySequenceElement);
   }
 
   function submit() {
+    playSound("selectTwo", "ui");
     // Remove empty sequence elements before submitting
     submitSequence(localSequence.filter((item) => item.operation.name !== "+"));
     uiState.alter("operations-planner", "active", false);
@@ -32,6 +35,7 @@
   }
 
   function add(operation: Operation) {
+    playSound("item", "ui");
     for (let i = 0; i < SEQUENCER_LENGTH; i++) {
       // Add operation to first free slot
       if (localSequence[i].operation.name == "+") {
@@ -88,6 +92,9 @@
             title={operation.description}
             data-description={operation.cost}
             use:tooltip
+            on:mouseenter={() => {
+              playSound("cursor", "ui");
+            }}
             class="operation {operation.category}"
             on:click={() => {
               add(operation);
