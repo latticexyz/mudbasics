@@ -67,11 +67,11 @@
     {#if localSequence.filter((item) => item.operation.name !== "+").length == 0}
       <div class="information">Click <strong>operations</strong> below to add to sequencer.</div>
     {:else}
-      <button on:click={clear}>Clear sequence</button>
+      <button class="action warning" on:click={clear}>Clear sequence</button>
       {#if !$sequencerActive}
-        <button on:click={submit}>Submit sequence</button>
+        <button class="action success" on:click={submit}>Submit sequence</button>
       {:else}
-        <button on:click={stop}>Stop current sequence</button>
+        <button class="action failure" on:click={stop}>Stop current sequence</button>
       {/if}
     {/if}
   </div>
@@ -95,7 +95,7 @@
             on:mouseenter={() => {
               playSound("cursor", "ui");
             }}
-            class="operation {operation.category}"
+            class="operation {operation.category} action-filled"
             on:click={() => {
               add(operation);
             }}
@@ -131,35 +131,35 @@
     border: var(--outer-border);
   }
   .move {
-    background: #92ff7c;
+    background: var(--move);
   }
 
   .gather {
-    background: #7ce5ff;
+    background: var(--gather);
   }
 
   .consume {
-    background: #d37cff;
+    background: var(--consume);
   }
 
   .burn {
-    background: orangered;
+    background: var(--burn);
   }
 
   .play {
-    background: #ebff7c;
+    background: var(--play);
   }
 
   .special {
-    background: #ff7ce7;
+    background: var(--special);
   }
 
   .gate {
-    background: #4336ff;
+    background: var(--gate);
   }
 
   .empty {
-    background: lightgrey;
+    background: var(--empty);
   }
 
   .inventory {
@@ -191,7 +191,6 @@
     display: inline-block;
     width: 100px;
     height: 100px;
-    margin-right: 30px;
   }
 
   .slot {
@@ -210,6 +209,9 @@
     background: grey;
     padding: 10px;
     margin-bottom: 10px;
+    display: flex;
+    gap: var(--row-gap);
+    flex-flow: row wrap;
   }
 
   .sequencer-controls {
@@ -228,6 +230,6 @@
   }
 
   .category {
-    display: inline;
+    display: inline-block;
   }
 </style>

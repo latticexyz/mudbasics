@@ -69,6 +69,7 @@ export const initialState = () => ({
       layer: 0,
       fluid: true,
       noscroll: true,
+      span: true,
     },
     active: true,
   }),

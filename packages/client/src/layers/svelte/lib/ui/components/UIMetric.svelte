@@ -50,8 +50,7 @@
     text-align: center;
     /* height: 60px; */
     /* line-height: 60px; */
-    margin-bottom: 10px;
-    margin-top: 10px;
+    margin-top: calc(var(--row-gap) / 3);
     border: var(--outer-border);
     overflow: hidden;
   }
@@ -95,7 +94,7 @@
 
   @keyframes down {
     to { 
-      color: var(--fail);
+      color: var(--failure);
     }
   }
 </style>

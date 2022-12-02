@@ -1,24 +1,40 @@
 <script lang="ts">
+  import { onMount, onDestroy } from "svelte"
+  import { fade } from "svelte/transition"
+
   export let title: string;
   export let description: string;
   export let x: number;
   export let y: number;
+
+  let timeout = null
+  let show = false
+
+  onMount(() => {
+    timeout = setTimeout(() => {
+      show = true
+    }, 1000)
+  })
+
+  onDestroy(() => clearTimeout(timeout))
 </script>
 
-<div class="ui-tooltip" style:top="{y + 5}px" style:left="{x + 5}px">
-  <div class="ui-tooltip-inner">
-    {#if title && title !== "false"}
-      <div class:ui-tooltip-title={!!description}>
-        {@html title}
-      </div>
-    {/if}
-    {#if description}
-      <div class="ui-tooltip-description">
-        {@html description}
-      </div>
-    {/if}
+{#if show}
+  <div transition:fade={{ duration: 150 }} class="ui-tooltip" style:top="{y + 5}px" style:left="{x + 5}px">
+    <div class="ui-tooltip-inner">
+      {#if title && title !== "false"}
+        <div class:ui-tooltip-title={!!description}>
+          {@html title}
+        </div>
+      {/if}
+      {#if description}
+        <div class="ui-tooltip-description">
+          {@html description}
+        </div>
+      {/if}
+    </div>
   </div>
-</div>
+{/if}
 
 <style>
   .ui-tooltip {

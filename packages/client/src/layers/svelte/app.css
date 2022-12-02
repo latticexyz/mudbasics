@@ -9,8 +9,17 @@
   --foreground: rgb(var(--foreground-rgb));
 
   --blue: #0033eb;
+  --warning: #fffbad;
   --success: #bfff5e;
-  --fail: #d1656c;
+  --failure: #d1656c;
+  --move: #92ff7c;
+  --gather: #7ce5ff;
+  --consume: #d37cff;
+  --burn: orangered;
+  --play: #ebff7c;
+  --special: #ff7ce7;
+  --gate: #4336ff;
+  --empty: lightgrey;
 
   /* Sizing */
   --padding-button: 6px 12px;
@@ -28,28 +37,6 @@
   --muted-opacity: 0.7;
   --backdrop: blur(10px);
   --outer-border: 1px solid rgba(var(--foreground-rgb), var(--muted-opacity));
-}
-
-.rectangles {
-  background-color: var(--background);
-  /* background-image: repeating-linear-gradient(
-      45deg,
-      var(--background-offset) 25%,
-      transparent 25%,
-      transparent 75%,
-      var(--background-offset) 75%,
-      var(--background-offset)
-    ),
-    repeating-linear-gradient(
-      45deg,
-      var(--background-offset) 25%,
-      var(--background) 25%,
-      var(--background) 75%,
-      var(--background-offset) 75%,
-      var(--background-offset)
-    ); */
-  /* background-position: 5px 5px, 15px 15px; */
-  /* background-size: 20px 20px; */
 }
 
 * {
@@ -189,4 +176,58 @@ span.ripple {
 }
 .overlay.fire.fire-off:after {
   background-image: url("../../public/images/fire/off.gif");
+}
+
+.action {
+  all: unset;
+  border: var(--outer-border);
+  color: var(--foreground);
+  padding: var(--padding-button);
+  background-color: var(--background) !important;
+  cursor: pointer;
+}
+
+.action.success:hover {
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+
+.action.warning:hover {
+  color: var(--warning);
+  border: 1px solid var(--warning);
+}
+
+.action.failure:hover {
+  color: var(--failure);
+  border: 1px solid var(--failure);
+}
+
+.action,
+.action-filled {
+  transition: all 0.1s ease;
+}
+
+.action-filled:active,
+.action:active {
+  background-color: var(--foreground) !important;
+  color: var(--background) !important;
+  transform: translate(0, 1px);
+}
+
+.cooldown-overlay {
+  position: absolute;
+  width: 100%;
+  background: rgba(127, 127, 127, 0.7);
+  backdrop-filter: blur(5px);
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1001;
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  padding: var(--font-size);
 }

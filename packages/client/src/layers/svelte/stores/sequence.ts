@@ -76,6 +76,8 @@ blockNumber.subscribe((newBlock) => {
     if (get(player).entityType == EntityType.Corpse) {
       uiState.close("executor");
       uiState.close("compulsions");
+      uiState.setOption("executor", "hidden", true);
+      uiState.setOption("compulsions", "hidden", true);
       return;
     }
 

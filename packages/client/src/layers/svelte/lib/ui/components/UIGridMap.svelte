@@ -190,23 +190,6 @@
     justify-content: center;
     align-items: center;
   }
-  .cooldown-overlay {
-    position: absolute;
-    width: 100%;
-    background: rgba(127, 127, 127, 0.7);
-    backdrop-filter: blur(5px);
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1001;
-    font-size: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    text-align: center;
-    padding: var(--font-size);
-  }
 
   .grid-container {
     aspect-ratio: 1 / 1;

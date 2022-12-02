@@ -52,28 +52,31 @@
         ({activityToVerb($playerActivity)})
       {/if}
     </div>
-    <div class="resources">
-      <UIMetric label="Energy" key="energy" />
-      <UIMetric label="Juice" key="resource" />
-    </div>
   </div>
 
-  <!-- CHARACTER -->
-  {#if $playerActivity === Activities.Moving}
-    <video src={"/animations/" + seedToMask($player.seed) + "/Walk.mp4"} autoplay muted loop />
-  {:else if $playerActivity === Activities.Eating}
-    <video src={"/animations/" + seedToMask($player.seed) + "/Eat.mp4"} autoplay muted loop />
-  {:else if $playerActivity === Activities.Gathering}
-    <video src={"/animations/" + seedToMask($player.seed) + "/Gather.mp4"} autoplay muted loop />
-  {:else if $playerActivity === Activities.Burning}
-    <video src={"/animations/" + seedToMask($player.seed) + "/Fire.mp4"} autoplay muted loop />
-  {:else if $playerActivity === Activities.Playing}
-    <video src={"/animations/" + seedToMask($player.seed) + "/Play.mp4"} autoplay muted loop />
-  {:else if $playerActivity === Activities.Dead}
-    <video src={"/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted loop />
-  {:else}
-    <video src={"/animations/" + seedToMask($player.seed) + "/Idle.mp4"} autoplay muted loop />
-  {/if}
+  <div class="resources">
+    <UIMetric label="Energy" key="energy" />
+    <UIMetric label="Juice" key="resource" />
+  </div>
+
+  <div class="ui-avatar-video">
+    <!-- CHARACTER -->
+    {#if $playerActivity === Activities.Moving}
+      <video src={"/animations/" + seedToMask($player.seed) + "/Walk.mp4"} autoplay muted loop />
+    {:else if $playerActivity === Activities.Eating}
+      <video src={"/animations/" + seedToMask($player.seed) + "/Eat.mp4"} autoplay muted loop />
+    {:else if $playerActivity === Activities.Gathering}
+      <video src={"/animations/" + seedToMask($player.seed) + "/Gather.mp4"} autoplay muted loop />
+    {:else if $playerActivity === Activities.Burning}
+      <video src={"/animations/" + seedToMask($player.seed) + "/Fire.mp4"} autoplay muted loop />
+    {:else if $playerActivity === Activities.Playing}
+      <video src={"/animations/" + seedToMask($player.seed) + "/Play.mp4"} autoplay muted loop />
+    {:else if $playerActivity === Activities.Dead}
+      <video src={"/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted loop />
+    {:else}
+      <video src={"/animations/" + seedToMask($player.seed) + "/Idle.mp4"} autoplay muted loop />
+    {/if}
+  </div>
 </div>
 
 <style>
@@ -86,11 +89,28 @@
   .ui-avatar {
     position: relative;
     height: 100%;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: stretch;
+  }
+
+  .ui-avatar-video {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
   }
 
   video {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -114,10 +134,5 @@
     text-align: center;
     grid-column: 1 / 3;
     /* font-weight: bold; */
-  }
-
-  .resources {
-    grid-column: 1 / 3;
-    align-self: start;
   }
 </style>

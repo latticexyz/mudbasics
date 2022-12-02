@@ -39,7 +39,6 @@
     on:introend={() => uiState.alter(id, "delay", 0)}
     class:fluid={options?.fluid}
     class:box={!options?.bare}
-    class:rectangles={!options?.bare}
     class:backed={!options?.bare}
     class:blend={options?.layer === 0}
     class:span={options?.span}

@@ -89,15 +89,15 @@
   <!-- CONTROLS -->
   <div class="sequencer-controls">
     {#if $sequencerActive}
-      <button on:click={stop}>Stop</button>
+      <button class="action failure" on:click={stop}>Stop</button>
     {/if}
     {#if !$sequencerActive}
       {#if $sequence.length > 0}
-        <button on:click={clear}>Clear</button>
-        <button on:click={start}>Start</button>
+        <button class="action failure" on:click={clear}>Clear</button>
+        <button class="action success" on:click={start}>Start</button>
       {/if}
     {/if}
-    <button on:click={edit}>Edit</button>
+    <button class="action warning" class:big={$sequence.length === 0} on:click={edit}>Edit</button>
   </div>
 </div>
 
@@ -187,11 +187,18 @@
   }
 
   .failure {
-    background: red;
+    background-color: red;
   }
 
   .active {
     border: 2px solid blue;
+  }
+
+  .big {
+    width: 100%;
+    text-align: center;
+    padding: 12px 24px;
+    transition: none;
   }
 
   .cooldown-overlay {
@@ -224,6 +231,8 @@
   .progress-number {
     font-weight: bold;
     margin-left: 5px;
+    min-width: 6ch;
+    display: inline-block;
   }
 
   progress {
