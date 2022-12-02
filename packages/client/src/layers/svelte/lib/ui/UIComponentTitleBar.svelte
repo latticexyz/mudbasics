@@ -6,43 +6,40 @@
   export let options: UIComponentOptions;
 </script>
 
-{#if !options?.bare}
-  <div class="titlebar border">
-    {title}
+<div class="titlebar border">
+  {title}
 
-    <div>
+  <div>
+    {#if options?.muted}
       <button class="close" on:click={() => uiState.toggle(id, "muted")}>
-        {#if options?.muted}
-          {!options.muted ? "[mut]" : "[unm]"}
-        {/if}
+        {!options.muted ? "[mut]" : "[unm]"}
       </button>
+    {/if}
 
-      {#if !options?.persistent}
-        <button
-          class="close"
-          on:click={() => {
-            playSound("error", "ui");
-            uiState.close(id);
-          }}
-        >
-          [×]
-        </button>
-      {/if}
-    </div>
+    {#if !options?.persistent}
+      <button
+        class="close"
+        on:click={() => {
+          playSound("error", "ui");
+          uiState.close(id);
+        }}
+      >
+        [×]
+      </button>
+    {/if}
   </div>
-{/if}
+</div>
 
 <style>
   .titlebar {
-    position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     padding: var(--padding-button);
     font-size: var(--font-size);
     color: var(--foreground);
+    height: var(--titlebar-height);
     font-weight: bold;
     display: flex;
+    flex-flow: row nowrap;
     justify-content: space-between;
     backdrop-filter: var(--backdrop);
     z-index: 99;

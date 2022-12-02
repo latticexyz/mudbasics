@@ -5,11 +5,42 @@
   import { fade } from "svelte/transition";
   import { speed, fragSpeed } from "../../stores/ui";
 
+  const ids = ['text-log', 'leaderboard', 'fires', 'grid-map']
+
   const toggle = () => {
     playSound("cursor", "ui");
     $menuVisible = !$menuVisible;
   };
+
+  const handleShortcuts = ({ code }) => {
+    if (code === 'Escape') {
+      if ($menuVisible) {
+        toggle()
+      }
+    }
+    if (code === 'KeyM') {
+      uiState.toggle('text-log', 'active')
+    }
+    if (code === 'KeyL') {
+      uiState.toggle('leaderboard', 'active')
+    }
+    if (code === 'KeyF') {
+      uiState.toggle('fires', 'active')
+    }
+    if (code === 'KeyS') {
+      uiState.toggle('grid-map', 'active')
+    }
+  }
+
+  function shortcut (item) {
+    if (ids.includes(item.id)) {
+      return `(${item.title[0].toLowerCase()})`
+    }
+    return ''
+  }
 </script>
+
+<svelte:window on:keydown={handleShortcuts}></svelte:window>
 
 {#if $player}
   <div class="ui-menu-container" class:open={$menuVisible}>
@@ -27,7 +58,7 @@
                 uiState.toggle(item.id, "active");
               }}
             >
-              [{item.active ? "x" : "/"}] {item.title}
+              [{item.active ? "x" : "/"}] {item.title} {shortcut(item)}
             </li>
           {/if}
         {/each}

@@ -1,7 +1,11 @@
 import UITooltip from "./UIToolTip.svelte";
 
-export function tooltip(node: HTMLElement, offset = { x: 10, y: -10 }) {
-  let div;
+export interface UIToolTipOptions {
+  class?: string;
+  offset?: { x: number; y: number };
+}
+
+export function tooltip(node: HTMLElement, options: UIToolTipOptions = { class: "", offset: { x: 10, y: 10 } }) {
   let title: string;
   let description: string;
   let tooltipComponent;
@@ -15,10 +19,11 @@ export function tooltip(node: HTMLElement, offset = { x: 10, y: -10 }) {
 
     tooltipComponent = new UITooltip({
       props: {
+        classes: options?.class,
         title: title ? title : false,
         description: description ? description : false,
-        x: event.pageX + offset.x,
-        y: event.pageY + offset.y,
+        x: event.pageX + options.offset.x,
+        y: event.pageY + options.offset.y,
       },
       target: document.body,
     });
@@ -26,8 +31,8 @@ export function tooltip(node: HTMLElement, offset = { x: 10, y: -10 }) {
 
   function mouseMove(event) {
     tooltipComponent.$set({
-      x: event.pageX + offset.x,
-      y: event.pageY + offset.y,
+      x: event.pageX + options.offset.x,
+      y: event.pageY + options.offset.y,
     });
   }
   function mouseLeave() {

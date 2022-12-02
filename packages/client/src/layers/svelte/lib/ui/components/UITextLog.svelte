@@ -21,10 +21,6 @@
     font-size: 9px;
   }
 
-  .ui-text-log {
-    height: 340px;
-  }
-
   .player {
     color: var(--blue);
   }

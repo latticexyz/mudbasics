@@ -9,7 +9,6 @@
   let perlin: Perlin;
 
   function paintPixel(x: number, y: number, factor: number) {
-    // console.log(y, x, factor);
     ctx.fillStyle =
       "rgb(" +
       [255 - Math.round(255 * factor), 255 - Math.round(255 * factor), 255 - Math.round(255 * factor)].join() +

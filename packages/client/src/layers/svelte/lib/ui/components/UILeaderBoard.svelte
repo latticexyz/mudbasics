@@ -97,7 +97,7 @@
     width: 100%;
     left: 0;
     top: 0;
-    padding: 6px 0;
+    padding-bottom: 6px;
     backdrop-filter: var(--backdrop);
     display: flex;
     justify-content: space-between;
@@ -112,7 +112,7 @@
   }
 
   .ui-stat-rank {
-    text-align: right;
+    /* text-align: right; */
     opacity: var(--muted-opacity);
   }
 

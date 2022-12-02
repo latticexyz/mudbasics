@@ -1,5 +1,6 @@
 <script lang="ts">
   import { playSound } from "../../../../howler";
+  import { get } from "svelte/store";
   import { Coord } from "@latticexyz/recs";
   import { onMount } from "svelte";
   import { entities, Entity, EntityType } from "../../../stores/entities";
@@ -8,8 +9,13 @@
   import { createPerlin, Perlin } from "@latticexyz/noise";
   import { TerrainType, directionToString } from "../../../utils/space";
   import { seedToName } from "../../../utils/name";
+  import { tooltip } from "./UIToolTip/index";
+  import { fireString, fireStatusString } from "./UIFires/index";
 
   let perlin: Perlin;
+  let w: Number;
+  let h: Number;
+  let shortest: Number;
 
   function checkForType(gridPosition: Coord, type: EntityType) {
     let entity = Object.values($entities).find(
@@ -73,6 +79,14 @@
     }
   }
 
+  function tileEntities(item) {
+    if (item?.fire) {
+      return get(fireString(item.fire));
+    }
+
+    return "";
+  }
+
   // Dust
   // 0.2
   // 0.20 - 0.25  => 1
@@ -124,6 +138,25 @@
     }
   }
 
+  function overlayClass(tile: GridItem) {
+    let str = "";
+    if (tile.resource == 0) {
+      str += "empty ";
+    }
+    if (tile.resource < 100 && tile.resource > 0) {
+      str += "mined ";
+    }
+    if (tile.corpse !== undefined) {
+      str += "corpse ";
+    }
+
+    if (str !== "") {
+      str += "overlay";
+    }
+
+    return str;
+  }
+
   blockNumber.subscribe(() => {
     updateGrid($player.position);
   });
@@ -133,10 +166,12 @@
     initGrid();
     updateGrid($player.position);
   });
+
+  $: shortest = Math.min(w, h);
 </script>
 
-<div class="ui-grid-map">
-  <div class="grid-container">
+<div class="ui-grid-map" bind:clientWidth={w} bind:clientHeight={h}>
+  <div class="grid-container overlay map" style:max-width="{shortest}px" style:max-height="{shortest}px">
     <!-- Shown if player is moving -->
     {#if $playerActivity == Activities.Moving && ($player.coolDownBlock || 0) > $blockNumber}
       <div class="cooldown-overlay">
@@ -149,16 +184,16 @@
       </div>
     {/if}
 
-    {#each grid as item}
-      <div class="grid-item {item.direction} {backgroundImageClass(item)}">
-        <div class="text">
-          [{item.coordinates.x}:{item.coordinates.y}]<br />
-          {item.resource}<br />
-          {item.perlinFactor.toFixed(2)}<br />
-        </div>
-
+    {#each grid as tile}
+      <div
+        use:tooltip={{ class: "fluid", offset: { x: 10, y: 10 } }}
+        title="x:{tile.coordinates.x} y:{tile.coordinates
+          .y}<br>resource: {tile.resource}<br>extraction speed: {tile.perlinFactor.toFixed(2)}"
+        data-description={tileEntities(tile)}
+        class="grid-tile {tile.direction} {backgroundImageClass(tile)} {overlayClass(tile)}"
+      >
         <!-- SELF -->
-        {#if item.transformation.x == 0 && item.transformation.y == 0}
+        {#if tile.transformation.x == 0 && tile.transformation.y == 0}
           <div class="icon self">
             {#if $player.entityType == EntityType.Player}
               👺
@@ -170,28 +205,30 @@
         {/if}
 
         <!-- FIRE -->
-        {#if item.fire !== undefined}
-          <div class="icon fire">🔥</div>
+        {#if tile.fire !== undefined}
+          <div class="icon fire">
+            {fireStatusString(tile.fire)}
+          </div>
         {/if}
 
         <!-- OTHER -->
-        {#if item.other !== undefined}
+        {#if tile.other !== undefined}
           <div class="icon other">😈</div>
         {/if}
 
         <!-- CORPSE -->
-        {#if item.corpse !== undefined}
+        {#if tile.corpse !== undefined}
           <div class="icon corpse">💀</div>
         {/if}
 
         <!-- MINED -->
-        {#if item.resource < 100 && item.resource > 0}
+        {#if tile.resource < 100 && tile.resource > 0}
           <div class="icon mined">🪨</div>
         {/if}
 
         <!-- EMPTY -->
-        {#if item.resource == 0}
-          <div class="icon empty">🥡</div>
+        {#if tile.resource == 0}
+          <div class="icon">🥡</div>
         {/if}
       </div>
     {/each}
@@ -200,13 +237,12 @@
 
 <style>
   .ui-grid-map {
-    height: 320px;
+    height: 100%;
     display: flex;
+    flex-wrap: column;
     justify-content: center;
-    position: relative;
     align-items: center;
   }
-
   .cooldown-overlay {
     position: absolute;
     width: 100%;
@@ -225,15 +261,25 @@
   }
 
   .grid-container {
-    width: 300px;
-    height: 300px;
-    position: relative;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
   }
 
-  .grid-item {
-    width: 60px;
-    height: 60px;
-    float: left;
+  .grid-container {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+    height: 100%;
+  }
+
+  .grid-tile {
+    aspect-ratio: 1 / 1;
+    max-width: 100%;
+    max-height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -242,14 +288,11 @@
     text-align: center;
     position: relative;
     background-size: cover;
+    cursor: pointer;
   }
 
   .text {
     opacity: 0;
-  }
-
-  .grid-item:hover .text {
-    opacity: 1;
   }
 
   .dust-1 {
@@ -305,11 +348,40 @@
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    font-size: 40px;
+    font-size: 4vw;
     z-index: 100;
   }
 
   .self {
     z-index: 1000;
+  }
+
+  .overlay:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    pointer-events: none;
+    /* mix-blend-mode: multiply; */
+  }
+
+  .overlay.empty:after {
+    background-image: url("../../../../../public/images/tiles/overlays/empty.png");
+  }
+
+  .overlay.corpse:after {
+    background-image: url("../../../../../public/images/tiles/overlays/corpse.png");
+  }
+
+  .overlay.mined:after {
+    background-image: url("../../../../../public/images/tiles/overlays/mined.png");
+  }
+
+  .overlay.map:after {
+    background-image: url("../../../../../public/images/tiles/overlays/maptremi.png");
+    mix-blend-mode: multiply;
   }
 </style>
