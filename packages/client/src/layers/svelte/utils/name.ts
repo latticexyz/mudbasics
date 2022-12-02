@@ -63,8 +63,6 @@ function toTitleCase(str: string) {
 }
 
 export function seedToName(seed: number) {
-  console.log("seed", seed);
-
   if (!seed) return "";
   const seedAsString = Math.abs(seed).toString();
 
@@ -81,5 +79,7 @@ export function seedToName(seed: number) {
 }
 
 export function seedToMask(seed: number) {
-  return 1;
+  if (!seed) return 0;
+  const seedAsString = Math.abs(seed).toString();
+  return (Number(seedAsString[4] + seedAsString[5]) || 0) % 4;
 }

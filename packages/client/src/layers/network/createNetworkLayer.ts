@@ -7,11 +7,12 @@ import {
   defineNumberComponent,
   defineStringComponent,
 } from "@latticexyz/std-client";
+import { createFaucetService } from "@latticexyz/network";
 import { defineLoadingStateComponent, defineStatsComponent } from "./components";
 import { SystemTypes } from "contracts/types/SystemTypes";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { GameConfig, getNetworkConfig } from "./config";
-import { BigNumber } from "ethers";
+import { BigNumber, utils } from "ethers";
 
 /**
  * The Network layer is the lowest layer in the client architecture.
@@ -45,6 +46,18 @@ export async function createNetworkLayer(config: GameConfig) {
     typeof components,
     SystemTypes
   >(getNetworkConfig(config), world, components, SystemAbis);
+
+  // Faucet setup
+  const faucet = config.faucetServiceUrl ? createFaucetService(config.faucetServiceUrl) : undefined;
+
+  if (config.devMode) {
+    const playerIsBroke = (await network.signer.get()?.getBalance())?.lte(utils.parseEther("0.005"));
+    if (playerIsBroke) {
+      console.info("[Dev Faucet] Dripping funds to player");
+      const address = network.connectedAddress.get();
+      address && (await faucet?.dripDev({ address }));
+    }
+  }
 
   // --- ACTION SYSTEM --------------------------------------------------------------
   const actions = createActionSystem(world, txReduced$);

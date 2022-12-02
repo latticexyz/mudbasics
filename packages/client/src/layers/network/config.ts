@@ -7,6 +7,7 @@ export type GameConfig = {
   jsonRpc: string;
   wsRpc?: string;
   snapshotServiceUrl?: string;
+  faucetServiceUrl?: string;
   devMode: boolean;
   initialBlockNumber: number;
 };
@@ -29,6 +30,7 @@ export const getNetworkConfig: (networkConfig: GameConfig) => SetupContractConfi
   chainId: config.chainId,
   snapshotServiceUrl: config.snapshotServiceUrl,
   initialBlockNumber: config.initialBlockNumber,
+  faucetServiceUrl: config.faucetServiceUrl,
   worldAddress: config.worldAddress,
   devMode: config.devMode,
 });
