@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { playSound } from "../../../../howler";
   import { Coord } from "@latticexyz/recs";
   import { onMount } from "svelte";
   import { entities, Entity, EntityType } from "../../../stores/entities";

@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { uiState } from "../../stores/ui"
-  export let id
-  export let title = ""
-  export let options: UIComponentOptions
+  import { playSound } from "../../../howler";
+  import { uiState } from "../../stores/ui";
+  export let id;
+  export let title = "";
+  export let options: UIComponentOptions;
 </script>
 
 {#if !options?.bare}
@@ -10,10 +11,7 @@
     {title}
 
     <div>
-      <button
-        class="close" 
-        on:click={() => uiState.toggle(id, "muted")}
-      >
+      <button class="close" on:click={() => uiState.toggle(id, "muted")}>
         {#if options?.muted}
           {!options.muted ? "[mut]" : "[unm]"}
         {/if}
@@ -22,8 +20,13 @@
       {#if !options?.persistent}
         <button
           class="close"
-          on:click={uiState.close(id)}
-        > [×] </button>
+          on:click={() => {
+            playSound("error", "ui");
+            uiState.close(id);
+          }}
+        >
+          [×]
+        </button>
       {/if}
     </div>
   </div>

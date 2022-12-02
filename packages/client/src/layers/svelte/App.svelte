@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { startEnvironmentSoundSystem, startMelodySoundSystem, startHarmonySoundSystem } from "../howler";
   import { onMount } from "svelte";
   import { bootGame } from "./boot";
   import UIContainer from "./lib/ui/UIContainer.svelte";
@@ -42,6 +43,10 @@
     layers.network.txReduced$.subscribe((x) => {
       console.log("TX", x);
     });
+
+    startEnvironmentSoundSystem();
+    // startMelodySoundSystem();
+    startHarmonySoundSystem();
 
     layers.network.network.blockNumber$.subscribe((x) => {
       blockNumber.set(x);

@@ -1,8 +1,39 @@
 <script lang="ts">
+  import { playSound } from "../../../../howler";
   import UIMetric from "./UIMetric.svelte";
   import { Activities, activityToVerb, player, playerActivity } from "../../../stores/player";
   import { seedToName, seedToMask } from "../../../utils/name";
   import { EntityType } from "../../../stores/entities";
+
+  let activitySound = {};
+
+  playerActivity.subscribe((activity) => {
+    console.log(activity);
+    console.log(activitySound);
+
+    if (activitySound.volume && activitySound.playing()) {
+      activitySound.stop();
+    }
+
+    if (activity === Activities.Moving) {
+      activitySound = playSound("walking", "activity", true);
+    }
+    if (activity === Activities.Eating) {
+      activitySound = playSound("eating", "activity", true);
+    }
+    if (activity === Activities.Gathering) {
+      activitySound = playSound("digging", "activity", true);
+    }
+    if (activity === Activities.Playing) {
+      activitySound = playSound("electricGuitar", "play", true);
+    }
+    if (activity === Activities.Burning) {
+      activitySound = playSound("fire", "environment", true);
+    }
+    if (activity === Activities.Idle) {
+      activitySound = playSound("idle", "activity", true);
+    }
+  });
 </script>
 
 <div class="ui-avatar">

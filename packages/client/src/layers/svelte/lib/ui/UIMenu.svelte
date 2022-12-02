@@ -1,10 +1,12 @@
 <script>
+  import { playSound } from "../../../howler";
   import { player } from "../../stores/player";
   import { menuVisible, uiState } from "../../stores/ui";
   import { fade } from "svelte/transition";
   import { speed, fragSpeed } from "../../stores/ui";
 
   const toggle = () => {
+    playSound("cursor", "ui");
     $menuVisible = !$menuVisible;
   };
 </script>
