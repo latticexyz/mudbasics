@@ -12,6 +12,7 @@ export async function bootGame() {
   const jsonRpc = params.get("rpc") || undefined;
   const wsRpc = params.get("wsRpc") || undefined; // || (jsonRpc && jsonRpc.replace("http", "ws"));
   const snapshotServiceUrl = params.get("snapshot") || undefined;
+  const faucetServiceUrl = params.get("faucet") || undefined;
   const devMode = params.get("dev") === "true";
   const initialBlockNumberString = params.get("initialBlockNumber");
   const initialBlockNumber = initialBlockNumberString ? parseInt(initialBlockNumberString) : 0;
@@ -30,6 +31,7 @@ export async function bootGame() {
       jsonRpc,
       wsRpc,
       snapshotServiceUrl,
+      faucetServiceUrl,
       devMode,
       initialBlockNumber,
     };
