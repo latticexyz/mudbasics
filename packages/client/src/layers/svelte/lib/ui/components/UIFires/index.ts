@@ -1,4 +1,4 @@
-import { writable, derived } from "svelte/store";
+import { writable, derived, get } from "svelte/store";
 import { playerList } from "../../../../stores/player";
 import { blockNumber } from "../../../../stores/network";
 
@@ -27,3 +27,11 @@ export const fireString = (v) => {
     return str;
   });
 };
+
+export function fireStatusString(v) {
+  if (Math.max(v.coolDownBlock - get(blockNumber), 0) > 0) {
+    return "🔥";
+  } else {
+    return "🕳";
+  }
+}

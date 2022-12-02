@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { fires } from "../../../../stores/entities";
+  import { fires, firesV2 } from "../../../../stores/entities";
   import { uiState } from "../../../../stores/ui";
   import { blockNumber } from "../../../../stores/network";
   import { speed, fragSpeed } from "../../../../stores/ui";
@@ -24,13 +24,11 @@
 
 <div class="ui-fires">
   <!-- The fire cooldown time minus current block number -->
-  {#if Object.entries($fires)?.length < 1}
+  {#if Object.entries($firesV2)?.length < 1}
     This soil looks fairly unscathed... <span class="link" on:click={arson}>Commit arson</span>
   {/if}
 
-  <!-- <div>Blocknumber: <strong>{$blockNumber}</strong></div> -->
-  <!-- <div>Cooldown block: {$player.coolDownBlock}</div> -->
-  {#each Object.entries($fires) as [address, value], i (address)}
+  {#each Object.entries($firesV2) as [address, value], i (address)}
     <div transition:fade={{ duration: $speed + $fragSpeed * i }}>
       <Fire {address} {value} />
     </div>

@@ -9,7 +9,7 @@
   import { TerrainType, directionToString } from "../../../utils/space";
   import { seedToName } from "../../../utils/name";
   import { tooltip } from "./UIToolTip/index"
-  import { fireString } from "./UIFires/index"
+  import { fireString, fireStatusString} from "./UIFires/index"
 
   let perlin: Perlin;
   let w: Number
@@ -137,6 +137,25 @@
     }
   }
 
+  function overlayClass (tile: GridItem) {
+    let str = ''
+    if (tile.resource == 0) {
+      str += 'empty '
+    }
+    if (tile.resource < 100 && tile.resource > 0) {
+      str += 'mined '
+    }
+    if (tile.corpse !== undefined) {
+      str += 'corpse '
+    }
+
+    if (str !== '') {
+      str += 'overlay'
+    }
+
+    return str
+  }
+
   blockNumber.subscribe(() => {
     updateGrid($player.position);
   });
@@ -155,7 +174,7 @@
   bind:clientWidth={w}
   bind:clientHeight={h}
 >
-  <div class="grid-container" style:max-width="{shortest}px" style:max-height="{shortest}px">
+  <div class="grid-container overlay map" style:max-width="{shortest}px" style:max-height="{shortest}px">
     <!-- Shown if player is moving -->
     {#if $playerActivity == Activities.Moving && ($player.coolDownBlock || 0) > $blockNumber}
       <div class="cooldown-overlay">
@@ -168,15 +187,15 @@
       </div>
     {/if}
 
-    {#each grid as item}
+    {#each grid as tile}
       <div
         use:tooltip={{ class: 'fluid', offset: { x: 10, y: 10 }}}
-        title="{item.coordinates.x}:{item.coordinates.y}<br>{item.resource}<br>{item.perlinFactor.toFixed(2)}"
-        data-description={tileEntities(item)}
-        class="grid-item {item.direction} {backgroundImageClass(item)}"
+        title="x:{tile.coordinates.x} y:{tile.coordinates.y}<br>resource: {tile.resource}<br>extraction speed: {tile.perlinFactor.toFixed(2)}"
+        data-description={tileEntities(tile)}
+        class="grid-tile {tile.direction} {backgroundImageClass(tile)} {overlayClass(tile)}"
       >
         <!-- SELF -->
-        {#if item.transformation.x == 0 && item.transformation.y == 0}
+        {#if tile.transformation.x == 0 && tile.transformation.y == 0}
           <div class="icon self">
             {#if $player.entityType == EntityType.Player}
               👺
@@ -188,28 +207,30 @@
         {/if}
 
         <!-- FIRE -->
-        {#if item.fire !== undefined}
-          <div class="icon fire">🔥</div>
+        {#if tile.fire !== undefined}
+          <div class="icon fire">
+            {fireStatusString(tile.fire)}
+          </div>
         {/if}
 
         <!-- OTHER -->
-        {#if item.other !== undefined}
+        {#if tile.other !== undefined}
           <div class="icon other">😈</div>
         {/if}
 
         <!-- CORPSE -->
-        {#if item.corpse !== undefined}
+        {#if tile.corpse !== undefined}
           <div class="icon corpse">💀</div>
         {/if}
 
         <!-- MINED -->
-        {#if item.resource < 100 && item.resource > 0}
+        {#if tile.resource < 100 && tile.resource > 0}
           <div class="icon mined">🪨</div>
         {/if}
 
         <!-- EMPTY -->
-        {#if item.resource == 0}
-          <div class="icon empty">🥡</div>
+        {#if tile.resource == 0}
+          <div class="icon">🥡</div>
         {/if}
       </div>
     {/each}
@@ -258,7 +279,7 @@
     height: 100%;
   }
 
-  .grid-item {
+  .grid-tile {
     aspect-ratio: 1 / 1;
     max-width: 100%;
     max-height: 100%;
@@ -275,10 +296,6 @@
 
   .text {
     opacity: 0;
-  }
-
-  .grid-item:hover .text {
-    opacity: 1;
   }
 
   .dust-1 {
@@ -340,5 +357,34 @@
 
   .self {
     z-index: 1000;
+  }
+
+  .overlay:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+    pointer-events: none;
+    /* mix-blend-mode: multiply; */
+  }
+
+  .overlay.empty:after {
+    background-image: url('../../../../../public/images/tiles/overlays/empty.png');
+  }
+
+  .overlay.corpse:after {
+    background-image: url('../../../../../public/images/tiles/overlays/corpse.png');
+  }
+
+  .overlay.mined:after {
+    background-image: url('../../../../../public/images/tiles/overlays/mined.png');
+  }
+
+  .overlay.map:after {
+    background-image: url('../../../../../public/images/tiles/overlays/maptremi.png');
+    mix-blend-mode: multiply;
   }
 </style>

@@ -1,8 +1,6 @@
 import { Coord } from "@latticexyz/utils";
 import { writable, get, derived } from "svelte/store";
 import { network } from "./network";
-import { category } from "./ui";
-import { playerAddress } from "../stores/player";
 
 export enum EntityType {
   Player,
@@ -47,12 +45,10 @@ export const players = derived(
   ($entities) => Object.values($entities).filter((e) => e.entityType == EntityType.Player) as ArrayLike<Entity>
 );
 
-export const fires = derived(
-  entities,
-  ($entities) =>
-    Object.values($entities).filter((e) => {
-      return e.entityType == EntityType.Fire;
-    }) as ArrayLike<Entity>
+export const fires = derived(entities, ($entities) =>
+  Object.values($entities).filter((e) => {
+    return e.entityType == EntityType.Fire;
+  })
 );
 
 export const terrains = derived(
@@ -63,4 +59,17 @@ export const terrains = derived(
 export const corpses = derived(
   entities,
   ($entities) => Object.values($entities).filter((e) => e.entityType == EntityType.Corpse) as ArrayLike<Entity>
+);
+
+export const playersV2 = derived(entities, ($entities) =>
+  Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Player))
+);
+export const firesV2 = derived(entities, ($entities) =>
+  Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Fire))
+);
+export const terrainsV2 = derived(entities, ($entities) =>
+  Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Terrain))
+);
+export const corpsesV2 = derived(entities, ($entities) =>
+  Object.fromEntries(Object.entries($entities).filter(([v, e]) => e.entityType == EntityType.Corpse))
 );
