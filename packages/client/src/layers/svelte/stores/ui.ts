@@ -8,6 +8,7 @@ export const menuVisible = writable(false);
 export const speed = writable(100);
 export const fragSpeed = writable(0);
 export const category = writable("gluttony");
+export const activeComponent = writable("");
 
 // Create custom store with simpler update methods
 function createComponentState() {

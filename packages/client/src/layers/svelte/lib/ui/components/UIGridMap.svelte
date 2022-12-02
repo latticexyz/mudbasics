@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { get } from "svelte/store"
   import { Coord } from "@latticexyz/recs";
   import { onMount } from "svelte";
   import { entities, Entity, EntityType } from "../../../stores/entities";
@@ -7,8 +8,13 @@
   import { createPerlin, Perlin } from "@latticexyz/noise";
   import { TerrainType, directionToString } from "../../../utils/space";
   import { seedToName } from "../../../utils/name";
+  import { tooltip } from "./UIToolTip/index"
+  import { fireString } from "./UIFires/index"
 
   let perlin: Perlin;
+  let w: Number
+  let h: Number
+  let shortest: Number
 
   function checkForType(gridPosition: Coord, type: EntityType) {
     let entity = Object.values($entities).find(
@@ -72,6 +78,14 @@
     }
   }
 
+  function tileEntities (item) {
+    if (item?.fire) {
+      return get(fireString(item.fire))
+    }
+
+    return ""
+  }
+
   // Dust
   // 0.2
   // 0.20 - 0.25  => 1
@@ -132,10 +146,16 @@
     initGrid();
     updateGrid($player.position);
   });
+
+  $: shortest = Math.min(w, h)
 </script>
 
-<div class="ui-grid-map">
-  <div class="grid-container">
+<div
+  class="ui-grid-map"
+  bind:clientWidth={w}
+  bind:clientHeight={h}
+>
+  <div class="grid-container" style:max-width="{shortest}px" style:max-height="{shortest}px">
     <!-- Shown if player is moving -->
     {#if $playerActivity == Activities.Moving && ($player.coolDownBlock || 0) > $blockNumber}
       <div class="cooldown-overlay">
@@ -149,13 +169,12 @@
     {/if}
 
     {#each grid as item}
-      <div class="grid-item {item.direction} {backgroundImageClass(item)}">
-        <div class="text">
-          [{item.coordinates.x}:{item.coordinates.y}]<br />
-          {item.resource}<br />
-          {item.perlinFactor.toFixed(2)}<br />
-        </div>
-
+      <div
+        use:tooltip={{ class: 'fluid', offset: { x: 10, y: 10 }}}
+        title="{item.coordinates.x}:{item.coordinates.y}<br>{item.resource}<br>{item.perlinFactor.toFixed(2)}"
+        data-description={tileEntities(item)}
+        class="grid-item {item.direction} {backgroundImageClass(item)}"
+      >
         <!-- SELF -->
         {#if item.transformation.x == 0 && item.transformation.y == 0}
           <div class="icon self">
@@ -198,14 +217,14 @@
 </div>
 
 <style>
+
   .ui-grid-map {
-    height: 320px;
+    height: 100%;
     display: flex;
+    flex-wrap: column;
     justify-content: center;
-    position: relative;
     align-items: center;
   }
-
   .cooldown-overlay {
     position: absolute;
     width: 100%;
@@ -224,15 +243,25 @@
   }
 
   .grid-container {
-    width: 300px;
-    height: 300px;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .grid-container {
     position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-rows: repeat(5, minmax(0, 1fr));
+    height: 100%;
   }
 
   .grid-item {
-    width: 60px;
-    height: 60px;
-    float: left;
+    aspect-ratio: 1 / 1;
+    max-width: 100%;
+    max-height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -241,6 +270,7 @@
     text-align: center;
     position: relative;
     background-size: cover;
+    cursor: pointer;
   }
 
   .text {
@@ -304,7 +334,7 @@
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    font-size: 40px;
+    font-size: 4vw;
     z-index: 100;
   }
 

@@ -6,7 +6,7 @@ import UIGridMap from "../lib/ui/components/UIGridMap.svelte";
 import UIView from "../lib/ui/components/UIView.svelte";
 import UIDebugLog from "../lib/ui/components/UIDebugLog.svelte";
 import UILeaderBoard from "../lib/ui/components/UILeaderBoard.svelte";
-import UIFires from "../lib/ui/components/UIFires.svelte";
+import UIFires from "../lib/ui/components/UIFires/UIFires.svelte";
 // --- Operations Editors
 import UIPlanner from "../lib/ui/components/UIOperationsEditor/UIPlanner.svelte";
 import UIExecutor from "../lib/ui/components/UIOperationsEditor/UIExecutor.svelte";
@@ -23,6 +23,7 @@ export interface UIComponentOptions {
   persistent?: boolean;
   muted?: boolean;
   layer?: number;
+  noscroll?: boolean;
 }
 
 export interface UIComponentPlacement {
@@ -61,7 +62,13 @@ export const initialState = () => ({
       col: [2, 3],
       row: [1, 10],
     },
-    options: { bare: true, persistent: true, layer: 0, fluid: true },
+    options: {
+      bare: true,
+      persistent: true,
+      layer: 0,
+      fluid: true,
+      noscroll: true,
+    },
     active: true,
   }),
   // OPS PLANNER
@@ -104,6 +111,7 @@ export const initialState = () => ({
     options: {
       fluid: true,
       delay: makeDelay(),
+      noscroll: true,
     },
     grid: {
       col: [3, 4],

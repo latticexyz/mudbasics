@@ -2,7 +2,7 @@
   import UIComponentTitleBar from "./UIComponentTitleBar";
   import { UIComponentPlacement, UIComponentOptions } from "../../stores/config";
   import { fade } from "svelte/transition";
-  import { uiState, speed } from "../../stores/ui";
+  import { uiState, speed, activeComponent } from "../../stores/ui";
 
   export let id: string;
   export let active: boolean = true;
@@ -11,10 +11,29 @@
   export let grid: UIComponentPlacement = {};
   export let options: UIComponentOptions;
   export let area: string = "";
+
+  const handleShortcuts = ({ code }) => {
+    if ($activeComponent === id) {
+      if (code === 'Escape' && !options.persistent) {
+        uiState.alter(id, 'active', false)
+      }
+    }
+  }
+
+  const handleMouseEnter = () => {
+    $activeComponent = id
+  }
+  const handleMouseLeave = () => {
+    $activeComponent = ''
+  }
 </script>
+
+<svelte:window on:keydown={handleShortcuts}></svelte:window>
 
 {#if active}
   <div
+    on:mouseenter={handleMouseEnter}
+    on:mouseleave={handleMouseLeave}
     in:fade={{ duration: $speed, delay: options?.delay }}
     out:fade={{ duration: $speed }}
     on:introend={() => uiState.alter(id, "delay", 0)}
@@ -27,10 +46,17 @@
     class:blend={options?.layer === 0}
   >
     <!-- Title Bar -->
-    <UIComponentTitleBar {id} {title} {options} />
+    {#if !options?.bare}
+      <UIComponentTitleBar {id} {title} {options} />
+    {/if}
 
     <!-- Body -->
-    <div class="ui-component-inner" class:no-padding={options?.layer === 0}>
+    <div
+      class="ui-component-inner"
+      class:no-padding={options?.layer === 0}
+      class:no-scroll={options?.noscroll}
+    >
+      <!-- aaa -->
       <slot />
     </div>
   </div>
@@ -41,10 +67,13 @@
     grid-column: auto / span 1;
     grid-row: auto / span 3;
     user-select: none;
-    overflow-y: scroll;
+    overflow-y: hidden;
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: max-content 1fr ;
   }
 
   .ui-component.blend {
@@ -58,16 +87,21 @@
   }
 
   .ui-component.box {
-    padding-top: var(--titlebar-height);
     border: 1px solid rgba(var(--foreground-rgb), var(--muted-opacity));
   }
 
   .ui-component-inner {
     padding: 10px;
+    height: 100%;
+    overflow-y: scroll;
   }
 
   .ui-component-inner.no-padding {
     padding: 0;
+  }
+
+  .ui-component-inner.no-scroll {
+    overflow: hidden;
   }
 
   .taskbar {

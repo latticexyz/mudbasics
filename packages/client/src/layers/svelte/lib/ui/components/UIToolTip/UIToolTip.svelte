@@ -9,12 +9,12 @@
   <div class="ui-tooltip-inner">
     {#if title && title !== "false"}
       <div class:ui-tooltip-title={!!description}>
-        {title}
+        {@html title}
       </div>
     {/if}
     {#if description}
       <div class="ui-tooltip-description">
-        {description}
+        {@html description}
       </div>
     {/if}
   </div>

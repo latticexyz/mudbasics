@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { fires } from "../../../stores/entities";
-  import { player, playerList } from "../../../stores/player";
-  import { uiState } from "../../../stores/ui";
-  import { seedToName } from "../../../utils/name";
-  import { blockNumber } from "../../../stores/network";
-  import { speed, fragSpeed } from "../../../stores/ui";
+  import { fires } from "../../../../stores/entities";
+  import { uiState } from "../../../../stores/ui";
+  import { blockNumber } from "../../../../stores/network";
+  import { speed, fragSpeed } from "../../../../stores/ui";
   import { fade } from "svelte/transition";
+
+  import Fire from "./Fire.svelte"
 
   const SECONDS_IN_DAY = 86400;
 
@@ -32,28 +32,7 @@
   <!-- <div>Cooldown block: {$player.coolDownBlock}</div> -->
   {#each Object.entries($fires) as [address, value], i (address)}
     <div transition:fade={{ duration: $speed + $fragSpeed * i }}>
-      <!-- {#if value.entityType == EntityType.Fire}
-        <strong>🔥 {shortenAddress(address)}</strong>
-      {/if} -->
-      <!-- / x:{value.position?.x}
-      / y: {value.position?.y}
-      {#if value.entityType == EntityType.Player}
-        / e: {value.energy}
-      {/if} -->
-      {#if Math.max(value.coolDownBlock - $blockNumber, 0) > 0}
-        🔥
-      {:else}
-        🕳
-      {/if}
-      {#if value.coolDownBlock}
-        / burntime: {Math.max(value.coolDownBlock - $blockNumber, 0)}
-      {/if}
-      {#if value.resource}
-        / resources: {value.resource}
-      {/if}
-      {#if value.creator}
-        / creators: {playerList(value.creator)}
-      {/if}
+      <Fire {address} {value} />
     </div>
   {/each}
 </div>
