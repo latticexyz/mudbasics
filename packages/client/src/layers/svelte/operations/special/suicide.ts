@@ -1,6 +1,7 @@
 import { get } from "svelte/store";
 import { network, blockNumber } from "../../stores/network";
 import { player } from "../../stores/player";
+import { uiState } from "../../stores/ui";
 
 export function suicide() {
   // Spend all available energy moving in a random direction

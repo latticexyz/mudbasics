@@ -34,12 +34,12 @@
   function edit() {
     playSound("selectFour", "ui");
     // Show the planner component full screen
-    uiState.alter("operations-planner", "active", true);
-    uiState.alter("operations-planner", "grid", {
+    uiState.alter("compulsions", "active", true);
+    uiState.alter("compulsions", "grid", {
       col: [1, 4],
       row: [1, 10],
     });
-    uiState.setOption("operations-planner", "layer", 10);
+    uiState.setOption("compulsions", "layer", 10);
   }
 </script>
 

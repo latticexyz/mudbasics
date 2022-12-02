@@ -127,3 +127,66 @@ span.ripple {
 .link:hover {
   opacity: 1;
 }
+
+/* OVERLAYS */
+
+.overlay:before,
+.overlay:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  pointer-events: none;
+}
+
+.overlay:before {
+  z-index: 1;
+}
+
+.overlay:after {
+  z-index: 2;
+}
+
+.overlay.empty:after {
+  background-image: url("../../public/images/tiles/overlays/empty.png");
+}
+
+.overlay.corpse:after {
+  background-image: url("../../public/images/tiles/overlays/corpse.png");
+  z-index: 9;
+}
+
+.overlay.mined:after {
+  background-image: url("../../public/images/tiles/overlays/mined.png");
+}
+
+.overlay.map:after {
+  background-image: url("../../public/images/tiles/overlays/map.png");
+  mix-blend-mode: multiply;
+}
+
+.overlay.mask:before {
+  z-index: 1;
+}
+
+.overlay.mask.mask-0:before {
+  background-image: url("../../public/images/masks/0.png");
+}
+.overlay.mask.mask-1:before {
+  background-image: url("../../public/images/masks/1.png");
+}
+.overlay.mask.mask-2:before {
+  background-image: url("../../public/images/masks/2.png");
+}
+.overlay.mask.mask-3:before {
+  background-image: url("../../public/images/masks/3.png");
+}
+
+.overlay.fire.fire-on:after {
+  background-image: url("../../public/images/fire/on.gif");
+}
+.overlay.fire.fire-off:after {
+  background-image: url("../../public/images/fire/off.gif");
+}

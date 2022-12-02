@@ -5,7 +5,7 @@
   import { fade } from "svelte/transition";
 </script>
 
-<div class="ui-text-log">
+<div class="ui-memory">
   <div class="inner-log">
     {#each $narrative as logEntry, i (logEntry.id)}
       <div transition:fade={{ duration: $speed }} class:player={logEntry.address == $playerAddress}>

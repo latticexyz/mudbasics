@@ -27,7 +27,7 @@
     playSound("selectTwo", "ui");
     // Remove empty sequence elements before submitting
     submitSequence(localSequence.filter((item) => item.operation.name !== "+"));
-    uiState.alter("operations-planner", "active", false);
+    uiState.alter("compulsions", "active", false);
   }
 
   function stop() {

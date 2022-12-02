@@ -37,9 +37,13 @@
 </script>
 
 <div class="ui-avatar">
-  <div class="ui-avatar-header">
+  <div
+    class="ui-avatar-header"
+    class:overlay={$player.entityType == EntityType.Corpse}
+    class:corpse={$player.entityType == EntityType.Corpse}
+  >
     <div class="name">
-      {#if $player.entityType == EntityType.Corpse}💀 {/if}{seedToName($player.seed)}
+      {seedToName($player.seed)}
     </div>
     <div class="activity">
       {#if $player.entityType == EntityType.Corpse}
@@ -84,22 +88,7 @@
     height: 100%;
   }
 
-  .ui-avatar-background {
-    position: absolute;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
   video {
-    /* height: 100%;
-    width: 100%;
-    object-fit: cover; */
     max-width: 100%;
     max-height: 100%;
     display: block;
@@ -111,8 +100,13 @@
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     grid-auto-rows: auto;
-    /* align-items: start; */
     gap: 4px;
+    position: relative;
+  }
+
+  .ui-avatar-header:after {
+    background-size: contain !important;
+    background-repeat: no-repeat;
   }
 
   .name {

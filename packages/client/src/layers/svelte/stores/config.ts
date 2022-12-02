@@ -73,8 +73,8 @@ export const initialState = () => ({
     active: true,
   }),
   // OPS PLANNER
-  "operations-planner": initialise({
-    id: "operations-planner",
+  compulsions: initialise({
+    id: "compulsions",
     title: "Compulsions",
     component: UIPlanner,
     active: false,
@@ -88,8 +88,8 @@ export const initialState = () => ({
     },
   }),
   // TEXT LOG
-  "text-log": initialise({
-    id: "text-log",
+  memory: initialise({
+    id: "memory",
     title: "Memory",
     component: UITextLog,
     active: true,
@@ -182,8 +182,8 @@ export const initialState = () => ({
     },
   }),
   //
-  "operations-executor": initialise({
-    id: "operations-executor",
+  executor: initialise({
+    id: "executor",
     title: "Compulsions",
     component: UIExecutor,
     active: true,

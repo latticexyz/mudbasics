@@ -16,7 +16,7 @@
   {/if}
   <div class="ui-container-inner">
     {#if !$ready}
-      <UIComponent id="ui-loading" options={{ fluid: true, bare: true }} area="mm">
+      <UIComponent id="ui-loading" options={{ fluid: true, bare: true, span: true }} area="mm">
         <UILoading />
       </UIComponent>
     {:else if !$player}

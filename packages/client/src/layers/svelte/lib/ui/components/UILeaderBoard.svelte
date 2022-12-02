@@ -5,6 +5,7 @@
   import { players } from "../../../stores/entities";
   import { category } from "../../../stores/ui";
   import { seedToName } from "../../../utils/name";
+  import { EntityType } from "../../../stores/entities";
 
   export let autoplay = 2500;
   // let interval;
@@ -24,27 +25,6 @@
     }
     return arr;
   });
-
-  // if (autoplay) {
-  //   play()
-  // }
-
-  // function play () {
-  //   interval = setInterval(next, 3000)
-  // }
-
-  // function pause () {
-  //   if (autoplay) {
-  //     clearInterval(interval)
-  //     setTimeout(play, 5000)
-  //   }
-  // }
-
-  // function next() {
-  //   const entries = Object.entries(mappings);
-  //   const index = i++ % entries.length;
-  //   $category = entries[index][0];
-  // }
 
   function pick(cat: string) {
     // pause()
@@ -72,8 +52,10 @@
   </div>
   <div class="players">
     {#each $rankedPlayers as player, i (player.seed + i)}
-      <div animate:flip={{ duration: 400, easing }} class="ui-stat-row">
-        <span class="ui-stat-player">{seedToName(player.seed)}</span>
+      <div
+        animate:flip={{ duration: 400, easing }}
+        class="ui-stat-row">
+        <span class:dead={player.entityType == EntityType.Corpse} class="ui-stat-player">{seedToName(player.seed)}</span>
       </div>
     {/each}
   </div>
@@ -125,5 +107,9 @@
   .ui-stat-rank {
     width: 20px;
     display: inline-block;
+  }
+
+  .dead {
+    text-decoration: line-through;
   }
 </style>

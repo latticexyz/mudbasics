@@ -86,46 +86,6 @@
     return "";
   }
 
-  // Dust
-  // 0.2
-  // 0.20 - 0.25  => 1
-  // 0.25 - 0.30  => 2
-  // 0.30 - 0.35  => 3
-  // 0.35 - 0.40  => 4
-
-  // Debris
-  // 0.4
-  // 0.40 - 0.45
-  // 0.45 - 0.50
-  // 0.50 - 0.55
-  // 0.55 - 0.60
-
-  // Ruins
-  // 0.6
-  // 0.60 - 0.65
-  // 0.65 - 0.70
-  // 0.70 - 0.75
-  // 0.75 - 0.80
-
-  // function terrainVariation(perlinFactor: number, minValue: number) {
-  //   let normalized = perlinFactor - minValue;
-  //   if (normalized < 0.05) return 1;
-  //   if (normalized < 0.1) return 2;
-  //   if (normalized < 0.15) return 3;
-  //   return 4;
-  // }
-
-  // function backgroundImageClass(tile: GridItem) {
-  //   switch (tile.terrain) {
-  //     case TerrainType.Dust:
-  //       return "dust-" + terrainVariation(tile.perlinFactor, 0.2);
-  //     case TerrainType.Debris:
-  //       return "debris-" + terrainVariation(tile.perlinFactor, 0.4);
-  //     case TerrainType.Ruins:
-  //       return "ruins-" + terrainVariation(tile.perlinFactor, 0.6);
-  //   }
-  // }
-
   function backgroundImageClass(tile: GridItem) {
     switch (tile.terrain) {
       case TerrainType.Dust:
@@ -158,7 +118,7 @@
 
     // SELF
     if (tile.transformation.x == 0 && tile.transformation.y == 0) {
-      if ($player.entityType == EntityType.Player) {
+      if ($player.entityType == EntityType.Player || $player.entityType == EntityType.Corpse) {
         str += `mask mask-${seedToMask($player.seed) } `
       }
       if ($player.entityType == EntityType.Corpse) {
@@ -342,59 +302,5 @@
 
   .self {
     z-index: 1000;
-  }
-
-  .overlay:after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    z-index: 1;
-    pointer-events: none;
-    /* mix-blend-mode: multiply; */
-  }
-
-  .overlay.empty:after {
-    background-image: url("../../../../../public/images/tiles/overlays/empty.png");
-  }
-
-  .overlay.corpse:after {
-    background-image: url('../../../../../public/images/tiles/overlays/corpse.png');
-    z-index: 2;
-  }
-
-  .overlay.mined:after {
-    background-image: url("../../../../../public/images/tiles/overlays/mined.png");
-  }
-
-  .overlay.map:after {
-    background-image: url("../../../../../public/images/tiles/overlays/maptremi.png");
-    mix-blend-mode: multiply;
-  }
-  
-  .overlay.mask:after {    
-    z-index: 1;
-  }
-
-  .overlay.mask.mask-1:after {
-    background-image: url('../../../../../public/images/masks/1.png');
-  }
-  .overlay.mask.mask-2:after {
-    background-image: url('../../../../../public/images/masks/2.png');
-  }
-  .overlay.mask.mask-3:after {
-    background-image: url('../../../../../public/images/masks/3.png');
-  }
-  .overlay.mask.mask-4:after {
-    background-image: url('../../../../../public/images/masks/4.png');
-  }
-  
-  .overlay.fire.fire-on:after {
-    background-image: url('../../../../../public/images/fire/on.gif');
-  }
-  .overlay.fire.fire-off:after {
-    background-image: url('../../../../../public/images/fire/off.gif');
   }
 </style>

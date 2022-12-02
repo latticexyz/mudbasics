@@ -3,6 +3,8 @@ import { tweened } from "svelte/motion";
 import { Operation } from "../operations/";
 import { blockNumber } from "./network";
 import { player, playerActivity, Activities, categoryToActivity } from "./player";
+import { uiState } from "./ui";
+import { EntityType } from "./entities";
 
 export interface SequenceElement {
   operation: Operation;
@@ -70,6 +72,13 @@ function executeOperation(sequenceElement: SequenceElement) {
 
 blockNumber.subscribe((newBlock) => {
   if (get(player)) {
+    // If the player be dead
+    if (get(player).entityType == EntityType.Corpse) {
+      uiState.close("executor");
+      uiState.close("compulsions");
+      return;
+    }
+
     // If cooldown block changed
     if (get(player).coolDownBlock !== oldCoolDownBlock) {
       // Block to cooldown is (current block + 1) - cooldown block

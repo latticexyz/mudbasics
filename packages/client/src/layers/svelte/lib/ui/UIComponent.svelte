@@ -32,19 +32,19 @@
 
 {#if active}
   <div
+    style:z-index={options?.layer}
+    class="ui-component col-{grid?.col?.[0]}-{grid?.col?.[1]} row-{grid?.row?.[0]}-{grid?.row?.[1]} {area}"
     on:mouseenter={handleMouseEnter}
     on:mouseleave={handleMouseLeave}
-    in:fade={{ duration: $speed, delay: options?.delay }}
-    out:fade={{ duration: $speed }}
     on:introend={() => uiState.alter(id, "delay", 0)}
-    class="ui-component col-{grid?.col?.[0]}-{grid?.col?.[1]} row-{grid?.row?.[0]}-{grid?.row?.[1]} {area}"
-    style:z-index={options?.layer}
     class:fluid={options?.fluid}
     class:box={!options?.bare}
     class:rectangles={!options?.bare}
     class:backed={!options?.bare}
     class:blend={options?.layer === 0}
     class:span={options?.span}
+    in:fade={{ duration: $speed, delay: options?.delay }}
+    out:fade={{ duration: $speed }}
   >
     <!-- Title Bar -->
     {#if !options?.bare}

@@ -5,7 +5,7 @@
   import { fade } from "svelte/transition";
   import { speed, fragSpeed } from "../../stores/ui";
 
-  const ids = ['text-log', 'leaderboard', 'fires', 'grid-map']
+  const ids = ['memory', 'leaderboard', 'fires', 'grid-map']
 
   const toggle = () => {
     playSound("cursor", "ui");
@@ -19,7 +19,7 @@
       }
     }
     if (code === 'KeyM') {
-      uiState.toggle('text-log', 'active')
+      uiState.toggle('memory', 'active')
     }
     if (code === 'KeyL') {
       uiState.toggle('leaderboard', 'active')

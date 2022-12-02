@@ -13,12 +13,12 @@
   $: clockTime = Math.floor((($blockNumber % 3600) / 3600) * SECONDS_IN_DAY);
 
   function arson() {
-    uiState.alter("operations-planner", "active", true);
-    uiState.alter("operations-planner", "grid", {
+    uiState.alter("compulsions", "active", true);
+    uiState.alter("compulsions", "grid", {
       col: [1, 4],
       row: [1, 10],
     });
-    uiState.setOption("operations-planner", "layer", 10);
+    uiState.setOption("compulsions", "layer", 10);
   }
 </script>
 
