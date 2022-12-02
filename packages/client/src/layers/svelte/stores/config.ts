@@ -24,6 +24,7 @@ export interface UIComponentOptions {
   muted?: boolean;
   layer?: number;
   noscroll?: boolean;
+  span?: boolean;
 }
 
 export interface UIComponentPlacement {

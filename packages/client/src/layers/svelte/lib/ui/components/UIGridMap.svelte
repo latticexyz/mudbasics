@@ -7,9 +7,9 @@
   import { blockNumber } from "../../../stores/network";
   import { createPerlin, Perlin } from "@latticexyz/noise";
   import { TerrainType, directionToString } from "../../../utils/space";
-  import { seedToName } from "../../../utils/name";
+  import { seedToName, seedToMask } from "../../../utils/name";
   import { tooltip } from "./UIToolTip/index"
-  import { fireString, fireStatusString} from "./UIFires/index"
+  import { fireString, fireStatusString, fireStatusClass } from "./UIFires/index"
 
   let perlin: Perlin;
   let w: Number
@@ -139,14 +139,31 @@
 
   function overlayClass (tile: GridItem) {
     let str = ''
+    // VACANT
     if (tile.resource == 0) {
       str += 'empty '
     }
+    // MINED
     if (tile.resource < 100 && tile.resource > 0) {
       str += 'mined '
     }
+    // DED
     if (tile.corpse !== undefined) {
       str += 'corpse '
+    }
+    // FIYA
+    if (tile.fire !== undefined) {
+      str += `${fireStatusClass(tile.fire)} `
+    }
+
+    // SELF
+    if (tile.transformation.x == 0 && tile.transformation.y == 0) {
+      if ($player.entityType == EntityType.Player) {
+        str += `mask mask-${seedToMask($player.seed) } `
+      }
+      if ($player.entityType == EntityType.Corpse) {
+        str += 'corpse '
+      }
     }
 
     if (str !== '') {
@@ -194,43 +211,14 @@
         data-description={tileEntities(tile)}
         class="grid-tile {tile.direction} {backgroundImageClass(tile)} {overlayClass(tile)}"
       >
-        <!-- SELF -->
-        {#if tile.transformation.x == 0 && tile.transformation.y == 0}
-          <div class="icon self">
-            {#if $player.entityType == EntityType.Player}
-              👺
-            {/if}
-            {#if $player.entityType == EntityType.Corpse}
-              💀
-            {/if}
-          </div>
-        {/if}
-
-        <!-- FIRE -->
-        {#if tile.fire !== undefined}
-          <div class="icon fire">
-            {fireStatusString(tile.fire)}
-          </div>
-        {/if}
-
         <!-- OTHER -->
         {#if tile.other !== undefined}
           <div class="icon other">😈</div>
         {/if}
 
-        <!-- CORPSE -->
-        {#if tile.corpse !== undefined}
-          <div class="icon corpse">💀</div>
-        {/if}
-
         <!-- MINED -->
         {#if tile.resource < 100 && tile.resource > 0}
-          <div class="icon mined">🪨</div>
-        {/if}
-
-        <!-- EMPTY -->
-        {#if tile.resource == 0}
-          <div class="icon">🥡</div>
+          <div class="icon mined"></div>
         {/if}
       </div>
     {/each}
@@ -261,6 +249,7 @@
     align-items: center;
     color: white;
     text-align: center;
+    padding: var(--font-size);
   }
 
   .grid-container {
@@ -377,6 +366,7 @@
 
   .overlay.corpse:after {
     background-image: url('../../../../../public/images/tiles/overlays/corpse.png');
+    z-index: 2;
   }
 
   .overlay.mined:after {
@@ -386,5 +376,29 @@
   .overlay.map:after {
     background-image: url('../../../../../public/images/tiles/overlays/maptremi.png');
     mix-blend-mode: multiply;
+  }
+  
+  .overlay.mask:after {    
+    z-index: 1;
+  }
+
+  .overlay.mask.mask-1:after {
+    background-image: url('../../../../../public/images/masks/1.png');
+  }
+  .overlay.mask.mask-2:after {
+    background-image: url('../../../../../public/images/masks/2.png');
+  }
+  .overlay.mask.mask-3:after {
+    background-image: url('../../../../../public/images/masks/3.png');
+  }
+  .overlay.mask.mask-4:after {
+    background-image: url('../../../../../public/images/masks/4.png');
+  }
+  
+  .overlay.fire.fire-on:after {
+    background-image: url('../../../../../public/images/fire/on.gif');
+  }
+  .overlay.fire.fire-off:after {
+    background-image: url('../../../../../public/images/fire/off.gif');
   }
 </style>

@@ -44,6 +44,7 @@
     class:rectangles={!options?.bare}
     class:backed={!options?.bare}
     class:blend={options?.layer === 0}
+    class:span={options?.span}
   >
     <!-- Title Bar -->
     {#if !options?.bare}
@@ -71,6 +72,9 @@
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
     position: relative;
+  }
+
+  .ui-component:not(.span) {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: max-content 1fr ;

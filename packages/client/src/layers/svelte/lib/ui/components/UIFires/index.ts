@@ -35,3 +35,11 @@ export function fireStatusString(v) {
     return "🕳";
   }
 }
+
+export function fireStatusClass(v) {
+  if (Math.max(v.coolDownBlock - get(blockNumber), 0) > 0) {
+    return "fire fire-on";
+  } else {
+    return "fire fire-off";
+  }
+}

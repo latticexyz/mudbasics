@@ -20,7 +20,7 @@
         <UILoading />
       </UIComponent>
     {:else if !$player}
-      <UIComponent id="ui-spawn" options={{ fluid: true, bare: true }} area="mm">
+      <UIComponent id="ui-spawn" options={{ fluid: true, bare: true, span: true }} area="mm">
         <UISpawn />
       </UIComponent>
     {:else}
