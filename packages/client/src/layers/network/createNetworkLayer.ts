@@ -49,14 +49,11 @@ export async function createNetworkLayer(config: GameConfig) {
 
   // Faucet setup
   const faucet = config.faucetServiceUrl ? createFaucetService(config.faucetServiceUrl) : undefined;
-
-  if (config.devMode) {
-    const playerIsBroke = (await network.signer.get()?.getBalance())?.lte(utils.parseEther("0.005"));
-    if (playerIsBroke) {
-      console.info("[Dev Faucet] Dripping funds to player");
-      const address = network.connectedAddress.get();
-      address && (await faucet?.dripDev({ address }));
-    }
+  const playerIsBroke = (await network.signer.get()?.getBalance())?.lte(utils.parseEther("0.05"));
+  if (playerIsBroke) {
+    console.info("[Dev Faucet] Dripping funds to player");
+    const address = network.connectedAddress.get();
+    address && (await faucet?.dripDev({ address }));
   }
 
   // --- ACTION SYSTEM --------------------------------------------------------------
