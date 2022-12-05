@@ -98,7 +98,7 @@ contract FireSystem is System {
     // Update values on player entity
     resourceComponent.set(entity, currentResourceLevel - resourceInput);
     energyComponent.set(entity, currentEnergyLevel - 50);
-    coolDownComponent.set(entity, int32(int256(block.number)) + 20);
+    coolDownComponent.set(entity, int32(int256(block.number)) + 10);
     updateStats(entity, resourceInput);
 
     // Check if dead
