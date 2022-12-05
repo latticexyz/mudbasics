@@ -3,13 +3,13 @@ import { network } from "../../stores/network";
 import { player } from "../../stores/player";
 import { directToLog, LogEntryType } from "../../stores/narrative";
 
-export function glean() {
-  if ((get(player).energy || 0) >= 50) {
-    get(network).api?.gather(50);
+export function eat() {
+  if ((get(player).resource || 0) >= 25) {
+    get(network).api?.consume(25);
     return true;
   } else {
-    directToLog("You do not have enough energy to do this", LogEntryType.Failure);
-    console.log("not enough energy");
+    directToLog("You do not have enough sludge to do this", LogEntryType.Failure);
+    console.log("Eat: not enough resource");
     return false;
   }
 }

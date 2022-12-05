@@ -12,8 +12,8 @@ import {
   northWest,
   goTowardsFire,
 } from "./move";
-import { glean, dig, drain } from "./gather";
-import { lick, drink, guzzle } from "./consume";
+import { collect, dig, drain } from "./gather";
+import { nibble, eat, feast } from "./consume";
 import { fire } from "./burn";
 import { play } from "./play";
 import { giveUp } from "./special";
@@ -109,39 +109,39 @@ export const operations: Operation[] = [
   {
     name: "walk towards fire",
     category: "move",
-    description: "Go to fire",
+    description: "Warmth or danger, who knows? does it matter?",
     cost: "energy: 10",
     f: goTowardsFire,
   },
   // --- CONSUME
   {
-    name: "lick",
+    name: "nibble",
     category: "consume",
-    description: "Have yourself a little something",
-    cost: "sludge: 5",
-    f: lick,
-  },
-  {
-    name: "drink",
-    category: "consume",
-    description: "Time for a meal",
+    description: "Treat yourself, wet your tongue with a bit of sludge",
     cost: "sludge: 10",
-    f: drink,
+    f: nibble,
   },
   {
-    name: "guzzle",
+    name: "eat",
     category: "consume",
-    description: "The hunger needs to be stilled",
-    cost: "sludge: 20",
-    f: guzzle,
+    description: "Decent portion, like grandma used to make it.",
+    cost: "sludge: 25",
+    f: eat,
+  },
+  {
+    name: "feast",
+    category: "consume",
+    description: "Deep gulps, if you throw up, dw, just drink it again <3",
+    cost: "sludge: 50",
+    f: feast,
   },
   // --- GATHER
   {
-    name: "glean",
+    name: "collect",
     category: "gather",
     description: "All I see are shrubs, leftovers and other bits",
     cost: "energy: 50",
-    f: glean,
+    f: collect,
   },
   {
     name: "dig",
