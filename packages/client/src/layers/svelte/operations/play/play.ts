@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 import { network } from "../../stores/network";
 import { player } from "../../stores/player";
-import { directToLog } from "../../stores/narrative";
+import { directToLog, LogEntryType } from "../../stores/narrative";
 
 export function play() {
   if ((get(player).energy || 0) >= 100) {
@@ -9,7 +9,7 @@ export function play() {
     get(network).api?.play(100);
     return true;
   } else {
-    directToLog("You do not have enough energy to waste on this...");
+    directToLog("You do not have enough energy to waste on this...", LogEntryType.Failure);
     console.log("Play: not enough energy");
     return false;
   }

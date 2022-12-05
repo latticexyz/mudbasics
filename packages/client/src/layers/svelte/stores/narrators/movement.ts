@@ -5,7 +5,7 @@ import { getDirection } from "../../utils/space";
 import { indexToID, entities } from "../entities";
 import { sample } from "lodash";
 
-const secondPersonActions = ["You are moving ", "You stumble ", "You are crawling "];
+const secondPersonActions = ["You are moving ", "You walk "];
 
 export function movement(update: ComponentUpdate, isSelf: boolean) {
   const from = update.value[1];

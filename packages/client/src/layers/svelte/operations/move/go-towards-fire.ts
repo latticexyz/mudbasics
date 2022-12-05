@@ -2,6 +2,7 @@ import { get } from "svelte/store";
 import { network } from "../../stores/network";
 import { player } from "../../stores/player";
 import { fires } from "../../stores/entities";
+import { directToLog, LogEntryType } from "../../stores/narrative";
 import { transformationToDirection, positionsToTransformation, directionalPathfind } from "../../utils/space";
 
 export function goTowardsFire() {
@@ -23,6 +24,7 @@ export function goTowardsFire() {
 
     return true;
   } else {
+    directToLog("You do not have enough energy to do this", LogEntryType.Failure);
     console.log("Go towards fire: not enough energy");
     return false;
   }

@@ -19,10 +19,17 @@ export enum EventCategory {
   Direct,
 }
 
+export enum LogEntryType {
+  Normal,
+  Failure,
+  Success,
+}
+
 export interface LogEntry {
   id: string;
   blockNumber: number;
   message: string;
+  messageType: LogEntryType;
 }
 
 function eventCategoryToString(eventCategory: EventCategory) {
@@ -43,19 +50,20 @@ export const logReady = writable(false);
 
 export const narrative = writable([] as LogEntry[]);
 
-function write(message: string) {
+function write(message: string, messageType: LogEntryType = LogEntryType.Normal) {
   const logEntry: LogEntry = {
     id: self.crypto.randomUUID(),
     blockNumber: get(blockNumber),
     message: message,
+    messageType: messageType,
   };
   narrative.update((value) => {
     return [logEntry, ...value];
   });
 }
 
-export function directToLog(message: string) {
-  write(message);
+export function directToLog(message: string, messageType: LogEntryType = LogEntryType.Normal) {
+  write(message, messageType);
 }
 
 export function addToLog(update: ComponentUpdate, category: EventCategory) {
