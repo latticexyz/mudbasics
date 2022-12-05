@@ -41,4 +41,8 @@ export const ui: SoundAssets = {
     src: "/sounds/ui/select-5.mp3",
     volume: 1,
   },
+  action: {
+    src: "/sounds/ui/action.mp3",
+    volume: 1,
+  },
 };

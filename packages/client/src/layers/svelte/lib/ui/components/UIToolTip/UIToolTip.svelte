@@ -1,22 +1,23 @@
 <script lang="ts">
-  import { onMount, onDestroy } from "svelte"
-  import { fade } from "svelte/transition"
+  import { onMount, onDestroy } from "svelte";
+  import { fade } from "svelte/transition";
 
   export let title: string;
   export let description: string;
   export let x: number;
   export let y: number;
 
-  let timeout = null
-  let show = false
+  let timeout = null;
+  let show = false;
 
   onMount(() => {
-    timeout = setTimeout(() => {
-      show = true
-    }, 1000)
-  })
+    show = true;
+    // timeout = setTimeout(() => {
+    //   show = true;
+    // }, 0);
+  });
 
-  onDestroy(() => clearTimeout(timeout))
+  // onDestroy(() => clearTimeout(timeout));
 </script>
 
 {#if show}

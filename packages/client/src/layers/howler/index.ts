@@ -40,7 +40,9 @@ export function startEnvironmentSoundSystem() {
 export function startMelodySoundSystem(timeout = 0) {
   const melodySound = playSound(sample(Object.keys(soundLibrary.melody)), "melody");
   melodySound.on("end", () => {
-    setTimeout(startMelodySoundSystem, timeout);
+    setTimeout(() => {
+      startMelodySoundSystem(timeout);
+    }, timeout);
   });
 }
 

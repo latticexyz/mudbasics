@@ -193,7 +193,7 @@ export const operations: Operation[] = [
     name: "hungry?",
     category: "gate",
     description: "Are you hungry?",
-    cost: "Continue if energy is under 900",
+    cost: "Continue if energy is under 100",
     f: hungry,
   },
   {
@@ -207,7 +207,7 @@ export const operations: Operation[] = [
     name: "sludge rich?",
     category: "gate",
     description: "Are you carrying enough sludge to survive for a while?",
-    cost: "Continue if resource is over 200",
+    cost: "Continue if resource is over 100",
     f: sludgeRich,
   },
   {

@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { tooltip } from "../UIToolTip/index.ts";
+  import { onDestroy } from "svelte";
+  import { tooltip } from "../UIToolTip/index";
   import { blockNumber } from "../../../../stores/network";
   import { uiState } from "../../../../stores/ui";
   import { player } from "../../../../stores/player";
@@ -17,7 +18,7 @@
   export const ID = "ui-executor";
 
   function start() {
-    playSound("eventGood", "ui");
+    playSound("action", "ui");
     startSequencer();
   }
 
@@ -41,6 +42,10 @@
     });
     uiState.setOption("compulsions", "layer", 10);
   }
+
+  onDestroy(() => {
+    stopSequencer();
+  });
 </script>
 
 <div class="ui-executor">
@@ -141,7 +146,7 @@
   }
 
   .gate {
-    background: #4336ff;
+    background: var(--gate);
   }
 
   .empty {

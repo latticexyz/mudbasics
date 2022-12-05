@@ -5,6 +5,7 @@ import { blockNumber } from "./network";
 import { player, playerActivity, Activities, categoryToActivity } from "./player";
 import { uiState } from "./ui";
 import { EntityType } from "./entities";
+import { playSound } from "../../howler";
 
 export interface SequenceElement {
   operation: Operation;
@@ -62,6 +63,7 @@ export function clearSequencer() {
 
 function executeOperation(sequenceElement: SequenceElement) {
   if (sequenceElement) {
+    playSound("eventGood", "ui");
     console.log("====> executing operation:", sequenceElement.operation.name);
     return sequenceElement.operation.f();
   } else {
