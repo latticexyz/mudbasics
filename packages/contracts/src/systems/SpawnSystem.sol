@@ -41,7 +41,7 @@ contract SpawnSystem is System {
     CannibalComponent cannibalComponent = CannibalComponent(getAddressById(components, CannibalComponentID));
 
     // Require user to be un-spawned
-    require(!birthComponent.has(entity), "already spawned");
+    // require(!birthComponent.has(entity), "already spawned");
 
     // --- Seed (Number used for naming the character etc...)
     seedComponent.set(entity, makeSeedValue());
