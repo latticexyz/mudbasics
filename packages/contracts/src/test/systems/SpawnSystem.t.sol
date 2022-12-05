@@ -42,11 +42,14 @@ contract SpawnSystemTest is MudTest {
     // --- Position
     Coord memory newPosition = positionComponent.getValue(entity);
     // X between 0 and WORLD_WIDTH
-    assertGt(newPosition.x, 0);
-    assertLt(newPosition.x, WORLD_WIDTH);
+    assertGt(newPosition.x, 44);
+    assertLt(newPosition.x, 56);
     // Y between 0 and WORLD_HEIGHT
-    assertGt(newPosition.y, 0);
-    assertLt(newPosition.y, WORLD_HEIGHT);
+    assertGt(newPosition.y, 44);
+    assertLt(newPosition.y, 56);
+
+    console.logInt(newPosition.x);
+    console.logInt(newPosition.y);
 
     // --- Resource
     assertEq(resourceComponent.getValue(entity), 200);

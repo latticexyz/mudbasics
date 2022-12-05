@@ -41,16 +41,16 @@ contract SpawnSystem is System {
     CannibalComponent cannibalComponent = CannibalComponent(getAddressById(components, CannibalComponentID));
 
     // Require user to be un-spawned
-    require(!birthComponent.has(entity), "already spawned");
+    // require(!birthComponent.has(entity), "already spawned");
 
     // --- Seed (Number used for naming the character etc...)
     seedComponent.set(entity, makeSeedValue());
 
     // --- Energy
-    energyComponent.set(entity, 1000);
+    energyComponent.set(entity, 100);
 
     // --- Resource
-    resourceComponent.set(entity, 200);
+    resourceComponent.set(entity, 80);
 
     // --- Entity type
     entityTypeComponent.set(entity, uint32(entityType.Player));
@@ -75,15 +75,18 @@ contract SpawnSystem is System {
     cannibalComponent.set(entity, initialCannibalArray);
 
     // --- Position
-    int32 randomX = int32(
-      int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender)))) % WORLD_WIDTH
-    );
+    int32 randomX = int32(int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender)))) % 10);
     int32 randomY = int32(
-      int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender)))) % WORLD_HEIGHT
+      int256(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender)))) % 10
     );
+
     // Make sure the values are positive
     if (randomX < 0) randomX *= -1;
     if (randomY < 0) randomY *= -1;
+
+    randomX += 45;
+    randomY += 45;
+
     positionComponent.set(entity, Coord(randomX, randomY));
   }
 

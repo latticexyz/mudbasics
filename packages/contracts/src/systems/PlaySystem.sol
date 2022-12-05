@@ -46,8 +46,8 @@ contract PlaySystem is System {
 
     // Update values on player entity
     energyComponent.set(entity, currentEnergyLevel - energyInput);
-    coolDownComponent.set(entity, int32(int256(block.number)) + energyInput * 2);
-    playingComponent.set(entity, int32(int256(block.number)) + energyInput * 2);
+    coolDownComponent.set(entity, int32(int256(block.number)) + 20);
+    playingComponent.set(entity, int32(int256(block.number)) + 20);
     updateStats(entity, energyInput);
 
     // Check if dead

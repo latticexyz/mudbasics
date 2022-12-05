@@ -53,7 +53,7 @@ contract EnergySystem is System {
     energyComponent.set(entity, currentEnergyLevel + resourceInput * 5);
 
     // 3 cooldown points / resource consumed
-    coolDownComponent.set(entity, int32(int256(block.number)) + (COOLDOWN_PER_RESOURCE * resourceInput));
+    coolDownComponent.set(entity, int32(int256(block.number)) + 10);
 
     updateStats(entity, resourceInput);
   }
