@@ -2,7 +2,7 @@ import { get } from "svelte/store";
 import { player } from "../../stores/player";
 
 export function hungry() {
-  if ((get(player).energy || 0) < 900) {
+  if ((get(player).energy || 0) < 100) {
     return true;
   } else {
     return false;

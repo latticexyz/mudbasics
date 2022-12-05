@@ -14,9 +14,9 @@ import {
 } from "./move";
 import { glean, dig, drain } from "./gather";
 import { lick, drink, guzzle } from "./consume";
-import { fire, bonfire } from "./burn";
+import { fire } from "./burn";
 import { play } from "./play";
-import { suicide } from "./special";
+import { giveUp } from "./special";
 import { hungry, sludgeRich, drained, byTheFire } from "./gates";
 
 export interface Operation {
@@ -182,11 +182,11 @@ export const operations: Operation[] = [
   },
   // --- SPECIAL
   {
-    name: "suicide",
+    name: "give up",
     category: "special",
     description: "What is the point to it all, anyways",
     cost: "energy: all of it",
-    f: suicide,
+    f: giveUp,
   },
   // --- GATES
   {
