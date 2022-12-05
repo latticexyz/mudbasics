@@ -1,9 +1,9 @@
 <script lang="ts">
-  import UIClock from "./UIClock.svelte";
+  import UISurvivalCounter from "./UISurvivalCounter.svelte";
 </script>
 
 <div class="ui-taskbar">
-  <UIClock />
+  <UISurvivalCounter />
 </div>
 
 <style>

@@ -17,7 +17,7 @@ import { lick, drink, guzzle } from "./consume";
 import { fire, bonfire } from "./burn";
 import { play } from "./play";
 import { suicide } from "./special";
-import { hungry, juiceRich, drained, byTheFire } from "./gates";
+import { hungry, sludgeRich, drained, byTheFire } from "./gates";
 
 export interface Operation {
   name: string;
@@ -32,7 +32,7 @@ export const operations: Operation[] = [
   {
     name: "east",
     category: "move",
-    description: "If you believe in God, believe in Death Row East",
+    description: "If you believe in God, believe in death row east",
     cost: "energy: 10",
     f: east,
   },
@@ -53,7 +53,7 @@ export const operations: Operation[] = [
   {
     name: "south",
     category: "move",
-    description: "The south will rise again",
+    description: "The south will rise, beware...",
     cost: "energy: 10",
     f: south,
   },
@@ -118,21 +118,21 @@ export const operations: Operation[] = [
     name: "lick",
     category: "consume",
     description: "Have yourself a little something",
-    cost: "juice: 5",
+    cost: "sludge: 5",
     f: lick,
   },
   {
     name: "drink",
     category: "consume",
     description: "Time for a meal",
-    cost: "juice: 10",
+    cost: "sludge: 10",
     f: drink,
   },
   {
     name: "guzzle",
     category: "consume",
     description: "The hunger needs to be stilled",
-    cost: "juice: 20",
+    cost: "sludge: 20",
     f: guzzle,
   },
   // --- GATHER
@@ -199,16 +199,16 @@ export const operations: Operation[] = [
   {
     name: "drained?",
     category: "gate",
-    description: "Has someone already drained all the juice in this soil?",
-    cost: "Continue if tile has juice",
+    description: "Has someone already drained all the sludge in this soil?",
+    cost: "Continue if tile has sludge",
     f: drained,
   },
   {
-    name: "juice rich?",
+    name: "sludge rich?",
     category: "gate",
-    description: "Are you carrying enough juice to survive for a while?",
+    description: "Are you carrying enough sludge to survive for a while?",
     cost: "Continue if resource is over 200",
-    f: juiceRich,
+    f: sludgeRich,
   },
   {
     name: "by the fire?",

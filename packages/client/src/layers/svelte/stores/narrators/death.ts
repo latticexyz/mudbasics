@@ -8,7 +8,7 @@ const secondPersonActions = ["You died.", "You left the world."];
 
 const thirdPersonActions = [
   " cries out in the darkness and is no more.",
-  " ran out of juice.",
+  " ran out of sludge.",
   " died.",
   " left the world.",
 ];

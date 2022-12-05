@@ -38,7 +38,7 @@
     class:up={direction > 0}
     class:down={direction < 0}
   >
-    <span>{$value.toFixed(2)}</span>
+    <span>{$value}</span>
   </div>
 </div>
 

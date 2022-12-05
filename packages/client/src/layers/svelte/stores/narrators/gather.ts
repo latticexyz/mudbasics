@@ -9,9 +9,9 @@ export function gather(update: ComponentUpdate, isSelf: boolean) {
   const newValue = Number(update.value[0]?.value || 0);
 
   if (isSelf) {
-    return "You dug up " + (newValue - oldValue) + " juice";
+    return "You dug up " + (newValue - oldValue) + " sludge";
   } else {
     const entity = get(entities)[indexToID(update.entity)];
-    return seedToName(entity.seed) + " dug up " + (newValue - oldValue) + " juice";
+    return seedToName(entity.seed) + " dug up " + (newValue - oldValue) + " sludge";
   }
 }

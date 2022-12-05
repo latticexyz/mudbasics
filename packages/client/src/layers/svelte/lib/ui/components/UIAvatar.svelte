@@ -56,7 +56,7 @@
 
   <div class="resources">
     <UIMetric label="Energy" key="energy" />
-    <UIMetric label="Juice" key="resource" />
+    <UIMetric label="Sludge" key="resource" />
   </div>
 
   <div class="ui-avatar-video">

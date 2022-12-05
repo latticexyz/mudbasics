@@ -114,6 +114,10 @@
     if (tile.fire !== undefined) {
       str += `${fireStatusClass(tile.fire)} `;
     }
+    // OTHER PLAYER
+    if (tile.other !== undefined) {
+      str += `mask mask-${seedToMask(tile.other.seed)} `;
+    }
 
     // SELF
     if (tile.transformation.x == 0 && tile.transformation.y == 0) {
@@ -162,14 +166,10 @@
       <div
         use:tooltip={{ class: "fluid", offset: { x: 10, y: 10 } }}
         title="{terrainTypeToString(tile.terrain)}<br>x:{tile.coordinates.x} y:{tile.coordinates
-          .y}<br>juice: {tile.resource}<br>extraction speed: {tile.perlinFactor.toFixed(2)}"
+          .y}<br>sludge: {tile.resource}<br>extraction speed: {tile.perlinFactor.toFixed(2)}"
         data-description={tileEntities(tile)}
         class="grid-tile {tile.direction} {backgroundImageClass(tile)} {overlayClass(tile)}"
       >
-        <!-- OTHER -->
-        {#if tile.other !== undefined}
-          <div class="icon other">😈</div>
-        {/if}
 
         <!-- MINED -->
         {#if tile.resource < 100 && tile.resource > 0}
