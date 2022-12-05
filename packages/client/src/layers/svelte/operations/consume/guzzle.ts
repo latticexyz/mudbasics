@@ -3,8 +3,8 @@ import { network } from "../../stores/network";
 import { player } from "../../stores/player";
 
 export function guzzle() {
-  if ((get(player).resource || 0) >= 20) {
-    get(network).api?.consume(20);
+  if ((get(player).resource || 0) >= 50) {
+    get(network).api?.consume(50);
     return true;
   } else {
     console.log("Guzzle: not enough resource");
