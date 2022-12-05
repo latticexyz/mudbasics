@@ -142,7 +142,7 @@ contract GatherSystem is System {
     }
 
     energyComponent.set(entity, currentEnergyLevel - energyInput);
-    coolDownComponent.set(entity, int32(int256(block.number)) + energyInput);
+    coolDownComponent.set(entity, int32(int256(block.number)) + 5);
 
     // Check if dead
     if (currentEnergyLevel - energyInput <= 0) {
