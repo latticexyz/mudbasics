@@ -1,1 +1,1 @@
-export { suicide } from "./suicide";
+export { giveUp } from "./give-up";
