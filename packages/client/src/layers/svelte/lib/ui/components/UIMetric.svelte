@@ -38,7 +38,7 @@
     class:up={direction > 0}
     class:down={direction < 0}
   >
-    <span>{$value}</span>
+    <span>{Math.round($value)}</span>
   </div>
 </div>
 

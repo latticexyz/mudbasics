@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { player } from "../../../stores/player"
   import { playSound } from "../../../../howler";
   import { network } from "../../../stores/network";
 
@@ -15,7 +16,13 @@
   {#if spawning}
     <div>Spawning...</div>
   {:else}
-    <button on:click={spawn}>Spawn</button>
+    <button on:click={spawn}>
+      {#if $player}
+        Respawn
+        {:else}
+        Spawn
+      {/if}
+    </button>
   {/if}
 </div>
 
@@ -35,9 +42,8 @@
     color: var(--foreground);
     font-family: var(--font-family);
     text-transform: uppercase;
-    font-weight: bold;
     position: relative;
-    padding: 10px;
+    padding: var(--padding-button);
     background: transparent;
     border: 1px solid white;
   }
