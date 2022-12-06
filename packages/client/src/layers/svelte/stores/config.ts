@@ -129,6 +129,7 @@ export const initialState = () => ({
     options: {
       fluid: true,
       layer: 5,
+      hidden: true,
     },
     grid: {
       col: [2, 3],
@@ -170,7 +171,7 @@ export const initialState = () => ({
   leaderboard: initialise({
     id: "leaderboard",
     title: "Leaderboard",
-    component: UILeaderBoard,
+    component: UIFires,
     active: true,
     options: {
       fluid: true,

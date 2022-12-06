@@ -1,42 +1,20 @@
 <script lang="ts">
-  import { fires, firesV2 } from "../../../../stores/entities";
-  import { uiState } from "../../../../stores/ui";
-  import { blockNumber } from "../../../../stores/network";
-  import { speed, fragSpeed } from "../../../../stores/ui";
-  import { fade } from "svelte/transition";
+  import { firesV2, Entities } from "../../../../stores/entities";
+  import Fire from "./Fire.svelte";
 
-  import Fire from "./Fire.svelte"
-
-  const SECONDS_IN_DAY = 86400;
-
-  let clockTime: number;
-  $: clockTime = Math.floor((($blockNumber % 3600) / 3600) * SECONDS_IN_DAY);
-
-  function arson() {
-    uiState.alter("compulsions", "active", true);
-    uiState.alter("compulsions", "grid", {
-      col: [1, 4],
-      row: [1, 10],
-    });
-    uiState.setOption("compulsions", "layer", 10);
-  }
+  // TODO:
+  // * sort fires
+  // – currently burning fires at top, burntout at bottom
+  // – Within each of those groups, order by resources burnt
+  // – so #1 will be the currently burning fire with the most resources burnt
 </script>
 
 <div class="ui-fires">
-  <!-- The fire cooldown time minus current block number -->
   {#if Object.entries($firesV2)?.length < 1}
-    This soil looks fairly unscathed... <span class="link" on:click={arson}>Commit arson</span>
+    No fires in sight...
   {/if}
 
   {#each Object.entries($firesV2) as [address, value], i (address)}
-    <div transition:fade={{ duration: $speed + $fragSpeed * i }}>
-      <Fire {address} {value} />
-    </div>
+    <Fire {address} {value} index={i} />
   {/each}
 </div>
-
-<style>
-  .player {
-    color: var(--blue);
-  }
-</style>

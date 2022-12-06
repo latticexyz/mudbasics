@@ -61,6 +61,13 @@ export const playerDirection = writable(Directions.Random);
 // Input: an array of players, outputs, player names
 export function playerList(players: string[]) {
   const playerNames = players.map((p) => (get(entities)[p] ? seedToName(get(entities)[p].seed) : "not-found"));
+
+  for (let i = 0; i < playerNames.length; i++) {
+    if (playerNames[i] === seedToName(get(player).seed || 0)) {
+      playerNames[i] += " (you)";
+    }
+  }
+
   // HACK: should make sure that the creator array on contract level is unique instead...
   return uniq(playerNames).join(", ");
 }

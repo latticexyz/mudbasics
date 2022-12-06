@@ -51,15 +51,17 @@ export const logReady = writable(false);
 export const narrative = writable([] as LogEntry[]);
 
 function write(message: string, messageType: LogEntryType = LogEntryType.Normal) {
-  const logEntry: LogEntry = {
-    id: self.crypto.randomUUID(),
-    blockNumber: get(blockNumber),
-    message: message,
-    messageType: messageType,
-  };
-  narrative.update((value) => {
-    return [logEntry, ...value];
-  });
+  if (message.length > 0) {
+    const logEntry: LogEntry = {
+      id: self.crypto.randomUUID(),
+      blockNumber: get(blockNumber),
+      message: message,
+      messageType: messageType,
+    };
+    narrative.update((value) => {
+      return [logEntry, ...value];
+    });
+  }
 }
 
 export function directToLog(message: string, messageType: LogEntryType = LogEntryType.Normal) {
