@@ -4,6 +4,7 @@ pragma solidity >=0.8.0;
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
 import { Cheats } from "../utils/Cheats.sol";
+import { INITIAL_ENERGY, INITIAL_RESOURCE } from "../../constants.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { GatherSystem, ID as GatherSystemID } from "../../systems/GatherSystem.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../../components/ResourceComponent.sol";
@@ -25,10 +26,10 @@ contract EnergySystemTest is MudTest {
 
     // Convert 50 resource => 250 energy
     EnergySystem(system(EnergySystemID)).executeTyped(entity, 50);
-    // 200 - 50
-    assertEq(resourceComponent.getValue(entity), 150);
-    // 1000 + 250
-    assertEq(energyComponent.getValue(entity), 1250);
+    // INITIAL_RESOURCE  - 50
+    assertEq(resourceComponent.getValue(entity), INITIAL_RESOURCE - 50);
+    // INITIAL_ENERGY + 250
+    assertEq(energyComponent.getValue(entity), INITIAL_ENERGY + 250);
     // Check stats are updated
     assertEq(statsComponent.getValue(entity).eaten, 50);
   }

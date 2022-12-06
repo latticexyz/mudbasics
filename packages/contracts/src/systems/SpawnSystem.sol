@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
-import { WORLD_HEIGHT, WORLD_WIDTH, entityType } from "../constants.sol";
+import { WORLD_HEIGHT, WORLD_WIDTH, INITIAL_ENERGY, INITIAL_RESOURCE, entityType } from "../constants.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
@@ -47,10 +47,10 @@ contract SpawnSystem is System {
     seedComponent.set(entity, makeSeedValue());
 
     // --- Energy
-    energyComponent.set(entity, 100);
+    energyComponent.set(entity, INITIAL_ENERGY);
 
     // --- Resource
-    resourceComponent.set(entity, 80);
+    resourceComponent.set(entity, INITIAL_RESOURCE);
 
     // --- Entity type
     entityTypeComponent.set(entity, uint32(entityType.Player));
@@ -84,8 +84,8 @@ contract SpawnSystem is System {
     if (randomX < 0) randomX *= -1;
     if (randomY < 0) randomY *= -1;
 
-    randomX += 45;
-    randomY += 45;
+    randomX += 25;
+    randomY += 25;
 
     positionComponent.set(entity, Coord(randomX, randomY));
   }

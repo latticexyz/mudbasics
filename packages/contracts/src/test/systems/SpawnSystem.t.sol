@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
-import { WORLD_HEIGHT, WORLD_WIDTH, entityType } from "../../constants.sol";
+import { WORLD_HEIGHT, WORLD_WIDTH, INITIAL_RESOURCE, INITIAL_ENERGY, entityType } from "../../constants.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { SeedComponent, ID as SeedComponentID } from "../../components/SeedComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../../components/EnergyComponent.sol";
@@ -37,22 +37,22 @@ contract SpawnSystemTest is MudTest {
     assertGt(seed, 0);
 
     // --- Energy
-    assertEq(energyComponent.getValue(entity), 1000);
+    assertEq(energyComponent.getValue(entity), INITIAL_ENERGY);
 
     // --- Position
     Coord memory newPosition = positionComponent.getValue(entity);
     // X between 0 and WORLD_WIDTH
-    assertGt(newPosition.x, 44);
-    assertLt(newPosition.x, 56);
+    assertGt(newPosition.x, 24);
+    assertLt(newPosition.x, 36);
     // Y between 0 and WORLD_HEIGHT
-    assertGt(newPosition.y, 44);
-    assertLt(newPosition.y, 56);
+    assertGt(newPosition.y, 24);
+    assertLt(newPosition.y, 36);
 
     console.logInt(newPosition.x);
     console.logInt(newPosition.y);
 
     // --- Resource
-    assertEq(resourceComponent.getValue(entity), 200);
+    assertEq(resourceComponent.getValue(entity), INITIAL_RESOURCE);
 
     // --- Player entity type
     assertEq(entityTypeComponent.getValue(entity), uint32(entityType.Player));

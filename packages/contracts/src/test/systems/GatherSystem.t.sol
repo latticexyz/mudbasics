@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
-import { entityType } from "../../constants.sol";
+import { INITIAL_ENERGY, INITIAL_RESOURCE, entityType } from "../../constants.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { Perlin } from "noise/Perlin.sol";
 import { ABDKMath64x64 as Math } from "abdk-libraries-solidity/ABDKMath64x64.sol";
@@ -41,10 +41,10 @@ contract GatherSystemTest is MudTest {
       )
     );
 
-    // Players resource balance should be 200 + value calculated based on perlin factor
-    assertEq(resourceComponent.getValue(entity), 200 + resourceToExtract);
-    // Energy should be 1000 - 50
-    assertEq(energyComponent.getValue(entity), 950);
+    // Players resource balance should be INITIAL_RESOURCE + value calculated based on perlin factor
+    assertEq(resourceComponent.getValue(entity), INITIAL_RESOURCE + resourceToExtract);
+    // Energy should be INITIAL_ENERGY - 50
+    assertEq(energyComponent.getValue(entity), INITIAL_ENERGY);
 
     assertEq(statsComponent.getValue(entity).gathered, resourceToExtract);
 
