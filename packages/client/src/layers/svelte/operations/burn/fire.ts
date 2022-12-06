@@ -8,9 +8,9 @@ export function fire() {
     directToLog("You do not have enough energy for this.", LogEntryType.Failure);
     return false;
   }
-  if ((get(player).resource || 0) >= 100) {
+  if ((get(player).resource || 0) >= 1000) {
     directToLog("You pour your sludge in a puddle and set it on fire...");
-    get(network).api?.burn(100);
+    get(network).api?.burn(1000);
     return true;
   } else {
     directToLog("You do not have enough sludge to start a fire.", LogEntryType.Failure);

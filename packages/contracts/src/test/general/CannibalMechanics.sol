@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
-import { entityType } from "../../constants.sol";
+import { INITIAL_ENERGY, INITIAL_RESOURCE, entityType } from "../../constants.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { PlaySystem, ID as PlaySystemID } from "../../systems/PlaySystem.sol";
 import { GatherSystem, ID as GatherSystemID } from "../../systems/GatherSystem.sol";
@@ -35,10 +35,10 @@ contract CannibalMechanicsTest is MudTest {
     assertEq(bobPosition.y, alicePosition.y);
 
     // Force Bob to play music until he dies
-    PlaySystem(system(PlaySystemID)).executeTyped(bob, 1000);
+    PlaySystem(system(PlaySystemID)).executeTyped(bob, INITIAL_ENERGY);
 
-    // Bob will be playing for 1000 * 2 blocks...
-    vm.roll(2100);
+    // Bob will be playing for INITIAL_ENERGY * 2 blocks...
+    vm.roll(201);
 
     // Bob should be dead
     assertEq(entityTypeComponent.getValue(bob), uint32(entityType.Corpse));
@@ -49,8 +49,8 @@ contract CannibalMechanicsTest is MudTest {
     GatherSystem(system(GatherSystemID)).executeTyped(alice, 50);
     // Bob's resource balance should be 0
     assertEq(resourceComponent.getValue(bob), 0);
-    // Alice's resource balance should be 200 + 500
-    assertEq(resourceComponent.getValue(alice), 700);
+    // Alice's resource balance should be INITIAL_RESOURCE + 500
+    assertEq(resourceComponent.getValue(alice), INITIAL_RESOURCE + 500);
     // Bob should be added to Alice's cannibal list
     assertEq(uint256(cannibalComponent.getValue(alice)[0]), bob);
   }

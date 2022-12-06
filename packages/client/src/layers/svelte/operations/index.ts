@@ -162,16 +162,9 @@ export const operations: Operation[] = [
     name: "fire",
     category: "burn",
     description: "This will keep me warm me at night",
-    cost: "resource: 100, energy: 50",
+    cost: "resource: 1000, energy: 50",
     f: fire,
   },
-  // {
-  //   name: "bonfire",
-  //   category: "burn",
-  //   description: "Let ashes blow over the fields for days on end",
-  //   cost: "resource: 500, energy: 50",
-  //   f: bonfire,
-  // },
   // --- PLAY
   {
     name: "serenade",
