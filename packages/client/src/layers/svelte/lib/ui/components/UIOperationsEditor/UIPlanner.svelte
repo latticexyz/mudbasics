@@ -1,9 +1,11 @@
 <script lang="ts">
+  import { onMount } from "svelte"
   import { playSound } from "../../../../../howler";
   import { tooltip } from "../UIToolTip/index";
   import { operations, Operation } from "../../../../operations/";
   import { uiState } from "../../../../stores/ui";
   import {
+    sequence,
     SequenceElement,
     emptySequenceElement,
     SEQUENCER_LENGTH,
@@ -44,6 +46,14 @@
       }
     }
   }
+
+  onMount(() => {
+    if ($sequence) {
+      $sequence.forEach(s => {
+        add(s.operation)
+      })
+    }
+  })
 </script>
 
 <div class="ui-operations-editor">
