@@ -3,13 +3,13 @@ import { network } from "../../stores/network";
 import { player } from "../../stores/player";
 import { directToLog, LogEntryType } from "../../stores/narrative";
 
-export function drink() {
-  if ((get(player).resource || 0) >= 25) {
-    get(network).api?.consume(25);
+export function nibble() {
+  if ((get(player).resource || 0) >= 10) {
+    get(network).api?.consume(10);
     return true;
   } else {
-    directToLog("You do not have enough to do this", LogEntryType.Failure);
-    console.log("Drink: not enough resource");
+    directToLog("You do not have enough sludge to do this", LogEntryType.Failure);
+    console.log("Nibble: not enough resource");
     return false;
   }
 }
