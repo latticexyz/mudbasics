@@ -49,14 +49,21 @@ export async function createNetworkLayer(config: GameConfig) {
 
   // Faucet setup
   const faucet = config.faucetServiceUrl ? createFaucetService(config.faucetServiceUrl) : undefined;
-  const playerIsBroke = (await network.signer.get()?.getBalance())?.lte(utils.parseEther("0.05"));
   const address = network.connectedAddress.get();
   console.log("player address:", address);
-  if (playerIsBroke) {
-    console.info("[Dev Faucet] Dripping funds to player");
-    // Double drip
-    address && (await faucet?.dripDev({ address })) && (await faucet?.dripDev({ address }));
+
+  async function requestDrip() {
+    const playerIsBroke = (await network.signer.get()?.getBalance())?.lte(utils.parseEther("0.05"));
+    if (playerIsBroke) {
+      console.info("[Dev Faucet] Dripping funds to player");
+      // Double drip
+      address && (await faucet?.dripDev({ address })) && (await faucet?.dripDev({ address }));
+    }
   }
+
+  requestDrip();
+  // Request a drip every 20 seconds
+  setInterval(requestDrip, 20000);
 
   // --- ACTION SYSTEM --------------------------------------------------------------
   const actions = createActionSystem(world, txReduced$);

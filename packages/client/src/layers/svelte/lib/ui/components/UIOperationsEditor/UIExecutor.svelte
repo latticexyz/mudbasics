@@ -204,6 +204,7 @@
     text-align: center;
     padding: 12px 24px;
     transition: none;
+    margin-right: 0;
   }
 
   .cooldown-overlay {
