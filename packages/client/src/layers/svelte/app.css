@@ -145,8 +145,16 @@ span.ripple {
   z-index: 9;
 }
 
-.overlay.mined:after {
-  background-image: url("../../public/images/tiles/overlays/mined.png");
+.overlay.mined-1:after {
+  background-image: url("../../public/images/tiles/overlays/mined-1.png");
+}
+
+.overlay.mined-2:after {
+  background-image: url("../../public/images/tiles/overlays/mined-2.png");
+}
+
+.overlay.mined-3:after {
+  background-image: url("../../public/images/tiles/overlays/mined-3.png");
 }
 
 .overlay.map:after {
@@ -217,7 +225,7 @@ span.ripple {
 .cooldown-overlay {
   position: absolute;
   width: 100%;
-  background: rgba(127, 127, 127, 0.7);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(5px);
   height: 100%;
   top: 0;

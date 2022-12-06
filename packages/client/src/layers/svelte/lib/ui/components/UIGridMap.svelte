@@ -98,13 +98,26 @@
 
   function overlayClass(tile: GridItem) {
     let str = "";
+
+    // 99 - 66 => MINED-1
+    // 66 - 33 => MINED-2
+    // 33 - 0 => MINED-3
+
+    // MINED 1
+    if (tile.resource < 100 && tile.resource >= 66) {
+      str += "mined-1 ";
+    }
+    // MINED 2
+    if (tile.resource < 66 && tile.resource >= 33) {
+      str += "mined-2 ";
+    }
+    // MINED 3
+    if (tile.resource < 33 && tile.resource > 0) {
+      str += "mined-3 ";
+    }
     // VACANT
     if (tile.resource == 0) {
       str += "empty ";
-    }
-    // MINED
-    if (tile.resource < 100 && tile.resource > 0) {
-      str += "mined ";
     }
     // DED
     if (tile.corpse !== undefined) {
@@ -116,13 +129,13 @@
     }
     // OTHER PLAYER
     if (tile.other !== undefined) {
-      str += `mask mask-${seedToMask(tile.other.seed)} `;
+      str += `mask mask-${seedToMask(tile.other?.seed || 0)} `;
     }
 
     // SELF
     if (tile.transformation.x == 0 && tile.transformation.y == 0) {
       if ($player.entityType == EntityType.Player || $player.entityType == EntityType.Corpse) {
-        str += `mask mask-${seedToMask($player.seed)} `;
+        str += `mask mask-${seedToMask($player.seed || 0)} `;
       }
       if ($player.entityType == EntityType.Corpse) {
         str += "corpse ";
@@ -170,7 +183,6 @@
         data-description={tileEntities(tile)}
         class="grid-tile {tile.direction} {backgroundImageClass(tile)} {overlayClass(tile)}"
       >
-
         <!-- MINED -->
         {#if tile.resource < 100 && tile.resource > 0}
           <div class="icon mined" />
