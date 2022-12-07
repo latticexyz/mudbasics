@@ -104,7 +104,6 @@ contract FireSystem is System {
     // Check if dead
     if (energyComponent.getValue(entity) <= 0) {
       entityTypeComponent.set(entity, uint32(entityType.Corpse));
-      resourceComponent.set(entity, 500);
       coolDownComponent.set(entity, 0);
     }
   }

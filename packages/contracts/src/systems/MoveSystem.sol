@@ -11,7 +11,6 @@ import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyCo
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Move"));
 int32 constant MAX_DISTANCE = 5;
@@ -34,7 +33,6 @@ contract MoveSystem is System {
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
-    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
 
     // Require entity to be player
     require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can move.");
@@ -140,7 +138,6 @@ contract MoveSystem is System {
     // Check if dead
     if (energyComponent.getValue(entity) <= 0) {
       entityTypeComponent.set(entity, uint32(entityType.Corpse));
-      resourceComponent.set(entity, 500);
       coolDownComponent.set(entity, 0);
     }
   }

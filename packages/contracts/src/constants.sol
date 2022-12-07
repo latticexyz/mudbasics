@@ -10,5 +10,6 @@ enum entityType {
   Player,
   Terrain,
   Fire,
-  Corpse
+  Corpse,
+  Ghost
 }
