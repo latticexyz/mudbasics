@@ -83,3 +83,8 @@ export function seedToMask(seed: number) {
   const seedAsString = Math.abs(seed).toString();
   return (Number(seedAsString[4] + seedAsString[5]) || 0) % 4;
 }
+
+export function seedToMaskTileOverlay(seed: number) {
+  const index = seedToMask(seed);
+  return `mask-${index}`;
+}

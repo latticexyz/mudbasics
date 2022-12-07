@@ -116,7 +116,6 @@ span.ripple {
 }
 
 /* OVERLAYS */
-
 .overlay:before,
 .overlay:after {
   content: "";
@@ -145,25 +144,21 @@ span.ripple {
   z-index: 9;
 }
 
-.overlay.mined-1:after {
+.overlay.mined-1:before {
   background-image: url("../../public/images/tiles/overlays/mined-1.png");
 }
 
-.overlay.mined-2:after {
+.overlay.mined-2:before {
   background-image: url("../../public/images/tiles/overlays/mined-2.png");
 }
 
-.overlay.mined-3:after {
+.overlay.mined-3:before {
   background-image: url("../../public/images/tiles/overlays/mined-3.png");
 }
 
 .overlay.map:after {
   background-image: url("../../public/images/tiles/overlays/map.png");
   mix-blend-mode: multiply;
-}
-
-.overlay.mask:before {
-  z-index: 1;
 }
 
 .overlay.mask.mask-0:before {
@@ -178,12 +173,15 @@ span.ripple {
 .overlay.mask.mask-3:before {
   background-image: url("../../public/images/masks/3.png");
 }
-
 .overlay.fire.fire-on:after {
   background-image: url("../../public/images/fire/on.gif");
 }
 .overlay.fire.fire-off:after {
   background-image: url("../../public/images/fire/off.gif");
+}
+
+.overlay.mask:before {
+  z-index: 1;
 }
 
 .action {
