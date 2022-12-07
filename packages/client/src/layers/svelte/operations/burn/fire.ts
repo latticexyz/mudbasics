@@ -8,8 +8,8 @@ export function fire() {
     directToLog(getOperationTale("fire", "insufficient_energy"), LogEntryType.Failure);
     return false;
   }
-  if ((get(player).resource || 0) >= 1000) {
-    get(network).api?.burn(1000);
+  if ((get(player).resource || 0) >= 500) {
+    get(network).api?.burn(500);
     directToLog(getOperationTale("fire", "lore"), LogEntryType.Banter);
     return true;
   } else {

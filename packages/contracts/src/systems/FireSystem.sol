@@ -48,7 +48,7 @@ contract FireSystem is System {
     require(currentEnergyLevel >= 50, "not enough energy");
 
     // Enforce minimum
-    require(resourceInput >= 1000, "minimum 1000 resources to make fire");
+    require(resourceInput >= 500, "minimum 500 resources to make fire");
 
     // Require the player to have enough resource
     int32 currentResourceLevel = resourceComponent.getValue(entity);

@@ -77,7 +77,7 @@ export function directToLog(message: string, messageType: LogEntryType = LogEntr
 export const banter: Narration = {
   main: [
     "Must not get this little maggot’s sobs make you lose your guard",
-    "If they could see me now, mending what is broken, they would know I kept my promise. But they are long gone…in the vortex of juice.",
+    "If they could see me now, mending what is broken, they would know I kept my promise. But they are long gone…in the vortex of sludge.",
     "it’s important to share if u wanna make friends, it’s also important *NOT* to share if you don’t want friends.",
     "You mustn’t show them, if they see it, they must die.",
     "If that puppypriest had just died nice’n quiet, we’d still have the old Boing747. High quality hair though, that boi.",

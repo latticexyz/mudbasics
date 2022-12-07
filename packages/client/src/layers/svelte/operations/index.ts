@@ -133,7 +133,7 @@ export const operations: Operation[] = [
       description: "Move 5 steps in random direction",
       lore: [
         "You leave a trail of blood.",
-        "Warm hearths for the sullen secret art, a lake of juice to drown your heart",
+        "Warm hearths for the sullen secret art, a lake of sludge to drown your heart",
         "One day you may touch the happy isles.",
       ],
       cost: "energy: 50",
@@ -209,7 +209,7 @@ export const operations: Operation[] = [
         The Stackdigger / 
         He took my twilight boi away/ 
         (˃̩̩̥ɷ˂̩̩̥)
-        Oh, the old Stackdigger!”, you cry; the smog is so thick you cough, you swallow, you throw up. What a waste of juice.`,
+        Oh, the old Stackdigger!”, you cry; the smog is so thick you cough, you swallow, you throw up. What a waste of sludge.`,
       ],
       description: "All I see are shrubs, leftovers and other bits",
       cost: "energy: 50",
@@ -258,7 +258,7 @@ export const operations: Operation[] = [
       ],
       insufficient_energy: "You do not have enough energy for this.",
       insufficient_sludge: "You do not have enough sludge to start a fire.",
-      cost: "resource: 1000, energy: 50",
+      cost: "sludge: 500, energy: 50",
     },
     f: fire,
   },
