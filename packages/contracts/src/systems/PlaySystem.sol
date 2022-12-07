@@ -16,7 +16,7 @@ uint256 constant ID = uint256(keccak256("system.Play"));
 contract PlaySystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function updateStats(uint256 entity, int32 energyInput) public {
+  function updateStats(uint256 entity, int32 energyInput) private {
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
     Stats memory currentStats = statsComponent.getValue(entity);
     currentStats.played += energyInput;

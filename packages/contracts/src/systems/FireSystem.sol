@@ -19,7 +19,7 @@ uint256 constant ID = uint256(keccak256("system.Fire"));
 contract FireSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function updateStats(uint256 entity, int32 resourceInput) public {
+  function updateStats(uint256 entity, int32 resourceInput) private {
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
     Stats memory currentStats = statsComponent.getValue(entity);
     currentStats.burnt += resourceInput;

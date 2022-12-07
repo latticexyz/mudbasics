@@ -18,7 +18,7 @@ int32 constant MAX_DISTANCE = 5;
 contract MoveSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function updateStats(uint256 entity, int32 steps) public {
+  function updateStats(uint256 entity, int32 steps) private {
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
     Stats memory currentStats = statsComponent.getValue(entity);
     currentStats.traveled += steps;

@@ -17,7 +17,7 @@ int32 constant COOLDOWN_PER_RESOURCE = 3;
 contract EnergySystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function updateStats(uint256 entity, int32 resourceInput) public {
+  function updateStats(uint256 entity, int32 resourceInput) private {
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
     Stats memory currentStats = statsComponent.getValue(entity);
     currentStats.eaten += resourceInput;

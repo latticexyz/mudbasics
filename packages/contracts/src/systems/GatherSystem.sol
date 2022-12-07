@@ -24,14 +24,14 @@ int32 constant INITIAL_RESOURCE_PER_POSITION = 100;
 contract GatherSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function updateStats(uint256 entity, int32 resourceToExtract) public {
+  function updateStats(uint256 entity, int32 resourceToExtract) private {
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
     Stats memory currentStats = statsComponent.getValue(entity);
     currentStats.gathered += resourceToExtract;
     statsComponent.set(entity, currentStats);
   }
 
-  function checkForEntity(Coord memory position, uint32 t) public returns (uint256[] memory) {
+  function checkForEntity(Coord memory position, uint32 t) private returns (uint256[] memory) {
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
 
@@ -41,7 +41,7 @@ contract GatherSystem is System {
     return LibQuery.query(fragments);
   }
 
-  function cannabalize(uint256 entity, uint256 corpse) public {
+  function cannabalize(uint256 entity, uint256 corpse) private {
     CannibalComponent cannibalComponent = CannibalComponent(getAddressById(components, CannibalComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
