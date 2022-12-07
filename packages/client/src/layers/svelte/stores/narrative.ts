@@ -5,7 +5,7 @@ import { playerAddress } from "../stores/player";
 import { indexToID, entities, EntityType } from "../stores/entities";
 import { getOperation } from "../operations";
 
-import { movement, birth, death, gather, eat, fire, cannibalism } from "./narrators";
+import { movement, birth, death, gather, eat, fire, cannibalism, play } from "./narrators";
 
 export enum EventCategory {
   Move,
@@ -164,6 +164,13 @@ export function addToLog(update: ComponentUpdate, category: EventCategory) {
     // ---
     if (category === EventCategory.Cannibalism) {
       write(cannibalism(update, isSelf), LogEntryType.Success);
+    }
+
+    // --- Play
+    // --- Reacts to changes to the playing component
+    // ---
+    if (category === EventCategory.Play) {
+      write(play(update, isSelf), LogEntryType.Success);
     }
   }
 }
