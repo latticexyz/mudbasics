@@ -1,60 +1,47 @@
 const firstNameList = [
   "Absolon",
-  "Blewet",
-  "Cloider",
   "Clikette",
-  "Ewyn",
   "Dowble",
-  "Madir",
-  "Ector",
   "Sigood",
-  "Lamprwn",
-  "Wrecche",
-  "Volante",
   "Roset",
   "Mordaunt",
   "Kolette",
-  "Gawntelette",
-  "Baldra",
-  "Blabbe",
   "Archebawl",
   "Loyre",
   "Frere",
   "Barefote",
-  "Japer",
   "Tynker",
-  "Gowere",
   "Stepfaste",
-];
-
-const middleNameList = [
   "Holy",
-  "Tawne",
-  "Lepar",
-  "Loyre",
-  "Gwnne",
-  "Dar",
-  "Gille",
   "Filthe",
   "Envye",
-  "Ergo",
-  "Berde",
-  "Halymote",
-  "Honysoke",
-  "Kalot",
-  "Pyoll",
-  "Perkyn",
-  "Dow",
   "Wyse",
   "Grey",
   "Wype ",
-  "Smyl",
+  "Smol",
   "Wastell",
   "Childe",
   "Blameles",
+  "Gege",
+  "E.Z.",
 ];
 
-const lastNameList = ["Thief", "Fixer", "Scavenger", "Builder"];
+const middleNameList = [
+  "Mirthquake",
+  "Follyhard",
+  "Foolfire",
+  "Jesteron",
+  "Tricksterion",
+  "Foolhardy",
+  "Jesteria",
+  "Prankstor",
+  "Jesterious",
+  "Foolferno",
+  "Foolmarch",
+  "Fooltar",
+];
+
+const lastNameList = ["I", "II", "III", "IV"];
 
 function toTitleCase(str: string) {
   return str.replace(/\w\S*/g, function (txt) {
@@ -75,7 +62,7 @@ export function seedToName(seed: number) {
   const lastNameIndex = Number(seedAsString[4] + seedAsString[5]) || 0;
   const lastName = lastNameList[lastNameIndex % lastNameList.length];
 
-  return toTitleCase(firstName + " " + middleName + " " + lastName);
+  return firstName + " " + middleName + " " + lastName;
 }
 
 export function seedToMask(seed: number) {
