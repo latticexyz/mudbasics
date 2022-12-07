@@ -2,6 +2,7 @@
   import { player } from "../../../stores/player"
   import { playSound } from "../../../../howler";
   import { network } from "../../../stores/network";
+  import { uiState } from "../../../stores/ui"
 
   let spawning = false;
 
@@ -9,6 +10,9 @@
     playSound("eventGood", "ui");
     spawning = true;
     $network.api?.spawn();
+    uiState.alter('executor', 'hidden', false)
+    uiState.alter('compulsions', 'hidden', false)
+    uiState.alter('executor', 'active', true)
   }
 </script>
 

@@ -1,2 +1,2 @@
-export { fire, cost as fireCost } from "./fire";
-export { bonfire, cost as bonfireCost } from "./bonfire";
+export { fire } from "./fire";
+export { bonfire } from "./bonfire";

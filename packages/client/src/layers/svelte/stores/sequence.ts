@@ -76,10 +76,10 @@ blockNumber.subscribe((newBlock) => {
   if (get(player)) {
     // If the player be dead
     if (get(player).entityType == EntityType.Corpse) {
+      uiState.alter("executor", "hidden", true);
+      uiState.alter("compulsions", "hidden", true);
       uiState.close("executor");
       uiState.close("compulsions");
-      uiState.setOption("executor", "hidden", true);
-      uiState.setOption("compulsions", "hidden", true);
       return;
     }
 

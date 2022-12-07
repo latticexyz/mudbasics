@@ -49,7 +49,7 @@
     {#if $menuVisible}
       <ul class="ui-menu">
         {#each Object.values($uiState) as item, i (item.id)}
-          {#if !item.options.persistent && !item.options.hidden}
+          {#if !item.options.persistent && !item.hidden}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <li
               in:fade={{ duration: $speed + $fragSpeed * i }}

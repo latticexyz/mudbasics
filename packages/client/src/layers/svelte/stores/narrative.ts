@@ -1,8 +1,9 @@
 import { writable, get } from "svelte/store";
 import { ComponentUpdate } from "@latticexyz/recs";
-import { blockNumber, startBlock } from "./network";
+import { blockNumber } from "./network";
 import { playerAddress } from "../stores/player";
 import { indexToID, entities, EntityType } from "../stores/entities";
+import { getOperation } from "../operations";
 
 import { movement, birth, death, gather, eat, fire, cannibalism } from "./narrators";
 
@@ -23,6 +24,10 @@ export enum LogEntryType {
   Normal,
   Failure,
   Success,
+}
+
+export interface Narration {
+  [key: string]: string | string[];
 }
 
 export interface LogEntry {
@@ -68,12 +73,28 @@ export function directToLog(message: string, messageType: LogEntryType = LogEntr
   write(message, messageType);
 }
 
+export function tale(narration: Narration, key: string, replace?: Record<string, string>) {
+  if (!(key in narration)) throw new Error("This tale cannot be told! " + key + " does not exist on narration");
+
+  let tale = narration[key];
+
+  if (Array.isArray(tale)) {
+    tale = tale[Math.floor(Math.random() * tale.length)];
+  }
+
+  if (replace) {
+    Object.entries(replace).forEach(([from, to]) => tale.toString().replaceAll(from, to));
+  }
+
+  return tale;
+}
+
+export function getOperationTale(name: string, key: string, replace?: Record<string, string>) {
+  const operation = getOperation(name);
+  return tale(operation.narration, key, replace);
+}
+
 export function addToLog(update: ComponentUpdate, category: EventCategory) {
-  console.log(eventCategoryToString(category));
-  console.log(update);
-
-  console.log("get(startBlock)", get(startBlock));
-
   // HACK: Avoid writing the first updates to the log
   if (get(logReady)) {
     const isSelf = indexToID(update.entity) == get(playerAddress);
@@ -83,48 +104,48 @@ export function addToLog(update: ComponentUpdate, category: EventCategory) {
     // --- Reacts to changes to the position component
     // ---
     if (category === EventCategory.Move && isSelf) {
-      write(movement(update, isSelf));
+      write(movement(update, isSelf), LogEntryType.Success);
     }
 
     // --- Gather
     // --- Reacts to increases to the resource component
     // ---
     if (category === EventCategory.Gather && entityType == EntityType.Player) {
-      write(gather(update, isSelf));
+      write(gather(update, isSelf), LogEntryType.Success);
     }
 
     // --- Eat
     // --- Reacts to increase to the energy component
     // ---
     if (category === EventCategory.Eat && isSelf) {
-      write(eat(update, isSelf));
+      write(eat(update, isSelf), LogEntryType.Success);
     }
 
     // --- Birth
     // ___ Reacts to entity-type component being set to player
     if (category === EventCategory.Birth && !isSelf) {
-      write(birth(update, isSelf));
+      write(birth(update, isSelf), LogEntryType.Success);
     }
 
     // --- Death
     // --- Reacts to entity-type component being set to corpse
     // ---
     if (category === EventCategory.Death) {
-      write(death(update, isSelf));
+      write(death(update, isSelf), LogEntryType.Failure);
     }
 
     // --- Fire
     // --- Reacts to changes to the creator component
     // ---
     if (category === EventCategory.Fire) {
-      write(fire(update, isSelf));
+      write(fire(update, isSelf), LogEntryType.Success);
     }
 
     // --- Cannibalism
     // --- Reacts to changes to the cannibal component
     // ---
     if (category === EventCategory.Cannibalism) {
-      write(cannibalism(update, isSelf));
+      write(cannibalism(update, isSelf), LogEntryType.Success);
     }
   }
 }
