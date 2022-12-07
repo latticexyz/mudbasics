@@ -10,7 +10,6 @@ import { CoolDownComponent, ID as CoolDownComponentID } from "../components/Cool
 import { PlayingComponent, ID as PlayingComponentID } from "../components/PlayingComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
-import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Play"));
 
@@ -32,7 +31,6 @@ contract PlaySystem is System {
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     PlayingComponent playingComponent = PlayingComponent(getAddressById(components, PlayingComponentID));
-    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
 
     // Require entity to be player
     require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can play.");
@@ -53,7 +51,6 @@ contract PlaySystem is System {
     // Check if dead
     if (energyComponent.getValue(entity) <= 0) {
       entityTypeComponent.set(entity, uint32(entityType.Corpse));
-      resourceComponent.set(entity, 500);
       coolDownComponent.set(entity, 0);
     }
   }

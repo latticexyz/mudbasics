@@ -44,10 +44,12 @@ contract GatherSystem is System {
   function cannabalize(uint256 entity, uint256 corpse) public {
     CannibalComponent cannibalComponent = CannibalComponent(getAddressById(components, CannibalComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
 
     // Transfer all resources from corpse to player
     resourceComponent.set(entity, resourceComponent.getValue(entity) + resourceComponent.getValue(corpse));
     resourceComponent.set(corpse, 0);
+    entityTypeComponent.set(entity, uint32(entityType.Ghost));
 
     // Add corpse to player's cannibal list
     uint256[] memory currentCannibalArray = cannibalComponent.getValue(entity);
@@ -109,7 +111,7 @@ contract GatherSystem is System {
       uint256[] memory terrainAtPosition = checkForEntity(playerPosition, uint32(entityType.Terrain));
 
       if (terrainAtPosition.length == 0) {
-        // The position has NOT been gathered before,
+        // The position HAS NOT been gathered before,
         // there are INITIAL_RESOURCE_PER_POSITION resources available
 
         // Cap resource extraction at INITIAL_RESOURCE_PER_POSITION
@@ -147,7 +149,6 @@ contract GatherSystem is System {
     // Check if dead
     if (currentEnergyLevel - energyInput <= 0) {
       entityTypeComponent.set(entity, uint32(entityType.Corpse));
-      resourceComponent.set(entity, 500);
       coolDownComponent.set(entity, 0);
     }
   }

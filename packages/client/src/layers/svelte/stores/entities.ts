@@ -7,6 +7,7 @@ export enum EntityType {
   Terrain,
   Fire,
   Corpse,
+  Ghost,
 }
 
 export interface StatsType {

@@ -309,7 +309,7 @@ export const operations: Operation[] = [
     category: "gate",
     narration: {
       description: "Has someone already drained all the sludge in this soil?",
-      cost: "Continue if tile has sludge",
+      cost: "Continue if tile does not have sludge",
     },
     f: drained,
   },
@@ -318,7 +318,7 @@ export const operations: Operation[] = [
     category: "gate",
     narration: {
       description: "Are you carrying enough sludge to survive for a while?",
-      cost: "Continue if resource is over 100",
+      cost: "Continue if resource is over 200",
     },
     f: sludgeRich,
   },

@@ -16,12 +16,12 @@ export function drained() {
   const terrainInLocation = checkForType(get(player).position, EntityType.Terrain);
   if (!terrainInLocation) {
     directToLog("Still something left...", LogEntryType.Success);
-    return true;
+    return false;
   }
   if ((terrainInLocation.resource || 0) > 0) {
     directToLog("Still something left...", LogEntryType.Success);
-    return true;
+    return false;
   }
-  directToLog("It is empty.", LogEntryType.Failure);
-  return false;
+  directToLog("No more sludge here.", LogEntryType.Failure);
+  return true;
 }

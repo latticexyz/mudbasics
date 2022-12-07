@@ -10,6 +10,7 @@ import { PositionComponent, ID as PositionComponentID, Coord } from "../../compo
 import { ResourceComponent, ID as ResourceComponentID } from "../../components/ResourceComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../../components/EntityTypeComponent.sol";
 import { CannibalComponent, ID as CannibalComponentID } from "../../components/CannibalComponent.sol";
+import { EnergyComponent, ID as EnergyComponentID } from "../../components/EnergyComponent.sol";
 
 contract CannibalMechanicsTest is MudTest {
   function testExecute() public {
@@ -21,6 +22,7 @@ contract CannibalMechanicsTest is MudTest {
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     CannibalComponent cannibalComponent = CannibalComponent(getAddressById(components, CannibalComponentID));
+    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
 
     // Spawn Alice
     SpawnSystem(system(SpawnSystemID)).executeTyped(alice);
@@ -34,23 +36,30 @@ contract CannibalMechanicsTest is MudTest {
     assertEq(bobPosition.x, alicePosition.x);
     assertEq(bobPosition.y, alicePosition.y);
 
-    // Force Bob to play music until he dies
-    PlaySystem(system(PlaySystemID)).executeTyped(bob, INITIAL_ENERGY);
+    // Get bob some resources
+    GatherSystem(system(GatherSystemID)).executeTyped(bob, 50);
+    int32 bobsResourceBalance = resourceComponent.getValue(bob);
+    console.log("bobs resourdes");
+    console.logInt(bobsResourceBalance);
 
-    // Bob will be playing for INITIAL_ENERGY * 2 blocks...
-    vm.roll(201);
+    // ...
+    vm.roll(1000);
+
+    // Force Bob to play music until he dies
+    PlaySystem(system(PlaySystemID)).executeTyped(bob, energyComponent.getValue(bob));
+
+    // ...
+    vm.roll(2000);
 
     // Bob should be dead
     assertEq(entityTypeComponent.getValue(bob), uint32(entityType.Corpse));
-    // ... and converted to 500 resources
-    assertEq(resourceComponent.getValue(bob), 500);
 
     // Alice gathers Bob's corpse
     GatherSystem(system(GatherSystemID)).executeTyped(alice, 50);
     // Bob's resource balance should be 0
     assertEq(resourceComponent.getValue(bob), 0);
-    // Alice's resource balance should be INITIAL_RESOURCE + 500
-    assertEq(resourceComponent.getValue(alice), INITIAL_RESOURCE + 500);
+    // Alice's resource balance should be INITIAL_RESOURCE + Bob's resources
+    assertEq(resourceComponent.getValue(alice), INITIAL_RESOURCE + bobsResourceBalance);
     // Bob should be added to Alice's cannibal list
     assertEq(uint256(cannibalComponent.getValue(alice)[0]), bob);
   }
