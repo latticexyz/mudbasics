@@ -61,7 +61,7 @@ export const operations: Operation[] = [
     name: "south",
     category: "move",
     narration: {
-      description: "The south will rise, beware...",
+      description: "Maybe this will head me from the cold.",
       cost: "energy: 10",
     },
     f: south,

@@ -32,10 +32,10 @@
 
   const conditions = [
     // Mined
-    (tile: GridTile) => (tile.resource < 100 && tile.resource >= 66 ? TileOverlays.Dug : null),
-    (tile: GridTile) => (tile.resource < 66 && tile.resource >= 33 ? TileOverlays.Extracted : null),
-    (tile: GridTile) => (tile.resource < 33 && tile.resource > 0 ? TileOverlays.Depleted : null),
     (tile: GridTile) => (tile.resource == 0 ? TileOverlays.Empty : null),
+    (tile: GridTile) => (tile.resource < 33 && tile.resource > 0 ? TileOverlays.Depleted : null),
+    (tile: GridTile) => (tile.resource < 66 && tile.resource >= 33 ? TileOverlays.Extracted : null),
+    (tile: GridTile) => (tile.resource < 100 && tile.resource >= 66 ? TileOverlays.Dug : null),
     // Other player
     (tile: GridTile) =>
     tile.other !== undefined ? `${TileOverlays.Other} ${seedToMaskTileOverlay(tile.other?.seed || 0)}` : null,
@@ -58,7 +58,6 @@
   ];
 
   $: overlays = [...conditions.map((c) => c(tile)).filter((o) => !!o)]
-  $: console.log(tile.corpse)
 </script>
 
 <div
@@ -132,7 +131,7 @@
     background-image: url("../../../../../../public/images/fire/on.gif");
   }
   .tile-overlay.fire.fire-off {
-    background-image: url("../../../../../../public/images/fire/off.gif");
+    background-image: url("../../../../../../public/images/fire/off.png");
   }
 
   .grid-tile {

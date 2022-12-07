@@ -18,7 +18,7 @@ export interface GridTile {
 // In order from low to high
 export enum TileOverlays {
   // Gathering
-  Empty = "mined",
+  Empty = "empty",
   Depleted = "mined-3",
   Extracted = "mined-2",
   Dug = "mined-1",

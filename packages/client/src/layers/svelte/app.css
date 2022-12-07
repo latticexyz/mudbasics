@@ -177,7 +177,7 @@ span.ripple {
   background-image: url("../../public/images/fire/on.gif");
 }
 .overlay.fire.fire-off:after {
-  background-image: url("../../public/images/fire/off.gif");
+  background-image: url("../../public/images/fire/off.png");
 }
 
 .overlay.mask:before {
