@@ -86,12 +86,12 @@
 
   function handleZoom (e) {
     if (e.key === '=') {
-      unit++
+      unit+= 2
       grid = []
       initGrid()
     }
     if (e.key === '-') {
-      unit--
+      unit-= 2
       grid = []
       initGrid()
     }

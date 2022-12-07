@@ -13,10 +13,17 @@
   let overlays = [];
 
   function tileEntities(tile: GridTile) {
+    let str = ''
     if (tile?.fire) {
-      return get(fireString(tile.fire));
+      str += `${get(fireString(tile.fire))}<br>`;
     }
-    return "";
+    if (tile?.other) {
+      str += `${seedToName(tile.other.seed)}<br>`;
+    }
+    if (isPlayerTile(tile)) {
+      str += `You: ${seedToName($player.seed || 0)}<br>`;
+    }
+    return str;
   }
 
   function backgroundImageClass(tile: GridTile) {
@@ -30,6 +37,11 @@
     }
   }
 
+  function isPlayerTile (tile: GridTile) {
+    return tile.transformation.x == 0 && tile.transformation.y == 0 && ($player.entityType == EntityType.Player || $player.entityType == EntityType.Corpse)
+  }
+  
+
   const conditions = [
     // Mined
     (tile: GridTile) => (tile.resource == 0 ? TileOverlays.Empty : null),
@@ -41,8 +53,8 @@
     tile.other !== undefined ? `${TileOverlays.Other} ${seedToMaskTileOverlay(tile.other?.seed || 0)}` : null,
     // Player
     (tile: GridTile) => {
-      if ( tile.transformation.x == 0 && tile.transformation.y == 0 && ($player.entityType == EntityType.Player || $player.entityType == EntityType.Corpse)) {
-          return `${TileOverlays.Player} ${seedToMaskTileOverlay($player.seed || 0)} ${$player.entityType == EntityType.Corpse ? TileOverlays.CorpseMask : ''}`;
+      if (isPlayerTile(tile)) {
+        return `${TileOverlays.Player} ${seedToMaskTileOverlay($player.seed || 0)} ${$player.entityType == EntityType.Corpse ? TileOverlays.CorpseMask : ''}`;
       }
     },
     // Player corpse
@@ -61,7 +73,9 @@
 </script>
 
 <div
-  use:tooltip={{ class: "fluid", offset: { x: 10, y: 10 } }}
+  use:tooltip={{
+    class: "fluid", offset: { x: 10, y: 10 }
+  }}
   title="
     {terrainTypeToString(tile.terrain)}<br>
     x:{tile.coordinates.x} y:{tile.coordinates.y}<br>
