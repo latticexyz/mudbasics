@@ -63,7 +63,7 @@ export function startHarmonySoundSystem() {
   if (settings.music.value == true) {
     music.set(playSound("organLoop", "harmony", false, true));
     get(music).on("end", () => {
-      startMelodySoundSystem(30000);
+      startMelodySoundSystem(60000);
     });
   }
 }
