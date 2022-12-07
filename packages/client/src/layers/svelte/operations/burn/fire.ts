@@ -10,7 +10,7 @@ export function fire() {
   }
   if ((get(player).resource || 0) >= 1000) {
     get(network).api?.burn(1000);
-    directToLog(getOperationTale("fire", "lore"));
+    directToLog(getOperationTale("fire", "lore"), LogEntryType.Banter);
     return true;
   } else {
     directToLog(getOperationTale("fire", "insufficient_sludge"), LogEntryType.Failure);

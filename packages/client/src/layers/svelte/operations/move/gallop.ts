@@ -6,7 +6,7 @@ import { directToLog, LogEntryType, getOperationTale } from "../../stores/narrat
 export function gallop() {
   if ((get(player).energy || 0) >= 50) {
     get(network).api?.move(50, 0);
-    directToLog(getOperationTale("gallop", "lore"));
+    directToLog(getOperationTale("gallop", "lore"), LogEntryType.Banter);
     return true;
   } else {
     directToLog("You do not have enough energy to do this", LogEntryType.Failure);

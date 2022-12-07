@@ -6,7 +6,7 @@ import { directToLog, LogEntryType, getOperationTale } from "../../stores/narrat
 export function eat() {
   if ((get(player).resource || 0) >= 25) {
     get(network).api?.consume(25);
-    directToLog(getOperationTale("eat", "lore"), LogEntryType.Normal);
+    directToLog(getOperationTale("eat", "lore"), LogEntryType.Banter);
     return true;
   } else {
     return false;

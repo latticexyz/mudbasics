@@ -1,13 +1,14 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { narrative, logReady, directToLog, LogEntryType } from "../../../stores/narrative";
-  import { playerAddress } from "../../../stores/player";
+  import { narrative, logReady, directToLog, LogEntryType, banter, tale } from "../../../stores/narrative";
+  import { playerAddress, player } from "../../../stores/player";
   import { speed } from "../../../stores/ui";
   import { fade } from "svelte/transition";
 
   function logEntryTypeToClass(messageType: LogEntryType) {
     if (messageType == LogEntryType.Failure) return "failure";
     if (messageType == LogEntryType.Success) return "success";
+    if (messageType == LogEntryType.Banter) return "banter";
     return "";
   }
 
@@ -15,7 +16,7 @@
     setTimeout(() => {
       logReady.set(true);
       directToLog("It is night.");
-      directToLog("You hear something in the darkness...");
+      directToLog("You hear something in the darkness...")
     }, 2000);
   });
 </script>
@@ -50,5 +51,9 @@
 
   .success {
     color: var(--success);
+  }
+
+  .banter {
+    opacity: 0.5;
   }
 </style>

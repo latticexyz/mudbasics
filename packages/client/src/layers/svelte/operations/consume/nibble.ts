@@ -1,12 +1,12 @@
 import { get } from "svelte/store";
 import { network } from "../../stores/network";
 import { player } from "../../stores/player";
-import { directToLog, getOperationTale } from "../../stores/narrative";
+import { directToLog, getOperationTale, LogEntryType } from "../../stores/narrative";
 
 export function nibble() {
   if ((get(player).resource || 0) >= 10) {
     get(network).api?.consume(10);
-    directToLog(getOperationTale("nibble", "lore"));
+    directToLog(getOperationTale("nibble", "lore"), LogEntryType.Banter);
 
     return true;
   } else {

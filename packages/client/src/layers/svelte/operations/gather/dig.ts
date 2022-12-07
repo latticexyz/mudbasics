@@ -6,7 +6,7 @@ import { directToLog, LogEntryType, getOperationTale } from "../../stores/narrat
 export function dig() {
   if ((get(player).energy || 0) >= 100) {
     get(network).api?.gather(100);
-    directToLog(getOperationTale("dig", "lore"));
+    directToLog(getOperationTale("dig", "lore"), LogEntryType.Banter);
     return true;
   } else {
     directToLog("You do not have enough energy to do this", LogEntryType.Failure);

@@ -6,7 +6,7 @@ import { directToLog, LogEntryType, getOperationTale } from "../../stores/narrat
 export function stumble() {
   if ((get(player).energy || 0) >= 30) {
     get(network).api?.move(30, 0);
-    directToLog(getOperationTale("stumble", "lore"));
+    directToLog(getOperationTale("stumble", "lore"), LogEntryType.Banter);
     return true;
   } else {
     directToLog("You do not have enough energy to do this", LogEntryType.Failure);
