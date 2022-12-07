@@ -14,7 +14,7 @@ function checkForType(gridPosition: Coord, type: EntityType) {
 export function byTheFire() {
   const fireInLocation = checkForType(get(player).position, EntityType.Fire);
   if (fireInLocation) {
-    directToLog("You arrived at a fire.", LogEntryType.Failure);
+    directToLog("You arrived at a fire.", LogEntryType.Success);
     return true;
   } else {
     directToLog("No fire in sight.", LogEntryType.Failure);

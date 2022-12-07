@@ -1,13 +1,17 @@
 import { Howl } from "howler";
 import { soundLibrary, Sound } from "./sound-library";
 import { sample } from "lodash";
+import { writable, get } from "svelte/store";
+import { userSettings } from "../svelte/stores/ui";
+
+export const music = writable(null);
+export const fx = writable(null);
 
 export function playSound(id: string, category: string, loop = false, fade = false) {
+  const settings = get(userSettings);
+
   let timeout;
-  // console.log(soundLibrary)
-  // console.log('category', category)
-  // console.log('id', id)
-  // console.log(soundLibrary[category][id])
+
   const sound = new Howl({
     src: [soundLibrary[category][id].src],
     volume: soundLibrary[category][id].volumetrue,
@@ -34,21 +38,32 @@ export function playSound(id: string, category: string, loop = false, fade = fal
 }
 
 export function startEnvironmentSoundSystem() {
-  playSound("workSitePlain", "environment", true);
+  const settings = get(userSettings);
+  if (settings.fx.value === true) {
+    music.set(playSound("workSitePlain", "environment", true));
+  }
 }
 
 export function startMelodySoundSystem(timeout = 0) {
-  const melodySound = playSound(sample(Object.keys(soundLibrary.melody)), "melody");
-  melodySound.on("end", () => {
-    setTimeout(() => {
-      startMelodySoundSystem(timeout);
-    }, timeout);
-  });
+  const settings = get(userSettings);
+
+  if (settings.music.value == true) {
+    music.set(playSound(sample(Object.keys(soundLibrary.melody)), "melody"));
+    get(music).on("end", () => {
+      setTimeout(() => {
+        startMelodySoundSystem(timeout);
+      }, timeout);
+    });
+  }
 }
 
 export function startHarmonySoundSystem() {
-  const harmonySound = playSound("organLoop", "harmony", false, true);
-  harmonySound.on("end", () => {
-    startMelodySoundSystem(30000);
-  });
+  const settings = get(userSettings);
+
+  if (settings.music.value == true) {
+    music.set(playSound("organLoop", "harmony", false, true));
+    get(music).on("end", () => {
+      startMelodySoundSystem(30000);
+    });
+  }
 }

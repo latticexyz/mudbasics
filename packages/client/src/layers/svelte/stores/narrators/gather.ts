@@ -2,7 +2,7 @@ import { get } from "svelte/store";
 import { ComponentUpdate } from "@latticexyz/recs";
 import { seedToName } from "../../utils/name";
 import { indexToID, entities } from "../entities";
-import { sample } from "lodash";
+// import { sample } from "lodash";
 
 export function gather(update: ComponentUpdate, isSelf: boolean) {
   const oldValue = Number(update.value[1]?.value || 0);

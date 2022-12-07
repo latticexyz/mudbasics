@@ -1,5 +1,6 @@
 import { ComponentUpdate } from "@latticexyz/recs";
 import { sample } from "lodash";
+import { getOperationTale } from "../../stores/narrative";
 
 const secondPersonActions = ["You absorbed ", "You ate "];
 

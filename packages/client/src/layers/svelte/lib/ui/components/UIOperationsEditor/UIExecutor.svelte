@@ -64,7 +64,7 @@
       {#each $sequence as sequenceElement, index}
         <div
           use:tooltip
-          title={sequenceElement.operation.description}
+          title={sequenceElement.operation.narration.description}
           data-description={sequenceElement.operation?.cost}
           class="slot {sequenceElement.operation.category}"
           class:active={$sequencerActive && $activeOperationIndex === index}

@@ -1,12 +1,29 @@
 <script lang="ts">
-  import { firesV2, Entities } from "../../../../stores/entities";
+  import { firesV2, EntityType } from "../../../../stores/entities";
+  import { blockNumber } from "../../../../stores/network";
+
   import Fire from "./Fire.svelte";
 
-  // TODO:
-  // * sort fires
-  // – currently burning fires at top, burntout at bottom
-  // – Within each of those groups, order by resources burnt
-  // – so #1 will be the currently burning fire with the most resources burnt
+  const remaining = (fire: EntityType.Fire) => Math.max((fire.coolDownBlock || 0) - $blockNumber, 0)
+
+  let sortedFires = [...sorted(Object.entries($firesV2))]
+
+  function sorted (entries) {
+    let result = [...entries]
+
+    result.sort(([ka, a], [kb, b]) => {
+      if (remaining(a) === remaining(b)) {
+        // Compare on secondary metric
+        return b.resource - a.resource
+      } else {
+        return remaining(b) - remaining(a)
+      }
+    })
+
+    return result
+  }
+
+  $: sortedFires = [...sorted(Object.entries($firesV2))]
 </script>
 
 <div class="ui-fires">
@@ -14,7 +31,7 @@
     No fires in sight...
   {/if}
 
-  {#each Object.entries($firesV2) as [address, value], i (address)}
+  {#each sortedFires as [address, value], i (address)}
     <Fire {address} {value} index={i} />
   {/each}
 </div>

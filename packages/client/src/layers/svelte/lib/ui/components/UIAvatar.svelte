@@ -8,8 +8,6 @@
   let activitySound = {};
 
   playerActivity.subscribe((activity) => {
-    console.log(activity);
-    console.log(activitySound);
 
     if (activitySound.volume && activitySound.playing()) {
       activitySound.stop();

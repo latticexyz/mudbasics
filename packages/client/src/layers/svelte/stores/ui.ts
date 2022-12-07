@@ -62,4 +62,15 @@ function createComponentState() {
   };
 }
 
+export const userSettings = writable({
+  music: {
+    label: "Music",
+    value: true,
+  },
+  fx: {
+    label: "Sound",
+    value: true,
+  },
+});
+
 export const uiState = createComponentState();

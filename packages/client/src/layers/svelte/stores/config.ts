@@ -39,6 +39,7 @@ export interface UIComponentDefinition {
   component: any;
   options?: UIComponentOptions;
   grid?: UIComponentPlacement;
+  hidden: boolean;
 }
 
 // Start
@@ -50,6 +51,7 @@ export const initialise = (def: UIComponentDefinition) => {
     component: def.component,
     options: def?.options,
     grid: def?.grid,
+    hidden: def.hidden,
   };
 };
 
@@ -72,6 +74,7 @@ export const initialState = () => ({
       span: true,
     },
     active: true,
+    hidden: false,
   }),
   // OPS PLANNER
   compulsions: initialise({
@@ -87,6 +90,7 @@ export const initialState = () => ({
       col: [1, 4],
       row: [1, 10],
     },
+    hidden: false,
   }),
   // TEXT LOG
   memory: initialise({
@@ -103,6 +107,7 @@ export const initialState = () => ({
       row: [1, 6],
       col: [1, 2],
     },
+    hidden: false,
   }),
   // GRID MAP
   "grid-map": initialise({
@@ -115,6 +120,7 @@ export const initialState = () => ({
       delay: makeDelay(),
       noscroll: true,
     },
+    hidden: false,
     grid: {
       col: [3, 4],
       row: [5, 10],
@@ -129,8 +135,8 @@ export const initialState = () => ({
     options: {
       fluid: true,
       layer: 5,
-      hidden: true,
     },
+    hidden: true,
     grid: {
       col: [2, 3],
       row: [6, 10],
@@ -144,8 +150,8 @@ export const initialState = () => ({
     active: false,
     options: {
       delay: 0,
-      hidden: true,
     },
+    hidden: true,
     grid: {
       col: [1, 2],
       row: [7, 10],
@@ -160,8 +166,8 @@ export const initialState = () => ({
       fluid: true,
       layer: 2,
       delay: 0,
-      hidden: true,
     },
+    hidden: true,
     grid: {
       col: [3, 4],
       row: [5, 10],
@@ -182,6 +188,7 @@ export const initialState = () => ({
       col: [1, 2],
       row: [6, 10],
     },
+    hidden: false,
   }),
   //
   executor: initialise({
@@ -199,6 +206,7 @@ export const initialState = () => ({
       col: [3, 4],
       row: [1, 5],
     },
+    hidden: false,
   }),
   //
   view: initialise({
@@ -209,11 +217,11 @@ export const initialState = () => ({
     options: {
       fluid: true,
       delay: makeDelay(),
-      hidden: true,
     },
     grid: {
       col: [3, 4],
       row: [1, 5],
     },
+    hidden: true,
   }),
 });

@@ -1,14 +1,15 @@
 import { get } from "svelte/store";
 import { network } from "../../stores/network";
 import { player } from "../../stores/player";
-import { directToLog, LogEntryType } from "../../stores/narrative";
+import { directToLog, getOperationTale, LogEntryType } from "../../stores/narrative";
 
 export function feast() {
   if ((get(player).resource || 0) >= 50) {
     get(network).api?.consume(50);
+    directToLog(getOperationTale("feast", "lore"), LogEntryType.Banter);
     return true;
   } else {
-    directToLog("You do not have enough sludge to do this", LogEntryType.Failure);
+    // directToLog(getOperationTale('feast', 'failure'), LogEntryType.Failure);
     console.log("Feast: not enough resource");
     return false;
   }

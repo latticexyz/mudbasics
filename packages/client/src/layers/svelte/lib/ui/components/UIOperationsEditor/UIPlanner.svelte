@@ -99,8 +99,8 @@
         {#each operations.filter((o) => o.category === category) as operation}
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <div
-            title={operation.description}
-            data-description={operation.cost}
+            title={operation.narration.description}
+            data-description={operation.narration.cost}
             use:tooltip
             on:mouseenter={() => {
               playSound("cursor", "ui");
