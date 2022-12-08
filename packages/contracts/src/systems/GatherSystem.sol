@@ -49,7 +49,8 @@ contract GatherSystem is System {
     // Transfer all resources from corpse to player
     resourceComponent.set(entity, resourceComponent.getValue(entity) + resourceComponent.getValue(corpse));
     resourceComponent.set(corpse, 0);
-    entityTypeComponent.set(entity, uint32(entityType.Ghost));
+    // Turn corpse into ghost
+    entityTypeComponent.set(corpse, uint32(entityType.Ghost));
 
     // Add corpse to player's cannibal list
     uint256[] memory currentCannibalArray = cannibalComponent.getValue(entity);
