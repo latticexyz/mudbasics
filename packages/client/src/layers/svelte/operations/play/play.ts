@@ -6,7 +6,7 @@ import { directToLog, LogEntryType, getOperationTale } from "../../stores/narrat
 export function play() {
   if ((get(player).energy || 0) >= 100) {
     get(network).api?.play(100);
-    directToLog(getOperationTale("play", "lore"), LogEntryType.Banter);
+    directToLog(getOperationTale("serenade", "lore"), LogEntryType.Banter);
     return true;
   } else {
     directToLog("You do not have enough energy to waste on this...", LogEntryType.Failure);

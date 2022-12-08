@@ -1,10 +1,10 @@
 import { ComponentUpdate } from "@latticexyz/recs";
-import { getDirection } from "../../utils/space";
+import { get } from "svelte/store";
+import { indexToID, entities } from "../entities";
+import { seedToName } from "../../utils/name";
 
 export function play(update: ComponentUpdate, isSelf: boolean) {
   console.log("play narrator:", update);
-  // let from = update.value[1];
-  // let to = update.value[0];
-  // return "is moving " + getDirection(from, to);
-  return "xxxxx";
+  const entity = get(entities)[indexToID(update.entity)];
+  return ".:.:.:.:." + seedToName(entity.seed || 0) + " is making an ungodly noise";
 }

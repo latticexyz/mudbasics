@@ -2,7 +2,6 @@ import { get } from "svelte/store";
 import { ComponentUpdate } from "@latticexyz/recs";
 import { seedToName } from "../../utils/name";
 import { indexToID, entities } from "../entities";
-import { sample } from "lodash";
 
 export function birth(update: ComponentUpdate, isSelf: boolean) {
   const entity = get(entities)[indexToID(update.entity)];

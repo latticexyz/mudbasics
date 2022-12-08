@@ -336,6 +336,5 @@ export const operations: Operation[] = [
 export const getOperation = (name: string) => {
   const result = operations.find((o) => o.name === name);
   if (!result) throw new Error("Operation Not Found");
-
   return result;
 };
