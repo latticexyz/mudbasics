@@ -6,7 +6,6 @@ import { playerAddress } from "../player";
 
 export function fire(update: ComponentUpdate, isSelf: boolean) {
   const entity = get(entities)[indexToID(update.entity)];
-  console.log(entity);
   if (entity.creator[entity.creator.length - 1] === playerAddress) {
     return "You made a fire";
   } else {

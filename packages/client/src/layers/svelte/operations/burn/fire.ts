@@ -14,7 +14,6 @@ export function fire() {
     return true;
   } else {
     directToLog(getOperationTale("fire", "insufficient_sludge"), LogEntryType.Failure);
-    console.log("Fire: not enough resource");
     return false;
   }
 }

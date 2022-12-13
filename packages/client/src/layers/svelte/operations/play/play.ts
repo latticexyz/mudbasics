@@ -10,7 +10,6 @@ export function play() {
     return true;
   } else {
     directToLog("You do not have enough energy to waste on this...", LogEntryType.Failure);
-    console.log("Play: not enough energy");
     return false;
   }
 }

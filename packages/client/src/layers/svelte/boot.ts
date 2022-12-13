@@ -42,7 +42,5 @@ export async function bootGame() {
   layers.network = await createNetworkLayer(networkLayerConfig);
   layers.network.startSync();
 
-  console.log("booted");
-
   return layers as Layers;
 }

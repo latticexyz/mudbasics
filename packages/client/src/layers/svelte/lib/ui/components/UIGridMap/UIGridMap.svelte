@@ -1,6 +1,6 @@
 <script lang="ts">
-  import UIGridTile from "./UIGridTile.svelte"
-  import { GridTile } from "./index"
+  import UIGridTile from "./UIGridTile.svelte";
+  import { GridTile } from "./index";
   import { Coord } from "@latticexyz/recs";
   import { onMount } from "svelte";
   import { entities, EntityType } from "../../../../stores/entities";
@@ -14,7 +14,7 @@
   let w: Number;
   let h: Number;
   let shortest: Number;
-  let unit = 5
+  let unit = 5;
 
   function checkForType(gridPosition: Coord, type: EntityType) {
     let entity = Object.values($entities).find(
@@ -33,14 +33,13 @@
     return TerrainType.Ruins;
   }
 
-
   let grid: GridTile[] = [];
 
   function initGrid() {
     for (let y = 0; y <= unit - 1; y++) {
       for (let x = 0; x <= unit - 1; x++) {
-        let yVal = y - Math.floor(unit / 2)
-        let xVal = x - Math.floor(unit / 2)        
+        let yVal = y - Math.floor(unit / 2);
+        let xVal = x - Math.floor(unit / 2);
 
         let newGridTile: GridTile = {
           direction: ".",
@@ -62,14 +61,14 @@
       grid[i].perlinFactor = perlin(grid[i].coordinates.x, grid[i].coordinates.y, 0, 20);
       grid[i].terrain = perlinToTerrainType(grid[i].perlinFactor);
       grid[i].fire = checkForType(grid[i].coordinates, EntityType.Fire);
-      grid[i].other = checkForType(grid[i].coordinates, EntityType.Player) || checkForType(grid[i].coordinates, EntityType.Corpse);
+      grid[i].other =
+        checkForType(grid[i].coordinates, EntityType.Player) || checkForType(grid[i].coordinates, EntityType.Corpse);
       grid[i].corpse = checkForType(grid[i].coordinates, EntityType.Corpse);
       grid[i].mined = checkForType(grid[i].coordinates, EntityType.Terrain);
       grid[i].resource = grid[i].mined == undefined ? 100 : grid[i].mined.resource;
-      console.log(Object.values(grid[i]))
     }
 
-    grid = [...grid]
+    grid = [...grid];
   }
 
   blockNumber.subscribe(() => {
@@ -84,25 +83,23 @@
 
   $: shortest = Math.min(w, h);
 
-  function handleZoom (e) {
-    if (e.key === '=') {
-      unit+= 2
-      grid = []
-      initGrid()
+  function handleZoom(e) {
+    if (e.key === "=") {
+      unit += 2;
+      grid = [];
+      initGrid();
     }
-    if (e.key === '-') {
-      unit-= 2
-      grid = []
-      initGrid()
+    if (e.key === "-") {
+      unit -= 2;
+      grid = [];
+      initGrid();
     }
   }
 </script>
 
 <svelte:window on:keypress={handleZoom} />
 
-<div
-  style="--rows: {unit}; --cols: {unit}"
-  class="ui-grid-map" bind:clientWidth={w} bind:clientHeight={h}>
+<div style="--rows: {unit}; --cols: {unit}" class="ui-grid-map" bind:clientWidth={w} bind:clientHeight={h}>
   <div class="grid-container overlay map" style:max-width="{shortest}px" style:max-height="{shortest}px">
     <!-- Shown if player is moving -->
     {#if $playerActivity == Activities.Moving && ($player.coolDownBlock || 0) > $blockNumber}

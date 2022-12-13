@@ -10,8 +10,6 @@ export function dig() {
     return true;
   } else {
     directToLog("You do not have enough energy to do this", LogEntryType.Failure);
-
-    console.log("not enough energy");
     return false;
   }
 }

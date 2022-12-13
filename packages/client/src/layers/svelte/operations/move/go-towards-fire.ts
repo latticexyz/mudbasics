@@ -25,7 +25,6 @@ export function goTowardsFire() {
     return true;
   } else {
     directToLog("You do not have enough energy to do this", LogEntryType.Failure);
-    console.log("Go towards fire: not enough energy");
     return false;
   }
 }

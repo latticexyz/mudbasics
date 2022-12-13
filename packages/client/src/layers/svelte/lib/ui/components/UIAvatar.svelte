@@ -8,7 +8,6 @@
   let activitySound = {};
 
   playerActivity.subscribe((activity) => {
-
     if (activitySound.volume && activitySound.playing()) {
       activitySound.stop();
     }
@@ -63,7 +62,7 @@
   <div class="ui-avatar-video">
     <!-- CHARACTER -->
     {#if $player.entityType == EntityType.Corpse}
-      <video on:timeupdate={function () { console.log(this) }} src={"/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted />
+      <video src={"/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted />
     {:else if $playerActivity === Activities.Moving}
       <video src={"/animations/" + seedToMask($player.seed) + "/Walk.mp4"} autoplay muted loop />
     {:else if $playerActivity === Activities.Eating}
@@ -75,7 +74,7 @@
     {:else if $playerActivity === Activities.Playing}
       <video src={"/animations/" + seedToMask($player.seed) + "/Play.mp4"} autoplay muted loop />
     {:else if $playerActivity === Activities.Dead}
-      <video on:timeupdate={function () { console.log('this') }} src={"/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted />
+      <video src={"/animations/" + seedToMask($player.seed) + "/Die.mp4"} autoplay muted />
     {:else}
       <video src={"/animations/" + seedToMask($player.seed) + "/Idle.mp4"} autoplay muted loop />
     {/if}

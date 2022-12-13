@@ -10,7 +10,6 @@ export function southWest() {
     return true;
   } else {
     directToLog("You do not have enough energy to do this", LogEntryType.Failure);
-    console.log("Walk: not enough energy");
     return false;
   }
 }
