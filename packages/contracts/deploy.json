@@ -10,7 +10,8 @@
     "StatsComponent",
     "BirthComponent",
     "CannibalComponent",
-    "PlayingComponent"
+    "PlayingComponent",
+    "DeathComponent"
   ],
   "systems": [
     {
@@ -50,7 +51,8 @@
         "EntityTypeComponent",
         "StatsComponent",
         "BirthComponent",
-        "CannibalComponent"
+        "CannibalComponent",
+        "DeathComponent"
       ]
     },
     {

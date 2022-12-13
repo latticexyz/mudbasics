@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
-import { entityType } from "../../constants.sol";
+import { EntityType } from "../../types.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { FireSystem, ID as FireSystemID } from "../../systems/FireSystem.sol";
@@ -49,7 +49,7 @@ contract FireSystemTest is MudTest {
     Coord memory currentPosition = positionComponent.getValue(entity);
     QueryFragment[] memory fragments = new QueryFragment[](2);
     fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(currentPosition));
-    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(entityType.Fire));
+    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(EntityType.Fire));
     uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
     assertEq(entitiesAtPosition.length, 1);
     // Cooldown on fire component should be blocknumber + (resources added * 10):

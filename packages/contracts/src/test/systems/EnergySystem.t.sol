@@ -4,7 +4,7 @@ pragma solidity >=0.8.0;
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
 import { Cheats } from "../utils/Cheats.sol";
-import { INITIAL_ENERGY, INITIAL_RESOURCE } from "../../constants.sol";
+import { INITIAL_ENERGY, INITIAL_RESOURCE } from "../../config.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { GatherSystem, ID as GatherSystemID } from "../../systems/GatherSystem.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../../components/ResourceComponent.sol";

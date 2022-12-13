@@ -2,7 +2,8 @@
 pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
-import { INITIAL_ENERGY, INITIAL_RESOURCE, SPAWN_RESOURCE_PER_POSITION, entityType } from "../../constants.sol";
+import { EntityType } from "../../types.sol";
+import { INITIAL_ENERGY, INITIAL_RESOURCE, SPAWN_RESOURCE_PER_POSITION } from "../../config.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { Perlin } from "noise/Perlin.sol";
 import { ABDKMath64x64 as Math } from "abdk-libraries-solidity/ABDKMath64x64.sol";
@@ -54,7 +55,7 @@ contract GatherSystemTest is MudTest {
     Coord memory currentPosition = positionComponent.getValue(entity);
     QueryFragment[] memory fragments = new QueryFragment[](2);
     fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(currentPosition));
-    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(uint32(entityType.Terrain)));
+    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(uint32(EntityType.Terrain)));
     uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
     assertEq(entitiesAtPosition.length, 1);
     // Terrain component should have SPAWN_RESOURCE_PER_POSITION - resourceToExtract

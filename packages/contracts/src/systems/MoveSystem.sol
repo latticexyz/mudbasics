@@ -3,8 +3,8 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
-import { WORLD_HEIGHT, WORLD_WIDTH } from "../constants.sol";
-import { entityType } from "../constants.sol";
+import { WORLD_HEIGHT, WORLD_WIDTH, MAX_DISTANCE } from "../config.sol";
+import { EntityType, Direction } from "../types.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
@@ -13,16 +13,80 @@ import { StatsComponent, ID as StatsComponentID, Stats } from "../components/Sta
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Move"));
-int32 constant MAX_DISTANCE = 5;
 
 contract MoveSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
+
+  function checkRequirements(uint256 player, uint32 energyInput) private view {
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
+
+    // Require entity to be player
+    require(entityTypeComponent.getValue(player) == uint32(EntityType.Player), "only (a living) player can move.");
+    // Require cooldown period to be over
+    require(coolDownComponent.getValue(player) < block.number, "in cooldown period");
+    // Require the player to have enough energy
+    require(energyComponent.getValue(player) >= energyInput, "not enough energy");
+  }
+
+  function getNewPosition(
+    uint256 player,
+    Coord memory currentPosition,
+    Direction direction,
+    int32 steps
+  ) private returns (Coord memory) {
+    Coord memory newPosition = Coord(currentPosition.x, currentPosition.y);
+
+    if (direction == Direction.North) {
+      if (newPosition.y > 0) newPosition.y -= steps;
+    } else if (direction == Direction.NorthEast) {
+      if (newPosition.y > 0) newPosition.y -= steps;
+      if (newPosition.x < WORLD_WIDTH) newPosition.x += steps;
+    } else if (direction == Direction.East) {
+      if (newPosition.x < WORLD_WIDTH) newPosition.x += steps;
+    } else if (direction == Direction.SouthEast) {
+      if (newPosition.y < WORLD_HEIGHT) newPosition.y += steps;
+      if (newPosition.x < WORLD_WIDTH) newPosition.x += steps;
+    } else if (direction == Direction.South) {
+      if (newPosition.y < WORLD_HEIGHT) newPosition.y += steps;
+    } else if (direction == Direction.SouthWest) {
+      if (newPosition.y < WORLD_HEIGHT) newPosition.y += steps;
+      if (newPosition.x > 0) newPosition.x -= steps;
+    } else if (direction == Direction.West) {
+      if (newPosition.x > 0) newPosition.x -= steps;
+    } else if (direction == Direction.NorthWest) {
+      if (newPosition.y > 0) newPosition.y -= steps;
+      if (newPosition.x > 0) newPosition.x -= steps;
+    }
+
+    return newPosition;
+  }
+
+  function updatePlayer(uint256 player, uint32 energyInput) private {
+    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
+
+    coolDownComponent.set(player, block.number + 10);
+    energyComponent.set(player, energyComponent.getValue(player) - energyInput);
+  }
 
   function updateStats(uint256 entity, int32 steps) private {
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
     Stats memory currentStats = statsComponent.getValue(entity);
     currentStats.traveled += uint32(steps);
     statsComponent.set(entity, currentStats);
+  }
+
+  function checkIfDead(uint256 player) private {
+    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+
+    if (energyComponent.getValue(player) <= 0) {
+      entityTypeComponent.set(player, uint32(EntityType.Corpse));
+      coolDownComponent.set(player, 0);
+    }
   }
 
   function execute(bytes memory arguments) public returns (bytes memory) {
@@ -34,68 +98,21 @@ contract MoveSystem is System {
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
 
-    // Require entity to be player
-    require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can move.");
-
-    // Require cooldown period to be over
-    require(coolDownComponent.getValue(entity) < block.number, "in cooldown period");
-
-    // Require the player to have enough energy
-    uint32 currentEnergyLevel = energyComponent.getValue(entity);
-    require(currentEnergyLevel >= energyInput, "not enough energy");
+    checkRequirements(entity, energyInput);
 
     // 10 energy => 1 step, capped at MAX_DISTANCE
     int32 steps = int32(energyInput) / 10;
     if (steps > MAX_DISTANCE) steps = MAX_DISTANCE;
 
-    Coord memory currentPosition = positionComponent.getValue(entity);
-    Coord memory newPosition = Coord(currentPosition.x, currentPosition.y);
+    // Set new position
+    positionComponent.set(
+      entity,
+      getNewPosition(entity, positionComponent.getValue(entity), Direction(direction), steps)
+    );
 
-    //  | 8 | 1 | 2 |
-    //  | 7 | X | 3 |
-    //  | 6 | 5 | 4 |
-
-    if (direction == 1) {
-      // 1 => N
-      if (newPosition.y > 0) newPosition.y -= steps;
-    } else if (direction == 2) {
-      // 2 => NE
-      if (newPosition.y > 0) newPosition.y -= steps;
-      if (newPosition.x < WORLD_WIDTH) newPosition.x += steps;
-    } else if (direction == 3) {
-      // 3 => E
-      if (newPosition.x < WORLD_WIDTH) newPosition.x += steps;
-    } else if (direction == 4) {
-      // 4 => SE
-      if (newPosition.y < WORLD_HEIGHT) newPosition.y += steps;
-      if (newPosition.x < WORLD_WIDTH) newPosition.x += steps;
-    } else if (direction == 5) {
-      // 5 => S
-      if (newPosition.y < WORLD_HEIGHT) newPosition.y += steps;
-    } else if (direction == 6) {
-      // 6 => SW
-      if (newPosition.y < WORLD_HEIGHT) newPosition.y += steps;
-      if (newPosition.x > 0) newPosition.x -= steps;
-    } else if (direction == 7) {
-      // 7 => W
-      if (newPosition.x > 0) newPosition.x -= steps;
-    } else if (direction == 8) {
-      // 8 => NW
-      if (newPosition.y > 0) newPosition.y -= steps;
-      if (newPosition.x > 0) newPosition.x -= steps;
-    }
-
-    // Update values of player
-    positionComponent.set(entity, newPosition);
-    coolDownComponent.set(entity, block.number + 10);
-    energyComponent.set(entity, currentEnergyLevel - energyInput);
+    updatePlayer(entity, energyInput);
     updateStats(entity, steps);
-
-    // Check if dead
-    if (energyComponent.getValue(entity) <= 0) {
-      entityTypeComponent.set(entity, uint32(entityType.Corpse));
-      coolDownComponent.set(entity, 0);
-    }
+    checkIfDead(entity);
   }
 
   function executeTyped(uint256 entity, uint32 energyInput, uint32 direction) public returns (bytes memory) {

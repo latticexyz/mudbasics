@@ -3,7 +3,8 @@ pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
 import { console } from "forge-std/console.sol";
-import { WORLD_HEIGHT, WORLD_WIDTH, INITIAL_RESOURCE, INITIAL_ENERGY, entityType } from "../../constants.sol";
+import { EntityType } from "../../types.sol";
+import { WORLD_HEIGHT, WORLD_WIDTH, INITIAL_RESOURCE, INITIAL_ENERGY } from "../../config.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { SeedComponent, ID as SeedComponentID } from "../../components/SeedComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../../components/EnergyComponent.sol";
@@ -55,7 +56,7 @@ contract SpawnSystemTest is MudTest {
     assertEq(resourceComponent.getValue(entity), INITIAL_RESOURCE);
 
     // --- Player entity type
-    assertEq(entityTypeComponent.getValue(entity), uint32(entityType.Player));
+    assertEq(entityTypeComponent.getValue(entity), uint32(EntityType.Player));
 
     // --- Cooldown
     assertEq(coolDownComponent.getValue(entity), 0);

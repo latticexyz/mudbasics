@@ -6,9 +6,8 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { Perlin } from "noise/Perlin.sol";
 import { ABDKMath64x64 as Math } from "abdk-libraries-solidity/ABDKMath64x64.sol";
-import { entityType, SPAWN_RESOURCE_PER_POSITION } from "../constants.sol";
-
-import { entityType } from "../constants.sol";
+import { SPAWN_RESOURCE_PER_POSITION } from "../config.sol";
+import { EntityType } from "../types.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyComponent.sol";
@@ -48,7 +47,7 @@ contract GatherSystem is System {
     resourceComponent.set(entity, resourceComponent.getValue(entity) + resourceComponent.getValue(corpse));
     resourceComponent.set(corpse, 0);
     // Turn corpse into ghost
-    entityTypeComponent.set(corpse, uint32(entityType.Ghost));
+    entityTypeComponent.set(corpse, uint32(EntityType.Ghost));
 
     // Add corpse to player's cannibal list
     uint256[] memory currentCannibalArray = cannibalComponent.getValue(entity);
@@ -71,7 +70,7 @@ contract GatherSystem is System {
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
 
     // Require entity to be player
-    require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can gather.");
+    require(entityTypeComponent.getValue(entity) == uint32(EntityType.Player), "only (a living) player can gather.");
 
     // Require cooldown period to be over
     require(coolDownComponent.getValue(entity) < block.number, "in cooldown period");
@@ -84,7 +83,7 @@ contract GatherSystem is System {
     Coord memory playerPosition = positionComponent.getValue(entity);
 
     // Require there to not be a fire in position
-    require(checkForEntity(playerPosition, uint32(entityType.Fire)).length == 0, "can not gather in fire");
+    require(checkForEntity(playerPosition, uint32(EntityType.Fire)).length == 0, "can not gather in fire");
 
     // Get player resource balance
     uint32 currentResourceBalance = resourceComponent.getValue(entity);
@@ -103,13 +102,13 @@ contract GatherSystem is System {
     );
 
     // Check for corpses in current location
-    uint256[] memory corpsesAtPosition = checkForEntity(playerPosition, uint32(entityType.Corpse));
+    uint256[] memory corpsesAtPosition = checkForEntity(playerPosition, uint32(EntityType.Corpse));
 
     if (corpsesAtPosition.length > 0) {
       cannabalize(entity, corpsesAtPosition[0]);
     } else {
       // Check for terrain component in current location
-      uint256[] memory terrainAtPosition = checkForEntity(playerPosition, uint32(entityType.Terrain));
+      uint256[] memory terrainAtPosition = checkForEntity(playerPosition, uint32(EntityType.Terrain));
 
       if (terrainAtPosition.length == 0) {
         // The position HAS NOT been gathered before,
@@ -121,7 +120,7 @@ contract GatherSystem is System {
         // Create new terrain block at position
         uint256 newTerrainEntity = world.getUniqueEntityId();
         positionComponent.set(newTerrainEntity, playerPosition);
-        entityTypeComponent.set(newTerrainEntity, uint32(entityType.Terrain));
+        entityTypeComponent.set(newTerrainEntity, uint32(EntityType.Terrain));
         resourceComponent.set(newTerrainEntity, SPAWN_RESOURCE_PER_POSITION - resourceToExtract);
       } else {
         // The position HAS been gathered before,
@@ -149,7 +148,7 @@ contract GatherSystem is System {
 
     // Check if dead
     if (currentEnergyLevel - energyInput <= 0) {
-      entityTypeComponent.set(entity, uint32(entityType.Corpse));
+      entityTypeComponent.set(entity, uint32(EntityType.Corpse));
       coolDownComponent.set(entity, 0);
     }
   }

@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
-import { WORLD_HEIGHT, WORLD_WIDTH } from "../../constants.sol";
+import { WORLD_HEIGHT, WORLD_WIDTH } from "../../config.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { MoveSystem, ID as MoveSystemID } from "../../systems/MoveSystem.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../../components/PositionComponent.sol";

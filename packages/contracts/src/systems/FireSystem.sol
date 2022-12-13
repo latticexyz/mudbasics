@@ -4,7 +4,8 @@ import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
-import { entityType } from "../constants.sol";
+import { EntityType } from "../types.sol";
+import { MINIMUM_FIRE_SIZE, FIRE_BURNTIME_MULTIPLIER, COST_TO_MAKE_FIRE } from "../config.sol";
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { ResourceComponent, ID as ResourceComponentID } from "../components/ResourceComponent.sol";
@@ -20,11 +21,21 @@ uint256 constant ID = uint256(keccak256("system.Fire"));
 contract FireSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function updateStats(uint256 entity, uint32 resourceInput) private {
-    StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
-    Stats memory currentStats = statsComponent.getValue(entity);
-    currentStats.burnt += resourceInput;
-    statsComponent.set(entity, currentStats);
+  function checkRequirements(uint256 entity, uint32 resourceInput) private view {
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
+    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
+    // Require entity to be a player
+    require(entityTypeComponent.getValue(entity) == uint32(EntityType.Player), "only (a living) player can burn.");
+    // Require cooldown period to be over
+    require(coolDownComponent.getValue(entity) < block.number, "in cooldown period");
+    // Require the player to have COST_TO_MAKE_FIRE energy
+    require(energyComponent.getValue(entity) >= COST_TO_MAKE_FIRE, "not enough energy");
+    // Enforce minimum fire size
+    require(resourceInput >= MINIMUM_FIRE_SIZE, "minimum resource amount not reached");
+    // Require the player to have enough resource
+    require(resourceComponent.getValue(entity) >= resourceInput, "not enough resource");
   }
 
   function makeSeedValue(uint256 fireId) private view returns (uint32) {
@@ -37,90 +48,102 @@ contract FireSystem is System {
 
     QueryFragment[] memory fragments = new QueryFragment[](2);
     fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(position));
-    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(entityType.Fire));
+    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(EntityType.Fire));
     uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
     return entitiesAtPosition;
+  }
+
+  function createNewFire(uint256 player, Coord memory position, uint32 resourceInput) private {
+    PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    SeedComponent seedComponent = SeedComponent(getAddressById(components, SeedComponentID));
+    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
+    CreatorComponent creatorComponent = CreatorComponent(getAddressById(components, CreatorComponentID));
+
+    uint256 newFire = world.getUniqueEntityId();
+    positionComponent.set(newFire, position);
+    entityTypeComponent.set(newFire, uint32(EntityType.Fire));
+    seedComponent.set(newFire, makeSeedValue(newFire));
+    // Cooldown = current block + resources to burn * FIRE_BURNTIME_MULTIPLIER
+    coolDownComponent.set(newFire, block.number + resourceInput * FIRE_BURNTIME_MULTIPLIER);
+    // Resources burnt in this fire
+    resourceComponent.set(newFire, resourceInput);
+    uint256[] memory creatorArray = new uint256[](1);
+    creatorArray[0] = player;
+    creatorComponent.set(newFire, creatorArray);
+  }
+
+  function addToFire(uint256 fire, uint256 player, uint32 resourceInput) private {
+    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
+    CreatorComponent creatorComponent = CreatorComponent(getAddressById(components, CreatorComponentID));
+
+    // If cooldown block is passed (fire is burnt out), count up from current block number
+    uint256 currentCoolDownBlock = coolDownComponent.getValue(fire) > block.number
+      ? coolDownComponent.getValue(fire)
+      : block.number;
+    // Cooldown = current block + resources to burn * FIRE_BURNTIME_MULTIPLIER
+    coolDownComponent.set(fire, currentCoolDownBlock + resourceInput * FIRE_BURNTIME_MULTIPLIER);
+    // Add to resources burnt in this fire
+    resourceComponent.set(fire, resourceComponent.getValue(fire) + resourceInput);
+
+    // Add player to creator list
+    uint256[] memory currentCreatorArray = creatorComponent.getValue(fire);
+    uint256[] memory newCreatorArray = new uint256[](currentCreatorArray.length + 1);
+    for (uint256 i = 0; i < currentCreatorArray.length; i++) {
+      newCreatorArray[i] = currentCreatorArray[i];
+    }
+    newCreatorArray[newCreatorArray.length - 1] = player;
+    creatorComponent.set(fire, newCreatorArray);
+  }
+
+  function updatePlayer(uint256 player, uint32 resourceInput) private {
+    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
+    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
+    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+
+    resourceComponent.set(player, resourceComponent.getValue(player) - resourceInput);
+    energyComponent.set(player, energyComponent.getValue(player) - COST_TO_MAKE_FIRE);
+    coolDownComponent.set(player, block.number + 10);
+  }
+
+  function updateStats(uint256 player, uint32 resourceInput) private {
+    StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
+    Stats memory currentStats = statsComponent.getValue(player);
+    currentStats.burnt += resourceInput;
+    statsComponent.set(player, currentStats);
+  }
+
+  function checkIfDead(uint256 player) private {
+    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+
+    if (energyComponent.getValue(player) <= 0) {
+      entityTypeComponent.set(player, uint32(EntityType.Corpse));
+      coolDownComponent.set(player, 0);
+    }
   }
 
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 entity, uint32 resourceInput) = abi.decode(arguments, (uint256, uint32));
 
-    // Initialize components
-    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
+    checkRequirements(entity, resourceInput);
+
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
-    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
-    ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
-    CreatorComponent creatorComponent = CreatorComponent(getAddressById(components, CreatorComponentID));
-    SeedComponent seedComponent = SeedComponent(getAddressById(components, SeedComponentID));
-
-    // Require entity to be a player
-    require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can burn.");
-
-    // Require cooldown period to be over
-    require(coolDownComponent.getValue(entity) < block.number, "in cooldown period");
-
-    // Require the player to have enough (50) energy
-    uint32 currentEnergyLevel = energyComponent.getValue(entity);
-    require(currentEnergyLevel >= 50, "not enough energy");
-
-    // Enforce minimum
-    require(resourceInput >= 500, "minimum 500 resources to make fire");
-
-    // Require the player to have enough resource
-    uint32 currentResourceLevel = resourceComponent.getValue(entity);
-    require(currentResourceLevel >= resourceInput, "not enough resource");
-
-    // Check if there is a fire at position
     Coord memory playerPosition = positionComponent.getValue(entity);
-    uint256[] memory entitiesAtPosition = checkForFire(playerPosition);
 
-    if (entitiesAtPosition.length == 0) {
-      // Create new fire at position
-      uint256 newFireEntity = world.getUniqueEntityId();
-      positionComponent.set(newFireEntity, playerPosition);
-      entityTypeComponent.set(newFireEntity, uint32(entityType.Fire));
-      seedComponent.set(newFireEntity, makeSeedValue(newFireEntity));
-
-      // Cooldown = current block + resources to burn * 10
-      coolDownComponent.set(newFireEntity, block.number + resourceInput * 10);
-      // Resources burnt in this fire
-      resourceComponent.set(newFireEntity, resourceInput);
-
-      uint256[] memory creatorArray = new uint256[](1);
-      creatorArray[0] = entity;
-      creatorComponent.set(newFireEntity, creatorArray);
+    uint256[] memory firesAtPosition = checkForFire(playerPosition);
+    if (firesAtPosition.length == 0) {
+      createNewFire(entity, playerPosition, resourceInput);
     } else {
-      // Add to existing fire at position
-      // If cooldown block is passed (fire is burnt out), count up from current block number
-      uint256 currentCoolDownBlock = coolDownComponent.getValue(entitiesAtPosition[0]) > block.number
-        ? coolDownComponent.getValue(entitiesAtPosition[0])
-        : block.number;
-      coolDownComponent.set(entitiesAtPosition[0], currentCoolDownBlock + resourceInput * 10);
-      // Add to resources burnt in this fire
-      resourceComponent.set(entitiesAtPosition[0], resourceComponent.getValue(entitiesAtPosition[0]) + resourceInput);
-
-      // Add player to creator list
-      uint256[] memory currentCreatorArray = creatorComponent.getValue(entitiesAtPosition[0]);
-      uint256[] memory newCreatorArray = new uint256[](currentCreatorArray.length + 1);
-      for (uint256 i = 0; i < currentCreatorArray.length; i++) {
-        newCreatorArray[i] = currentCreatorArray[i];
-      }
-      newCreatorArray[newCreatorArray.length - 1] = entity;
-      creatorComponent.set(entitiesAtPosition[0], newCreatorArray);
+      addToFire(firesAtPosition[0], entity, resourceInput);
     }
 
-    // Update values on player entity
-    resourceComponent.set(entity, currentResourceLevel - resourceInput);
-    energyComponent.set(entity, currentEnergyLevel - 50);
-    coolDownComponent.set(entity, block.number + 10);
+    updatePlayer(entity, resourceInput);
     updateStats(entity, resourceInput);
-
-    // Check if dead
-    if (energyComponent.getValue(entity) <= 0) {
-      entityTypeComponent.set(entity, uint32(entityType.Corpse));
-      coolDownComponent.set(entity, 0);
-    }
+    checkIfDead(entity);
   }
 
   function executeTyped(uint256 entity, uint32 resourceInput) public returns (bytes memory) {

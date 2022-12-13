@@ -2,7 +2,8 @@
 pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
-import { entityType, INITIAL_ENERGY } from "../../constants.sol";
+import { EntityType } from "../../types.sol";
+import { INITIAL_ENERGY } from "../../config.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { SpawnSystem, ID as SpawnSystemID } from "../../systems/SpawnSystem.sol";
 import { PlaySystem, ID as PlaySystemID } from "../../systems/PlaySystem.sol";
