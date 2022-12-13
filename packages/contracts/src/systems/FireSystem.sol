@@ -13,6 +13,7 @@ import { CoolDownComponent, ID as CoolDownComponentID } from "../components/Cool
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { CreatorComponent, ID as CreatorComponentID } from "../components/CreatorComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
+import { SeedComponent, ID as SeedComponentID } from "../components/SeedComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Fire"));
 
@@ -26,6 +27,21 @@ contract FireSystem is System {
     statsComponent.set(entity, currentStats);
   }
 
+  function makeSeedValue(uint256 fireId) private view returns (uint32) {
+    return uint32(uint256(keccak256(abi.encodePacked(fireId, block.timestamp, block.number))));
+  }
+
+  function checkForFire(Coord memory position) private view returns (uint256[] memory) {
+    PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
+    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
+
+    QueryFragment[] memory fragments = new QueryFragment[](2);
+    fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(position));
+    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(entityType.Fire));
+    uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
+    return entitiesAtPosition;
+  }
+
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 entity, uint32 resourceInput) = abi.decode(arguments, (uint256, uint32));
 
@@ -36,6 +52,7 @@ contract FireSystem is System {
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     CreatorComponent creatorComponent = CreatorComponent(getAddressById(components, CreatorComponentID));
+    SeedComponent seedComponent = SeedComponent(getAddressById(components, SeedComponentID));
 
     // Require entity to be a player
     require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can burn.");
@@ -56,16 +73,14 @@ contract FireSystem is System {
 
     // Check if there is a fire at position
     Coord memory playerPosition = positionComponent.getValue(entity);
-    QueryFragment[] memory fragments = new QueryFragment[](2);
-    fragments[0] = QueryFragment(QueryType.HasValue, positionComponent, abi.encode(playerPosition));
-    fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(entityType.Fire));
-    uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
+    uint256[] memory entitiesAtPosition = checkForFire(playerPosition);
 
     if (entitiesAtPosition.length == 0) {
       // Create new fire at position
       uint256 newFireEntity = world.getUniqueEntityId();
       positionComponent.set(newFireEntity, playerPosition);
       entityTypeComponent.set(newFireEntity, uint32(entityType.Fire));
+      seedComponent.set(newFireEntity, makeSeedValue(newFireEntity));
 
       // Cooldown = current block + resources to burn * 10
       coolDownComponent.set(newFireEntity, block.number + resourceInput * 10);

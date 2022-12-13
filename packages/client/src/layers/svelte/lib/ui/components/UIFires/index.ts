@@ -2,49 +2,6 @@ import { writable, derived, get } from "svelte/store";
 import { playerList } from "../../../../stores/player";
 import { blockNumber } from "../../../../stores/network";
 
-const fireZerothNames = [
-  "The Fire of",
-  "The Star of",
-  "The Blaze of",
-  "The Great Recyler of",
-  "The Semaphor of",
-  "The Calling of",
-  "The Warmth of",
-  "The Light of",
-  "The Comforter of",
-  "The Sign of",
-];
-
-const fireFirstNames = [
-  "Tereris",
-  "Juffo",
-  "Justyz",
-  "Kano",
-  "Barchtel",
-  "Barkins",
-  "The Hound",
-  "The Fool",
-  "Syn",
-  "Violette",
-  "Noon",
-  "Joliboye",
-  "Jogeler",
-  "Camphor",
-  "Stalk",
-  "Dawnse",
-  "Gord",
-  "Foly",
-  "Kardu",
-  "Bolka",
-];
-
-export function addressToFireName(address: string) {
-  const zerothNameIndex = Math.round(Number(address)) % 10;
-  const firstNameIndex = Math.round(Number(address)) % 20;
-
-  return fireZerothNames[zerothNameIndex] + " " + fireFirstNames[firstNameIndex];
-}
-
 export const fireString = (v) => {
   const valueStore = writable(v);
 

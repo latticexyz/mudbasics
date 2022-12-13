@@ -2,7 +2,7 @@
   import { Entity } from "../../../../stores/entities";
   import { blockNumber } from "../../../../stores/network";
   import { playerList } from "../../../../stores/player";
-  import { addressToFireName } from "./index";
+  import { seedToFireName } from "../../../../utils/name";
   import { fade } from "svelte/transition";
   export let address: string;
   export let value: Entity;
@@ -16,7 +16,7 @@
     </div>
   </div>
   <div class="fire-info">
-    <div class="fire-name">#{index + 1} {addressToFireName(address)}</div>
+    <div class="fire-name">#{index + 1} {seedToFireName(value.seed || 0)}</div>
     <div class="fire-resource">sludge burnt: <strong>{value.resource}</strong></div>
     <div class="fire-resource">
       remaining burntime: <strong>{Math.max((value.coolDownBlock || 0) - $blockNumber, 0)}</strong> seconds

@@ -68,6 +68,7 @@
     {
       "name": "FireSystem",
       "writeAccess": [
+        "SeedComponent",
         "PositionComponent",
         "ResourceComponent",
         "EnergyComponent",

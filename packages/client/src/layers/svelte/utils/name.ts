@@ -49,9 +49,14 @@ function toTitleCase(str: string) {
   });
 }
 
+function reverseString(str: string): string {
+  if (str === "") return "";
+  else return reverseString(str.substr(1)) + str.charAt(0);
+}
+
 export function seedToName(seed: number) {
   if (!seed) return "";
-  const seedAsString = Math.abs(seed).toString();
+  const seedAsString = reverseString(Math.abs(seed).toString());
 
   const firstNameIndex = Number(seedAsString[0] + seedAsString[1]) || 0;
   const firstName = firstNameList[firstNameIndex % firstNameList.length];
@@ -67,11 +72,60 @@ export function seedToName(seed: number) {
 
 export function seedToMask(seed: number) {
   if (!seed) return 0;
-  const seedAsString = Math.abs(seed).toString();
+  const seedAsString = reverseString(Math.abs(seed).toString());
   return (Number(seedAsString[4] + seedAsString[5]) || 0) % 4;
 }
 
 export function seedToMaskTileOverlay(seed: number) {
   const index = seedToMask(seed);
   return `mask-${index}`;
+}
+
+const fireFirstNames = [
+  "The Fire of",
+  "The Star of",
+  "The Blaze of",
+  "The Great Recyler of",
+  "The Semaphor of",
+  "The Calling of",
+  "The Warmth of",
+  "The Light of",
+  "The Comforter of",
+  "The Sign of",
+];
+
+const fireSecondNames = [
+  "Tereris",
+  "Juffo",
+  "Justyz",
+  "Kano",
+  "Barchtel",
+  "Barkins",
+  "The Hound",
+  "The Fool",
+  "Syn",
+  "Violette",
+  "Noon",
+  "Joliboye",
+  "Jogeler",
+  "Camphor",
+  "Stalk",
+  "Dawnse",
+  "Gord",
+  "Foly",
+  "Kardu",
+  "Bolka",
+];
+
+export function seedToFireName(seed: number) {
+  if (!seed) return "";
+  const seedAsString = reverseString(Math.abs(seed).toString());
+
+  const firstNameIndex = Number(seedAsString[0]) || 0;
+  const firstName = fireFirstNames[firstNameIndex % fireFirstNames.length];
+
+  const secondNameIndex = Number(seedAsString[1] + seedAsString[2]) || 0;
+  const secondName = fireSecondNames[secondNameIndex % fireSecondNames.length];
+
+  return firstName + " " + secondName;
 }
