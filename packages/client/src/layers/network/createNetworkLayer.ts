@@ -37,6 +37,7 @@ export async function createNetworkLayer(config: GameConfig) {
     Creator: defineNumberComponent(world, { id: "Creator", metadata: { contractId: "component.Creator" } }),
     Stats: defineStatsComponent(world),
     Birth: defineNumberComponent(world, { id: "Birth", metadata: { contractId: "component.Birth" } }),
+    Death: defineNumberComponent(world, { id: "Death", metadata: { contractId: "component.Death" } }),
     Cannibal: defineNumberComponent(world, { id: "Cannibal", metadata: { contractId: "component.Cannibal" } }),
     Playing: defineNumberComponent(world, { id: "Playing", metadata: { contractId: "component.Playing" } }),
   };

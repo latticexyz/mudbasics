@@ -17,9 +17,9 @@
     createCannibalSystem,
     createLoadingStateSystem,
     createPlayingSystem,
+    createDeathSystem,
   } from "./systems";
   import { network as networkStore, blockNumber, startBlock } from "./stores/network";
-  import { directToLog } from "./stores/narrative";
 
   onMount(async () => {
     const layers = await bootGame();
@@ -37,6 +37,7 @@
     createCannibalSystem(layers.network);
     createLoadingStateSystem(layers.network);
     createPlayingSystem(layers.network);
+    createDeathSystem(layers.network);
 
     networkStore.set(layers.network);
 

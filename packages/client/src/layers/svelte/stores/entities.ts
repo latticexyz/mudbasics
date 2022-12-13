@@ -27,6 +27,7 @@ export interface Entity {
   seed?: number;
   stats?: StatsType;
   birth?: number;
+  death?: number;
   cannibal?: string[];
   playing?: number;
 }

@@ -37,7 +37,8 @@
         "EnergyComponent",
         "ResourceComponent",
         "CoolDownComponent",
-        "StatsComponent"
+        "StatsComponent",
+        "DeathComponent"
       ]
     },
     {
