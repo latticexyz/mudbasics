@@ -38,9 +38,7 @@ contract CannibalMechanicsTest is MudTest {
 
     // Get bob some resources
     GatherSystem(system(GatherSystemID)).executeTyped(bob, 50);
-    int32 bobsResourceBalance = resourceComponent.getValue(bob);
-    console.log("bobs resourdes");
-    console.logInt(bobsResourceBalance);
+    uint32 bobsResourceBalance = resourceComponent.getValue(bob);
 
     // ...
     vm.roll(1000);

@@ -21,12 +21,12 @@ contract MoveSystem is System {
   function updateStats(uint256 entity, int32 steps) private {
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
     Stats memory currentStats = statsComponent.getValue(entity);
-    currentStats.traveled += steps;
+    currentStats.traveled += uint32(steps);
     statsComponent.set(entity, currentStats);
   }
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 entity, int32 energyInput, int32 direction) = abi.decode(arguments, (uint256, int32, int32));
+    (uint256 entity, uint32 energyInput, uint32 direction) = abi.decode(arguments, (uint256, uint32, uint32));
 
     // Initialize components
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
@@ -38,21 +38,21 @@ contract MoveSystem is System {
     require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can move.");
 
     // Require cooldown period to be over
-    require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
+    require(coolDownComponent.getValue(entity) < block.number, "in cooldown period");
 
     // Require the player to have enough energy
-    int32 currentEnergyLevel = energyComponent.getValue(entity);
+    uint32 currentEnergyLevel = energyComponent.getValue(entity);
     require(currentEnergyLevel >= energyInput, "not enough energy");
 
     // 10 energy => 1 step, capped at MAX_DISTANCE
-    int32 steps = energyInput / 10;
+    int32 steps = int32(energyInput) / 10;
     if (steps > MAX_DISTANCE) steps = MAX_DISTANCE;
 
     Coord memory currentPosition = positionComponent.getValue(entity);
     Coord memory newPosition = Coord(currentPosition.x, currentPosition.y);
 
     //  | 8 | 1 | 2 |
-    //  | 7 | 0 | 3 |
+    //  | 7 | X | 3 |
     //  | 6 | 5 | 4 |
 
     if (direction == 1) {
@@ -83,55 +83,11 @@ contract MoveSystem is System {
       // 8 => NW
       if (newPosition.y > 0) newPosition.y -= steps;
       if (newPosition.x > 0) newPosition.x -= steps;
-    } else if (direction == 0) {
-      // 0 => random
-      // Move either along the X (0) or Y (1) axis
-      uint256 randomAxis = uint256(
-        keccak256(abi.encodePacked(block.timestamp, block.difficulty, msg.sender, currentPosition.y))
-      ) % 2;
-
-      // Either decrement (0) or increment (1) along the selected axis
-      uint256 randomDirection = uint256(
-        keccak256(abi.encodePacked(block.timestamp, block.number, msg.sender, currentPosition.x))
-      ) % 2;
-
-      // At eastern edge – move west
-      if (randomAxis == 0 && currentPosition.x == 0) randomDirection = 1;
-      // At western edge – move east
-      if (randomAxis == 0 && currentPosition.x == WORLD_WIDTH) randomDirection = 0;
-      // At northern edge – move south
-      if (randomAxis == 1 && currentPosition.y == 0) randomDirection = 1;
-      // At southern edge –  move north
-      if (randomAxis == 1 && currentPosition.y == WORLD_HEIGHT) randomDirection = 0;
-
-      // X-axis
-      if (randomAxis == 0) {
-        // Decrement
-        if (randomDirection == 0) {
-          newPosition.x = currentPosition.x - steps;
-        }
-        //Increment
-        if (randomDirection == 1) {
-          newPosition.x = currentPosition.x + steps;
-        }
-      }
-
-      // Y-axis
-      if (randomAxis == 1) {
-        // Decrement
-        if (randomDirection == 0) {
-          newPosition.y = currentPosition.y - steps;
-        }
-        //Increment
-        if (randomDirection == 1) {
-          newPosition.y = currentPosition.y + steps;
-        }
-      }
     }
 
     // Update values of player
     positionComponent.set(entity, newPosition);
-    coolDownComponent.set(entity, int32(int256(block.number)) + 10);
+    coolDownComponent.set(entity, block.number + 10);
     energyComponent.set(entity, currentEnergyLevel - energyInput);
     updateStats(entity, steps);
 
@@ -142,7 +98,7 @@ contract MoveSystem is System {
     }
   }
 
-  function executeTyped(uint256 entity, int32 energyInput, int32 direction) public returns (bytes memory) {
+  function executeTyped(uint256 entity, uint32 energyInput, uint32 direction) public returns (bytes memory) {
     return execute(abi.encode(entity, energyInput, direction));
   }
 }

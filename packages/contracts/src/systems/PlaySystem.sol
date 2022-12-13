@@ -16,7 +16,7 @@ uint256 constant ID = uint256(keccak256("system.Play"));
 contract PlaySystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function updateStats(uint256 entity, int32 energyInput) private {
+  function updateStats(uint256 entity, uint32 energyInput) private {
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
     Stats memory currentStats = statsComponent.getValue(entity);
     currentStats.played += energyInput;
@@ -24,7 +24,7 @@ contract PlaySystem is System {
   }
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 entity, int32 energyInput) = abi.decode(arguments, (uint256, int32));
+    (uint256 entity, uint32 energyInput) = abi.decode(arguments, (uint256, uint32));
 
     // Initialize components
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
@@ -36,16 +36,16 @@ contract PlaySystem is System {
     require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can play.");
 
     // Require cooldown period to be over
-    require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
+    require(coolDownComponent.getValue(entity) < block.number, "in cooldown period");
 
     // Require the player to have enough energy
-    int32 currentEnergyLevel = energyComponent.getValue(entity);
+    uint32 currentEnergyLevel = energyComponent.getValue(entity);
     require(currentEnergyLevel >= energyInput, "not enough energy");
 
     // Update values on player entity
     energyComponent.set(entity, currentEnergyLevel - energyInput);
-    coolDownComponent.set(entity, int32(int256(block.number)) + 20);
-    playingComponent.set(entity, int32(int256(block.number)) + 20);
+    coolDownComponent.set(entity, block.number + 20);
+    playingComponent.set(entity, block.number + 20);
     updateStats(entity, energyInput);
 
     // Check if dead
@@ -55,7 +55,7 @@ contract PlaySystem is System {
     }
   }
 
-  function executeTyped(uint256 entity, int32 energyInput) public returns (bytes memory) {
+  function executeTyped(uint256 entity, uint32 energyInput) public returns (bytes memory) {
     return execute(abi.encode(entity, energyInput));
   }
 }

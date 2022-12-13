@@ -20,10 +20,8 @@ uint256 constant ID = uint256(keccak256("system.Spawn"));
 contract SpawnSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function makeSeedValue() private view returns (int32) {
-    int32 seed = int32(int256(uint256(keccak256(abi.encodePacked(msg.sender, block.timestamp, block.number)))));
-    if (seed < 0) seed *= -1;
-    return seed;
+  function makeSeedValue() private view returns (uint32) {
+    return uint32(uint256(keccak256(abi.encodePacked(msg.sender, block.timestamp, block.number))));
   }
 
   function execute(bytes memory arguments) public returns (bytes memory) {
@@ -59,7 +57,7 @@ contract SpawnSystem is System {
     coolDownComponent.set(entity, 0);
 
     // --- Birth block
-    birthComponent.set(entity, int32(int256(block.number)));
+    birthComponent.set(entity, block.number);
 
     // --- Stats
     Stats memory initialStats;

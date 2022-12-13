@@ -6,7 +6,7 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { Perlin } from "noise/Perlin.sol";
 import { ABDKMath64x64 as Math } from "abdk-libraries-solidity/ABDKMath64x64.sol";
-import { entityType } from "../constants.sol";
+import { entityType, SPAWN_RESOURCE_PER_POSITION } from "../constants.sol";
 
 import { entityType } from "../constants.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
@@ -19,19 +19,17 @@ import { CannibalComponent, ID as CannibalComponentID } from "../components/Cann
 
 uint256 constant ID = uint256(keccak256("system.Gather"));
 
-int32 constant INITIAL_RESOURCE_PER_POSITION = 100;
-
 contract GatherSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function updateStats(uint256 entity, int32 resourceToExtract) private {
+  function updateStats(uint256 entity, uint32 resourceToExtract) private {
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
     Stats memory currentStats = statsComponent.getValue(entity);
     currentStats.gathered += resourceToExtract;
     statsComponent.set(entity, currentStats);
   }
 
-  function checkForEntity(Coord memory position, uint32 t) private returns (uint256[] memory) {
+  function checkForEntity(Coord memory position, uint256 t) private view returns (uint256[] memory) {
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
 
@@ -55,7 +53,7 @@ contract GatherSystem is System {
     // Add corpse to player's cannibal list
     uint256[] memory currentCannibalArray = cannibalComponent.getValue(entity);
     uint256[] memory newCannibalArray = new uint256[](currentCannibalArray.length + 1);
-    for (uint256 i = 0; i < currentCannibalArray.length; i++) {
+    for (uint32 i = 0; i < currentCannibalArray.length; i++) {
       newCannibalArray[i] = currentCannibalArray[i];
     }
     newCannibalArray[newCannibalArray.length - 1] = corpse;
@@ -63,7 +61,7 @@ contract GatherSystem is System {
   }
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 entity, int32 energyInput) = abi.decode(arguments, (uint256, int32));
+    (uint256 entity, uint32 energyInput) = abi.decode(arguments, (uint256, uint32));
 
     // Initialize components
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
@@ -76,10 +74,13 @@ contract GatherSystem is System {
     require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can gather.");
 
     // Require cooldown period to be over
-    require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
+    require(coolDownComponent.getValue(entity) < block.number, "in cooldown period");
+
+    // Require input to be positive
+    require(energyInput > 0, "input must be positive");
 
     // Require the player to have enough energy
-    int32 currentEnergyLevel = energyComponent.getValue(entity);
+    uint32 currentEnergyLevel = energyComponent.getValue(entity);
     require(currentEnergyLevel >= energyInput, "not enough energy");
 
     // Get player position
@@ -89,15 +90,17 @@ contract GatherSystem is System {
     require(checkForEntity(playerPosition, uint32(entityType.Fire)).length == 0, "can not gather in fire");
 
     // Get player resource balance
-    int32 currentResourceBalance = resourceComponent.getValue(entity);
+    uint32 currentResourceBalance = resourceComponent.getValue(entity);
 
     // Scale resource allocation by perlin noise value
     // resources = energyInput * (perlin noise / 2**16 <= precision)
-    int32 resourceToExtract = int32(
-      Math.toInt(
-        Math.mul(
-          Math.fromInt(energyInput),
-          Math.div(Perlin.noise2d(playerPosition.x, playerPosition.y, 20, 16), 2 ** 16)
+    uint32 resourceToExtract = uint32(
+      uint64(
+        Math.toInt(
+          Math.mul(
+            Math.fromUInt(energyInput),
+            Math.div(Perlin.noise2d(playerPosition.x, playerPosition.y, 20, 16), 2 ** 16)
+          )
         )
       )
     );
@@ -116,18 +119,18 @@ contract GatherSystem is System {
         // there are INITIAL_RESOURCE_PER_POSITION resources available
 
         // Cap resource extraction at INITIAL_RESOURCE_PER_POSITION
-        if (resourceToExtract > INITIAL_RESOURCE_PER_POSITION) resourceToExtract = INITIAL_RESOURCE_PER_POSITION;
+        if (resourceToExtract > SPAWN_RESOURCE_PER_POSITION) resourceToExtract = SPAWN_RESOURCE_PER_POSITION;
 
         // Create new terrain block at position
         uint256 newTerrainEntity = world.getUniqueEntityId();
         positionComponent.set(newTerrainEntity, playerPosition);
         entityTypeComponent.set(newTerrainEntity, uint32(entityType.Terrain));
-        resourceComponent.set(newTerrainEntity, INITIAL_RESOURCE_PER_POSITION - resourceToExtract);
+        resourceComponent.set(newTerrainEntity, SPAWN_RESOURCE_PER_POSITION - resourceToExtract);
       } else {
         // The position HAS been gathered before,
         // there are terrainResourceBalance resources available
 
-        int32 terrainResourceBalance = resourceComponent.getValue(terrainAtPosition[0]);
+        uint32 terrainResourceBalance = resourceComponent.getValue(terrainAtPosition[0]);
 
         // Require there to be resources in the position
         require(terrainResourceBalance > 0, "no resources in position");
@@ -145,7 +148,7 @@ contract GatherSystem is System {
     }
 
     energyComponent.set(entity, currentEnergyLevel - energyInput);
-    coolDownComponent.set(entity, int32(int256(block.number)) + 10);
+    coolDownComponent.set(entity, block.number + 10);
 
     // Check if dead
     if (currentEnergyLevel - energyInput <= 0) {
@@ -154,7 +157,7 @@ contract GatherSystem is System {
     }
   }
 
-  function executeTyped(uint256 entity, int32 energyInput) public returns (bytes memory) {
+  function executeTyped(uint256 entity, uint32 energyInput) public returns (bytes memory) {
     return execute(abi.encode(entity, energyInput));
   }
 }

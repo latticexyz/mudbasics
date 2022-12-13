@@ -19,7 +19,7 @@ uint256 constant ID = uint256(keccak256("system.Fire"));
 contract FireSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function updateStats(uint256 entity, int32 resourceInput) private {
+  function updateStats(uint256 entity, uint32 resourceInput) private {
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
     Stats memory currentStats = statsComponent.getValue(entity);
     currentStats.burnt += resourceInput;
@@ -27,7 +27,7 @@ contract FireSystem is System {
   }
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 entity, int32 resourceInput) = abi.decode(arguments, (uint256, int32));
+    (uint256 entity, uint32 resourceInput) = abi.decode(arguments, (uint256, uint32));
 
     // Initialize components
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
@@ -37,21 +37,21 @@ contract FireSystem is System {
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     CreatorComponent creatorComponent = CreatorComponent(getAddressById(components, CreatorComponentID));
 
-    // Require entity to be player
+    // Require entity to be a player
     require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can burn.");
 
     // Require cooldown period to be over
-    require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
+    require(coolDownComponent.getValue(entity) < block.number, "in cooldown period");
 
     // Require the player to have enough (50) energy
-    int32 currentEnergyLevel = energyComponent.getValue(entity);
+    uint32 currentEnergyLevel = energyComponent.getValue(entity);
     require(currentEnergyLevel >= 50, "not enough energy");
 
     // Enforce minimum
     require(resourceInput >= 500, "minimum 500 resources to make fire");
 
     // Require the player to have enough resource
-    int32 currentResourceLevel = resourceComponent.getValue(entity);
+    uint32 currentResourceLevel = resourceComponent.getValue(entity);
     require(currentResourceLevel >= resourceInput, "not enough resource");
 
     // Check if there is a fire at position
@@ -68,7 +68,7 @@ contract FireSystem is System {
       entityTypeComponent.set(newFireEntity, uint32(entityType.Fire));
 
       // Cooldown = current block + resources to burn * 10
-      coolDownComponent.set(newFireEntity, int32(int256(block.number)) + resourceInput * 10);
+      coolDownComponent.set(newFireEntity, block.number + resourceInput * 10);
       // Resources burnt in this fire
       resourceComponent.set(newFireEntity, resourceInput);
 
@@ -78,9 +78,9 @@ contract FireSystem is System {
     } else {
       // Add to existing fire at position
       // If cooldown block is passed (fire is burnt out), count up from current block number
-      int32 currentCoolDownBlock = coolDownComponent.getValue(entitiesAtPosition[0]) > int32(int256(block.number))
+      uint256 currentCoolDownBlock = coolDownComponent.getValue(entitiesAtPosition[0]) > block.number
         ? coolDownComponent.getValue(entitiesAtPosition[0])
-        : int32(int256(block.number));
+        : block.number;
       coolDownComponent.set(entitiesAtPosition[0], currentCoolDownBlock + resourceInput * 10);
       // Add to resources burnt in this fire
       resourceComponent.set(entitiesAtPosition[0], resourceComponent.getValue(entitiesAtPosition[0]) + resourceInput);
@@ -98,7 +98,7 @@ contract FireSystem is System {
     // Update values on player entity
     resourceComponent.set(entity, currentResourceLevel - resourceInput);
     energyComponent.set(entity, currentEnergyLevel - 50);
-    coolDownComponent.set(entity, int32(int256(block.number)) + 10);
+    coolDownComponent.set(entity, block.number + 10);
     updateStats(entity, resourceInput);
 
     // Check if dead
@@ -108,7 +108,7 @@ contract FireSystem is System {
     }
   }
 
-  function executeTyped(uint256 entity, int32 resourceInput) public returns (bytes memory) {
+  function executeTyped(uint256 entity, uint32 resourceInput) public returns (bytes memory) {
     return execute(abi.encode(entity, resourceInput));
   }
 }

@@ -17,7 +17,7 @@ int32 constant COOLDOWN_PER_RESOURCE = 3;
 contract EnergySystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function updateStats(uint256 entity, int32 resourceInput) private {
+  function updateStats(uint256 entity, uint32 resourceInput) private {
     StatsComponent statsComponent = StatsComponent(getAddressById(components, StatsComponentID));
     Stats memory currentStats = statsComponent.getValue(entity);
     currentStats.eaten += resourceInput;
@@ -25,7 +25,7 @@ contract EnergySystem is System {
   }
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 entity, int32 resourceInput) = abi.decode(arguments, (uint256, int32));
+    (uint256 entity, uint32 resourceInput) = abi.decode(arguments, (uint256, uint32));
 
     // Initialize components
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
@@ -33,32 +33,32 @@ contract EnergySystem is System {
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
 
-    // Require entity to be caller
-    // require(entity == addressToEntity(msg.sender), "player does not own entity");
+    // Require input to be positive
+    require(resourceInput > 0, "input must be positive");
 
-    // Require entity to be player
+    // Require entity to be a player
     require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can eat.");
 
     // Require cooldown period to be over
-    require(coolDownComponent.getValue(entity) < int32(int256(block.number)), "in cooldown period");
+    require(coolDownComponent.getValue(entity) < block.number, "in cooldown period");
 
     // Require the player to have enough resource
-    int32 currentResourceBalance = resourceComponent.getValue(entity);
+    uint32 currentResourceBalance = resourceComponent.getValue(entity);
     require(currentResourceBalance >= resourceInput, "not enough resources");
 
-    int32 currentEnergyLevel = energyComponent.getValue(entity);
+    uint32 currentEnergyLevel = energyComponent.getValue(entity);
 
     // 1 resource => 5 energy
     resourceComponent.set(entity, currentResourceBalance - resourceInput);
     energyComponent.set(entity, currentEnergyLevel + resourceInput * 5);
 
-    // 3 cooldown points / resource consumed
-    coolDownComponent.set(entity, int32(int256(block.number)) + 10);
+    // Add 10 cooldown points
+    coolDownComponent.set(entity, block.number + 10);
 
     updateStats(entity, resourceInput);
   }
 
-  function executeTyped(uint256 entity, int32 energyInput) public returns (bytes memory) {
-    return execute(abi.encode(entity, energyInput));
+  function executeTyped(uint256 entity, uint32 resourceInput) public returns (bytes memory) {
+    return execute(abi.encode(entity, resourceInput));
   }
 }

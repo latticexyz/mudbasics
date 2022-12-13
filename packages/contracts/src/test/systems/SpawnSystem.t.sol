@@ -32,8 +32,8 @@ contract SpawnSystemTest is MudTest {
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
 
     // --- Seed
-    int32 seed = seedComponent.getValue(entity);
-    console.logInt(seed);
+    uint256 seed = seedComponent.getValue(entity);
+    console.log(seed);
     assertGt(seed, 0);
 
     // --- Energy

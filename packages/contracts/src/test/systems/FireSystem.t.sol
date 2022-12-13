@@ -13,6 +13,7 @@ import { EntityTypeComponent, ID as EntityTypeComponentID } from "../../componen
 import { CreatorComponent, ID as CreatorComponentID } from "../../components/CreatorComponent.sol";
 import { CoolDownComponent, ID as CoolDownComponentID } from "../../components/CoolDownComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../../components/StatsComponent.sol";
+import { ComponentDevSystem, ID as ComponentDevSystemID } from "../../systems/ComponentDevSystem.sol";
 
 contract FireSystemTest is MudTest {
   function testExecute() public {
@@ -30,8 +31,15 @@ contract FireSystemTest is MudTest {
     // Spawn player
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
 
+    // Give player 1000 resources
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      ResourceComponentID,
+      entity,
+      abi.encodePacked(uint32(1000))
+    );
+
     // Create fire
-    FireSystem(system(FireSystemID)).executeTyped(entity, 100);
+    FireSystem(system(FireSystemID)).executeTyped(entity, 500);
     // 200 - 100
     assertEq(resourceComponent.getValue(entity), 100);
     // 1000 - 50
@@ -59,7 +67,7 @@ contract FireSystemTest is MudTest {
 
     // 66 block later...
     // Add to the existing fire
-    FireSystem(system(FireSystemID)).executeTyped(entity, 100);
+    FireSystem(system(FireSystemID)).executeTyped(entity, 500);
     // 100 - 100
     assertEq(resourceComponent.getValue(entity), 0);
     // 950 - 50

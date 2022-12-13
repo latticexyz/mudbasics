@@ -11,6 +11,7 @@ import { ResourceComponent, ID as ResourceComponentID } from "../../components/R
 import { EnergySystem, ID as EnergySystemID } from "../../systems/EnergySystem.sol";
 import { EnergyComponent, ID as EnergyComponentID } from "../../components/EnergyComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../../components/StatsComponent.sol";
+import { ComponentDevSystem, ID as ComponentDevSystemID } from "../../systems/ComponentDevSystem.sol";
 
 contract EnergySystemTest is MudTest {
   function testExecute() public {
@@ -24,10 +25,23 @@ contract EnergySystemTest is MudTest {
     // Spawn player
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
 
+    console.log(resourceComponent.getValue(entity));
+
+    // Give player 50 resources
+    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+      ResourceComponentID,
+      entity,
+      abi.encodePacked(uint32(50))
+    );
+
+    console.logBytes(abi.encodePacked(uint32(50)));
+
+    console.log(resourceComponent.getValue(entity));
+
     // Convert 50 resource => 250 energy
     EnergySystem(system(EnergySystemID)).executeTyped(entity, 50);
-    // INITIAL_RESOURCE  - 50
-    assertEq(resourceComponent.getValue(entity), INITIAL_RESOURCE - 50);
+    // 0
+    assertEq(resourceComponent.getValue(entity), 0);
     // INITIAL_ENERGY + 250
     assertEq(energyComponent.getValue(entity), INITIAL_ENERGY + 250);
     // Check stats are updated

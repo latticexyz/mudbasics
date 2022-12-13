@@ -2,7 +2,7 @@
 pragma solidity >=0.8.0;
 
 import "../MudTest.t.sol";
-import { INITIAL_ENERGY, INITIAL_RESOURCE, entityType } from "../../constants.sol";
+import { INITIAL_ENERGY, INITIAL_RESOURCE, SPAWN_RESOURCE_PER_POSITION, entityType } from "../../constants.sol";
 import { QueryFragment, LibQuery, QueryType } from "solecs/LibQuery.sol";
 import { Perlin } from "noise/Perlin.sol";
 import { ABDKMath64x64 as Math } from "abdk-libraries-solidity/ABDKMath64x64.sol";
@@ -35,16 +35,18 @@ contract GatherSystemTest is MudTest {
     GatherSystem(system(GatherSystemID)).executeTyped(entity, 50);
 
     // resourceToExtract = 50 * (perlin noise / 2**16 <= precision)
-    int32 resourceToExtract = int32(
-      Math.toInt(
-        Math.mul(Math.fromInt(50), Math.div(Perlin.noise2d(playerPosition.x, playerPosition.y, 20, 16), 2 ** 16))
+    uint32 resourceToExtract = uint32(
+      uint64(
+        Math.toInt(
+          Math.mul(Math.fromInt(50), Math.div(Perlin.noise2d(playerPosition.x, playerPosition.y, 20, 16), 2 ** 16))
+        )
       )
     );
 
     // Players resource balance should be INITIAL_RESOURCE + value calculated based on perlin factor
     assertEq(resourceComponent.getValue(entity), INITIAL_RESOURCE + resourceToExtract);
     // Energy should be INITIAL_ENERGY - 50
-    assertEq(energyComponent.getValue(entity), INITIAL_ENERGY);
+    assertEq(energyComponent.getValue(entity), INITIAL_ENERGY - 50);
 
     assertEq(statsComponent.getValue(entity).gathered, resourceToExtract);
 
@@ -55,7 +57,7 @@ contract GatherSystemTest is MudTest {
     fragments[1] = QueryFragment(QueryType.HasValue, entityTypeComponent, abi.encode(uint32(entityType.Terrain)));
     uint256[] memory entitiesAtPosition = LibQuery.query(fragments);
     assertEq(entitiesAtPosition.length, 1);
-    // Terrain component should have 100 - resourceToExtract
-    assertEq(resourceComponent.getValue(entitiesAtPosition[0]), 100 - resourceToExtract);
+    // Terrain component should have SPAWN_RESOURCE_PER_POSITION - resourceToExtract
+    assertEq(resourceComponent.getValue(entitiesAtPosition[0]), SPAWN_RESOURCE_PER_POSITION - resourceToExtract);
   }
 }

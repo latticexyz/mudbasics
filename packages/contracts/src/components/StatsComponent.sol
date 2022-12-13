@@ -5,11 +5,11 @@ import "solecs/Component.sol";
 uint256 constant ID = uint256(keccak256("component.Stats"));
 
 struct Stats {
-  int32 traveled;
-  int32 gathered;
-  int32 burnt;
-  int32 eaten;
-  int32 played;
+  uint32 traveled;
+  uint32 gathered;
+  uint32 burnt;
+  uint32 eaten;
+  uint32 played;
 }
 
 contract StatsComponent is Component {
@@ -20,19 +20,19 @@ contract StatsComponent is Component {
     values = new LibTypes.SchemaValue[](5);
 
     keys[0] = "traveled";
-    values[0] = LibTypes.SchemaValue.INT32;
+    values[0] = LibTypes.SchemaValue.UINT32;
 
     keys[1] = "gathered";
-    values[1] = LibTypes.SchemaValue.INT32;
+    values[1] = LibTypes.SchemaValue.UINT32;
 
     keys[2] = "burnt";
-    values[2] = LibTypes.SchemaValue.INT32;
+    values[2] = LibTypes.SchemaValue.UINT32;
 
     keys[3] = "eaten";
-    values[3] = LibTypes.SchemaValue.INT32;
+    values[3] = LibTypes.SchemaValue.UINT32;
 
     keys[4] = "played";
-    values[4] = LibTypes.SchemaValue.INT32;
+    values[4] = LibTypes.SchemaValue.UINT32;
   }
 
   function set(uint256 entity, Stats memory stats) public {
