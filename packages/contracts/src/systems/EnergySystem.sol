@@ -33,9 +33,6 @@ contract EnergySystem is System {
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
 
-    // Require input to be positive
-    require(resourceInput > 0, "input must be positive");
-
     // Require entity to be a player
     require(entityTypeComponent.getValue(entity) == uint32(entityType.Player), "only (a living) player can eat.");
 

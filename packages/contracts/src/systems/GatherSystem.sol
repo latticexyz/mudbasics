@@ -76,9 +76,6 @@ contract GatherSystem is System {
     // Require cooldown period to be over
     require(coolDownComponent.getValue(entity) < block.number, "in cooldown period");
 
-    // Require input to be positive
-    require(energyInput > 0, "input must be positive");
-
     // Require the player to have enough energy
     uint32 currentEnergyLevel = energyComponent.getValue(entity);
     require(currentEnergyLevel >= energyInput, "not enough energy");
