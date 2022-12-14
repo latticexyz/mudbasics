@@ -15,27 +15,43 @@ import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/
 import { CreatorComponent, ID as CreatorComponentID } from "../components/CreatorComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
 import { SeedComponent, ID as SeedComponentID } from "../components/SeedComponent.sol";
+import { DeathComponent, ID as DeathComponentID } from "../components/DeathComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Fire"));
 
 contract FireSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function checkRequirements(uint256 entity, uint32 resourceInput) private view {
+  function getLazyUpdateEnergy(uint256 player) private view returns (uint32) {
+    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
+    // actualEnergy = deathBlock - currentBlock
+    return uint32(deathComponent.getValue(player) - block.number);
+  }
+
+  function checkRequirements(uint256 player, uint32 resourceInput) private {
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
+    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
+
     // Require entity to be a player
-    require(entityTypeComponent.getValue(entity) == uint32(EntityType.Player), "only (a living) player can burn.");
+    require(entityTypeComponent.getValue(player) == uint32(EntityType.Player), "only (a living) player can burn.");
     // Require cooldown period to be over
-    require(coolDownComponent.getValue(entity) < block.number, "in cooldown period");
+    require(coolDownComponent.getValue(player) < block.number, "in cooldown period");
+    // Require the player to not be past its death block
+    if (deathComponent.getValue(player) > block.number) {
+      entityTypeComponent.set(player, uint32(EntityType.Corpse));
+      coolDownComponent.set(player, 0);
+      energyComponent.set(player, 0);
+      require(false, "death block past. you are dead");
+    }
     // Require the player to have COST_TO_MAKE_FIRE energy
-    require(energyComponent.getValue(entity) >= COST_TO_MAKE_FIRE, "not enough energy");
+    require(energyComponent.getValue(player) >= COST_TO_MAKE_FIRE, "not enough energy");
     // Enforce minimum fire size
     require(resourceInput >= MINIMUM_FIRE_SIZE, "minimum resource amount not reached");
     // Require the player to have enough resource
-    require(resourceComponent.getValue(entity) >= resourceInput, "not enough resource");
+    require(resourceComponent.getValue(player) >= resourceInput, "not enough resource");
   }
 
   function makeSeedValue(uint256 fireId) private view returns (uint32) {
@@ -102,7 +118,9 @@ contract FireSystem is System {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     ResourceComponent resourceComponent = ResourceComponent(getAddressById(components, ResourceComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
 
+    deathComponent.set(player, deathComponent.getValue(player) - COST_TO_MAKE_FIRE);
     resourceComponent.set(player, resourceComponent.getValue(player) - resourceInput);
     energyComponent.set(player, energyComponent.getValue(player) - COST_TO_MAKE_FIRE);
     coolDownComponent.set(player, block.number + 10);

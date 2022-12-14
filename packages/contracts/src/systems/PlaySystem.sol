@@ -11,30 +11,48 @@ import { CoolDownComponent, ID as CoolDownComponentID } from "../components/Cool
 import { PlayingComponent, ID as PlayingComponentID } from "../components/PlayingComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
+import { DeathComponent, ID as DeathComponentID } from "../components/DeathComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Play"));
 
 contract PlaySystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function checkRequirements(uint256 player, uint32 energyInput) private view {
+  function getLazyUpdateEnergy(uint256 player) private view returns (uint32) {
+    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
+    // actualEnergy = deathBlock - currentBlock
+    return uint32(deathComponent.getValue(player) - block.number);
+  }
+
+  function checkRequirements(uint256 player, uint32 energyInput) private {
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
+
     // Require entity to be player
     require(entityTypeComponent.getValue(player) == uint32(EntityType.Player), "only (a living) player can play.");
     // Require cooldown period to be over
     require(coolDownComponent.getValue(player) < block.number, "in cooldown period");
+    // Require the player to not be past its death block
+    if (deathComponent.getValue(player) > block.number) {
+      entityTypeComponent.set(player, uint32(EntityType.Corpse));
+      coolDownComponent.set(player, 0);
+      energyComponent.set(player, 0);
+      require(false, "death block past. you are dead");
+    }
     // Require the player to have enough energy
-    require(energyComponent.getValue(player) >= energyInput, "not enough energy");
+    require(getLazyUpdateEnergy(player) >= energyInput, "not enough energy");
   }
 
   function updatePlayer(uint256 player, uint32 energyInput) private {
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     PlayingComponent playingComponent = PlayingComponent(getAddressById(components, PlayingComponentID));
+    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
 
-    energyComponent.set(player, energyComponent.getValue(player) - energyInput);
+    deathComponent.set(player, deathComponent.getValue(player) - energyInput);
+    energyComponent.set(player, getLazyUpdateEnergy(player) - energyInput);
     coolDownComponent.set(player, block.number + PLAYING_DURATION);
     playingComponent.set(player, block.number + PLAYING_DURATION);
   }

@@ -28,11 +28,11 @@ contract EnergySystemTest is MudTest {
     console.log(resourceComponent.getValue(entity));
 
     // Give player 50 resources
-    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
-      ResourceComponentID,
-      entity,
-      abi.encodePacked(uint32(50))
-    );
+    // ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+    //   ResourceComponentID,
+    //   entity,
+    //   abi.encodePacked(uint32(50))
+    // );
 
     console.logBytes(abi.encodePacked(uint32(50)));
 

@@ -11,31 +11,45 @@ import { EnergyComponent, ID as EnergyComponentID } from "../components/EnergyCo
 import { CoolDownComponent, ID as CoolDownComponentID } from "../components/CoolDownComponent.sol";
 import { StatsComponent, ID as StatsComponentID, Stats } from "../components/StatsComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
+import { DeathComponent, ID as DeathComponentID } from "../components/DeathComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Move"));
 
 contract MoveSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  function checkRequirements(uint256 player, uint32 energyInput) private view {
+  function getLazyUpdateEnergy(uint256 player) private view returns (uint32) {
+    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
+    // actualEnergy = deathBlock - currentBlock
+    return uint32(deathComponent.getValue(player) - block.number);
+  }
+
+  function checkRequirements(uint256 player, uint32 energyInput) private {
     EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
+    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
 
     // Require entity to be player
     require(entityTypeComponent.getValue(player) == uint32(EntityType.Player), "only (a living) player can move.");
     // Require cooldown period to be over
     require(coolDownComponent.getValue(player) < block.number, "in cooldown period");
+    // Require the player to not be past its death block
+    if (deathComponent.getValue(player) > block.number) {
+      entityTypeComponent.set(player, uint32(EntityType.Corpse));
+      coolDownComponent.set(player, 0);
+      energyComponent.set(player, 0);
+      require(false, "death block past. you are dead");
+    }
     // Require the player to have enough energy
     require(energyComponent.getValue(player) >= energyInput, "not enough energy");
   }
 
   function getNewPosition(
-    uint256 player,
     Coord memory currentPosition,
     Direction direction,
     int32 steps
-  ) private returns (Coord memory) {
+  ) private pure returns (Coord memory) {
     Coord memory newPosition = Coord(currentPosition.x, currentPosition.y);
 
     if (direction == Direction.North) {
@@ -66,9 +80,11 @@ contract MoveSystem is System {
   function updatePlayer(uint256 player, uint32 energyInput) private {
     CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
     EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
+    DeathComponent deathComponent = DeathComponent(getAddressById(components, DeathComponentID));
 
+    deathComponent.set(player, deathComponent.getValue(player) - energyInput);
+    energyComponent.set(player, getLazyUpdateEnergy(player) - energyInput);
     coolDownComponent.set(player, block.number + 10);
-    energyComponent.set(player, energyComponent.getValue(player) - energyInput);
   }
 
   function updateStats(uint256 entity, int32 steps) private {
@@ -92,11 +108,7 @@ contract MoveSystem is System {
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 entity, uint32 energyInput, uint32 direction) = abi.decode(arguments, (uint256, uint32, uint32));
 
-    // Initialize components
-    EnergyComponent energyComponent = EnergyComponent(getAddressById(components, EnergyComponentID));
     PositionComponent positionComponent = PositionComponent(getAddressById(components, PositionComponentID));
-    CoolDownComponent coolDownComponent = CoolDownComponent(getAddressById(components, CoolDownComponentID));
-    EntityTypeComponent entityTypeComponent = EntityTypeComponent(getAddressById(components, EntityTypeComponentID));
 
     checkRequirements(entity, energyInput);
 
@@ -105,10 +117,7 @@ contract MoveSystem is System {
     if (steps > MAX_DISTANCE) steps = MAX_DISTANCE;
 
     // Set new position
-    positionComponent.set(
-      entity,
-      getNewPosition(entity, positionComponent.getValue(entity), Direction(direction), steps)
-    );
+    positionComponent.set(entity, getNewPosition(positionComponent.getValue(entity), Direction(direction), steps));
 
     updatePlayer(entity, energyInput);
     updateStats(entity, steps);

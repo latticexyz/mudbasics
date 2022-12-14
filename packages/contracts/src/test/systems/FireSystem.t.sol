@@ -32,11 +32,11 @@ contract FireSystemTest is MudTest {
     SpawnSystem(system(SpawnSystemID)).executeTyped(entity);
 
     // Give player 1000 resources
-    ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
-      ResourceComponentID,
-      entity,
-      abi.encodePacked(uint32(1000))
-    );
+    // ComponentDevSystem(system(ComponentDevSystemID)).executeTyped(
+    //   ResourceComponentID,
+    //   entity,
+    //   abi.encodePacked(uint32(1000))
+    // );
 
     // Create fire
     FireSystem(system(FireSystemID)).executeTyped(entity, 500);

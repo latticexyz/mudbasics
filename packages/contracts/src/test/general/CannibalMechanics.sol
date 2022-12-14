@@ -42,7 +42,7 @@ contract CannibalMechanicsTest is MudTest {
     uint32 bobsResourceBalance = resourceComponent.getValue(bob);
 
     // ...
-    vm.roll(1000);
+    vm.roll(20);
 
     // Force Bob to play music until he dies
     PlaySystem(system(PlaySystemID)).executeTyped(bob, energyComponent.getValue(bob));

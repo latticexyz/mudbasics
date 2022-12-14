@@ -28,7 +28,8 @@
         "CoolDownComponent",
         "StatsComponent",
         "EntityTypeComponent",
-        "ResourceComponent"
+        "ResourceComponent",
+        "DeathComponent"
       ]
     },
     {
@@ -78,7 +79,8 @@
         "CoolDownComponent",
         "EntityTypeComponent",
         "CreatorComponent",
-        "StatsComponent"
+        "StatsComponent",
+        "DeathComponent"
       ]
     },
     {
@@ -89,7 +91,8 @@
         "EntityTypeComponent",
         "PlayingComponent",
         "StatsComponent",
-        "ResourceComponent"
+        "ResourceComponent",
+        "DeathComponent"
       ]
     }
   ]

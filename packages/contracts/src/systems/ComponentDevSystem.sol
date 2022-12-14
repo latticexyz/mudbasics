@@ -17,6 +17,7 @@ contract ComponentDevSystem is System {
 
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 componentId, uint256 entity, bytes memory value) = abi.decode(arguments, (uint256, uint256, bytes));
+    // require(msg.sender == _owner, "ONLY_OWNER");
     IComponent c = IComponent(getAddressById(components, componentId));
     if (value.length == 0) {
       c.remove(entity);
